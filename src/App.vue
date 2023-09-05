@@ -4,7 +4,7 @@ import { RouterLink, RouterView } from 'vue-router'
 </script>
 
 <template>
-  <header>
+  <!-- <header>
     <img alt="Vue logo" 
     class="logo" 
     src="@/assets/logo.svg" 
@@ -18,7 +18,7 @@ import { RouterLink, RouterView } from 'vue-router'
         <RouterLink to="/Cadastro_Cargo">About</RouterLink>
       </nav>
     </div>
-  </header>
+  </header> -->
 
   <RouterView />
 </template>
