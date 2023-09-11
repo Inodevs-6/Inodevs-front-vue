@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import OpenMenu from '@/components/menu/OpenMenu.vue';  
+import Alert from '@/components/alert/Alert.vue'
 import axios from "axios"
 import { ref } from 'vue';
 const name = ref('')
@@ -7,6 +8,7 @@ const level = ref('')
 const desc = ref('')
 const erro = ref('')
 const isDisabled = ref(true);
+const isDone = ref(false);
 const Play = ref(false);
 
 
@@ -18,6 +20,7 @@ async function cadatrar() {
     nivel_cargo : level.value,
     descricao_cargo : desc.value
   });
+  isDone.value = false
   console.log(`${name.value} + ${level.value} + ${desc.value}`)
   }catch(err){
     erro.value = (err as Error).message
@@ -25,9 +28,25 @@ async function cadatrar() {
   console.log("passei")
 }
 
+async function getResponseChatgpt(name : String , level : String) {
+  console.log("carregando")
+  try{
+    await axios.get(`https://jsonplaceholder.typicode.com/chatgp/${name} ${level}`,{
+
+  });
+  played()
+  }catch(err){
+    erro.value = (err as Error).message
+  }
+
+}
+
 const habilitarInput = () => {
   isDisabled.value = !isDisabled.value;
 };
+const success = () => {
+  
+}
 
 const played = () =>{
   Play.value = true
@@ -40,9 +59,13 @@ const played = () =>{
   <div class="bg-white flex w-screen h-screen">
     <OpenMenu/>
     <div class="flex ml-[5rem] w-screen items-center flex-col bg-white">
+      <div v-if="isDone">
+        <Alert variant="success"/>
+      </div >
        <h1 class="text-center font-medium text-3xl mt-7 flex w-full h-10 justify-center items-center ">
         Cadastro Cargo
       </h1>
+      <p class="text-red-700">{{ erro }}</p>
       <div class="w-[98%] flex flex-col gap-10 p-4 h-[80vh] mt-[3rem] bg-[#1DEEA3] shadow-md bg-opacity-30 rounded-2xl">
        <div class="w-full flex flex-row justify-between">
          <div class="w-1/3 flex flex-col ">
@@ -76,7 +99,8 @@ const played = () =>{
                 placeholder="sua descrição será gerada"
                 class="w-5/6 h-[75%] bg-[#2A753D] p-4 focus:outline-none flex resize-none shadow-xl justify-start rounded-xl">
               </textarea>
-             <div @click="played" class="bg-black cursor-pointer rounded-full shadow-md p-5 flex justify-center  h-[3.7rem]">
+             <div @click="getResponseChatgpt(name , level )"
+             class="bg-black cursor-pointer rounded-full shadow-md p-5 flex justify-center  h-[3.7rem]">
                <img src="/assets/play.svg" width="20" height="20" alt="" srcset="">
              </div>
             </div>
