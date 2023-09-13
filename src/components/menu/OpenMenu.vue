@@ -1,10 +1,13 @@
 <template >
   <RouterView/>
-    <div class="bg-[#CCFF00] h-screen w-[5rem] fixed justify-start flex-col gap-6 p-2 items-center flex ">
+    <div class="bg-[#CCFF00] hidden h-screen w-[5rem] fixed justify-start flex-col gap-6 p-2 items-center xl:flex ">
       <RouterLink to="/">
         <BtnMenu caminho="/assets/logo.svg"/> 
       </RouterLink>
-       <BtnMenu caminho="/assets/Bell.svg"/> 
+       <BtnMenu caminho="/assets/Bell.svg"/>
+       <div class="absolute flex items-center justify-center bg-red-800 left-10 top-[4.7rem] rounded-full">
+        <p class="text-white font-bold px-[0.4rem]">{{ notify }}</p>
+       </div> 
        <RouterLink to="/">
          <BtnMenu caminho="/assets/Home.svg"/> 
        </RouterLink>
@@ -18,8 +21,13 @@
     width="40" height="40" />
       </div>
     </div>
+    <div>
+      <MenuMobile></MenuMobile>
+    </div>
 </template>
 <script lang="ts" setup>
 import BtnMenu from "@/components/menu/BtnMenu.vue";
+import MenuMobile from "@/components/menu/MenuMobile.vue"
 import { RouterLink, RouterView } from 'vue-router'
+const notify = null
 </script>
