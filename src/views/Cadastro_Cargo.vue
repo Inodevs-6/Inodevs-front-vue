@@ -1,35 +1,33 @@
 <script setup lang="ts">
 import OpenMenu from '@/components/menu/OpenMenu.vue';  
 import Alert from '@/components/alert/Alert.vue'
-import axios from "axios"
+import api from '../services/api'
+import axios from 'axios'
 import { ref } from 'vue';
 const name = ref('')
 const level = ref('')
-const desc_hab = ref('')
-const desc_ati = ref('')
-const desc_cap = ref('')
+const conhecimentos = ref('')
+const habilidades = ref('')
+const atitudes = ref('')
 const erro = ref('')
 const isDisabled = ref(true);
 const isDone = ref(false);
 const Play = ref(false);
 
 
-
 async function cadastrar() {
   try{
-    await axios.post("https://localhost:8080/descricaoCargo" ,{
-    desc_vaga: name.value, 
-    desc_nivel : level.value,
-    desc_habilidades : desc_hab.value,
-    desc_atitudes : desc_ati.value,
-    desc_capacidades : desc_cap.value
+    await api.post("/descricaoCargo" ,{
+    vaga: name.value, 
+    nivel : level.value,
+    conhecimentos: conhecimentos.value,
+    habilidades : habilidades.value,
+    atitudes: atitudes.value,
   });
-  isDone.value = false
-  console.log(`${name.value} + ${level.value} + ${desc_hab.value} + ${desc_ati.value} + ${desc_cap.value}`)
+  isDone.value = true
   }catch(err){
     erro.value = (err as Error).message
   }
-  console.log("passei")
 }
 
 async function getResponseChatgpt(name : String , level : String) {
@@ -101,24 +99,24 @@ const played = () =>{
             <div class="h-full flex justify-between">
               <textarea 
                 rows="4" 
-                v-model="desc_hab" id="desc_hab"
+                v-model="conhecimentos" id="conhecimentos"
+                :disabled="isDisabled"
+                placeholder="Descrição de conhecimentos será gerada"
+                class="w-5/6 h-[75%] bg-[#2A753D] p-4 focus:outline-none flex resize-none shadow-xl justify-start rounded-xl">
+              </textarea>
+              <textarea 
+                rows="4" 
+                v-model="habilidades" id="habilidades"
                 :disabled="isDisabled"
                 placeholder="Descrição de habilidade será gerada..."
                 class="w-5/6 h-[75%] bg-[#2A753D] p-4 focus:outline-none flex resize-none shadow-xl justify-start rounded-xl">
               </textarea>
               <textarea 
                 rows="4" 
-                v-model="desc_ati" id="desc_ati"
+                v-model="atitudes" id="atitudes"
                 :disabled="isDisabled"
                 placeholder="Descrição de atitude será gerada..."
                 class="w-5/6 h-[75%] bg-[#2A753D] p-4 focus:outline-none flex resize-none shadow-xl justify-start rounded-xl">
-              </textarea>
-              <textarea 
-                rows="4" 
-                v-model="desc_cap" id="desc_cap"
-                :disabled="isDisabled"
-                placeholder="sua descrição será gerada"
-                class="w-5/6 h-[75%] text-xs bg-[#2A753D] p-4 focus:outline-none flex resize-none shadow-xl justify-start rounded-xl">
               </textarea>
              <div @click="getResponseChatgpt(name , level )"
              class="bg-black cursor-pointer rounded-full shadow-md xl:p-5 p-2  flex justify-center  xl:h-[3.7rem]  h-[2rem] ">
