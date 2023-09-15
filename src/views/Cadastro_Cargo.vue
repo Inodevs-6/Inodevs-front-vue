@@ -5,7 +5,9 @@ import axios from "axios"
 import { ref } from 'vue';
 const name = ref('')
 const level = ref('')
-const desc = ref('')
+const desc_hab = ref('')
+const desc_ati = ref('')
+const desc_cap = ref('')
 const erro = ref('')
 const isDisabled = ref(true);
 const isDone = ref(false);
@@ -15,13 +17,15 @@ const Play = ref(false);
 
 async function cadatrar() {
   try{
-    await axios.post("https://jsonplaceholder.typicode.com/posts" ,{
-    nome_cargo: name.value, 
-    nivel_cargo : level.value,
-    descricao_cargo : desc.value
+    await axios.post("https://localhost:8080/descricaoCargo" ,{
+    desc_vaga: name.value, 
+    desc_nivel : level.value,
+    desc_habilidades : desc_hab.value,
+    desc_atitudes : desc_ati.value,
+    desc_capacidades : desc_cap.value
   });
   isDone.value = false
-  console.log(`${name.value} + ${level.value} + ${desc.value}`)
+  console.log(`${name.value} + ${level.value} + ${desc_hab.value} + ${desc_ati.value} + ${desc_cap.value}`)
   }catch(err){
     erro.value = (err as Error).message
   }
@@ -94,13 +98,27 @@ const played = () =>{
             <div class="w-full h-full flex justify-between">
               <textarea 
                 rows="4" 
-                v-model="desc" id="desc"
+                v-model="desc_hab" id="desc_hab"
                 :disabled="isDisabled"
-                placeholder="sua descrição será gerada"
+                placeholder="Descrição de habilidade será gerada..."
+                class="w-5/6 h-[75%] bg-[#2A753D] p-4 focus:outline-none flex resize-none shadow-xl justify-start rounded-xl">
+              </textarea>
+              <textarea 
+                rows="4" 
+                v-model="desc_ati" id="desc_ati"
+                :disabled="isDisabled"
+                placeholder="Descrição de atitude será gerada..."
+                class="w-5/6 h-[75%] bg-[#2A753D] p-4 focus:outline-none flex resize-none shadow-xl justify-start rounded-xl">
+              </textarea>
+              <textarea 
+                rows="4" 
+                v-model="desc_cap" id="desc_cap"
+                :disabled="isDisabled"
+                placeholder="Descrição de capacidade será gerada..."
                 class="w-5/6 h-[75%] bg-[#2A753D] p-4 focus:outline-none flex resize-none shadow-xl justify-start rounded-xl">
               </textarea>
              <div @click="getResponseChatgpt(name , level )"
-             class="bg-black cursor-pointer rounded-full shadow-md p-5 flex justify-center  h-[3.7rem]">
+             class="bg-black cursor-pointer rounded-full shadow-md p-6  flex justify-center  h-[3.7rem]">
                <img src="/assets/play.svg" width="20" height="20" alt="" srcset="">
              </div>
             </div>
