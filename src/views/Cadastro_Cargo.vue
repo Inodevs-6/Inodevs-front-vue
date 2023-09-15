@@ -15,7 +15,7 @@ const Play = ref(false);
 
 
 
-async function cadatrar() {
+async function cadastrar() {
   try{
     await axios.post("https://localhost:8080/descricaoCargo" ,{
     desc_vaga: name.value, 
@@ -131,16 +131,16 @@ const played = () =>{
              </div>
             </div>
             
-            <div    
+            <!-- <div    
             v-if="Play"
             @click="habilitarInput"
             class="bg-[#FFD600] text-black p-[0.3rem] w-32 shadow-md rounded-xl flex justify-center">
                 <p v-if="isDisabled" class="font-bold text-base" >Aprimorar</p>
                 <p v-else class="font-bold text-base" >Voltar</p>
-            </div>
+            </div> -->
           </div>
           <div class="w-full flex justify-center text-[#fff] ">
-              <button v-if="Play" class="bg-[#263001] w-[15rem] rounded-xl" @click="cadatrar" type="submit" value="Cadastrar" >
+              <button class="bg-[#263001] w-[15rem] rounded-xl" @click="cadastrar" type="submit" value="Cadastrar" >
               <p class="text-lg font-bold p-1">
                 Cadastrar
               </p>
