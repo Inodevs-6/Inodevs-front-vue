@@ -2,7 +2,7 @@
 import OpenMenu from '@/components/menu/OpenMenu.vue';  
 import Alert from '@/components/alert/Alert.vue'
 import api from '../services/api'
-import axios from 'axios'
+import ia from '../services/ia'
 import { ref } from 'vue';
 const name = ref('')
 const level = ref('')
@@ -13,16 +13,17 @@ const erro = ref('')
 const isDisabled = ref(true);
 const isDone = ref(false);
 const Play = ref(false);
+const loading = ref(false)
 
 
-async function cadastrar() {
+async function editar() {
   try{
-    await api.post("/descricaoCargo" ,{
-    vaga: name.value, 
-    nivel : level.value,
-    conhecimentos: conhecimentos.value,
-    habilidades : habilidades.value,
-    atitudes: atitudes.value,
+    await api.post("/vaga" ,{
+      nome: name.value, 
+      nivel: level.value,
+      conhecimentos: conhecimentos.value,
+      habilidades : habilidades.value,
+      atitudes: atitudes.value,
   });
   isDone.value = true
   }catch(err){
@@ -30,18 +31,41 @@ async function cadastrar() {
   }
 }
 
-async function getResponseChatgpt(name : String , level : String) {
-  console.log("carregando")
-  try{
-    await axios.get(`https://jsonplaceholder.typicode.com/chatgp/${name} ${level}`,{
+async function match(){
+  try {
+    await ia.post('/scrap')
+    await ia.post('/match', {
+       cargo: name.value,
+       nivel: level.value
+    })
+  } catch (err) {
+    erro.value = (err as Error).message
+  }
+}
 
-  });
-  played()
+async function getResponseChatgpt() {
+  loading.value = true;
+  try{
+    const response = (await ia.post('/chat',{
+      cargo: name.value,
+      nivel: level.value
+    })).data;
+    for (let i=0; i < response.descricao.Conhecimentos.length; i++) {
+      conhecimentos.value += response.descricao.Conhecimentos[i] + '\n';
+    }
+    for (let i=0; i < response.descricao.Habilidades.length; i++) {
+      habilidades.value += response.descricao.Habilidades[i] + '\n';
+    }
+    for (let i=0; i < response.descricao.Atitudes.length; i++) {
+      atitudes.value += response.descricao.Atitudes[i] + '\n';
+    }
+    habilitarInput()
+    played()
   }catch(err){
     erro.value = (err as Error).message
   }
   // played()
-
+  loading.value = false;
 }
 
 const habilitarInput = () => {
@@ -67,18 +91,18 @@ const played = () =>{
         <Alert variant="success"/>
       </div >
        <h1 class="text-center font-medium xl:text-3xl text-xl xl:mt-7 mt-3  flex w-full h-10 justify-center items-center ">
-        Cadastro Cargo
+        Cadastro de uma Nova Vaga
       </h1>
       <p class="text-red-700 fixed">{{ erro }}</p>
       <div class="xl:w-[98%] w-[90%] flex flex-col gap-10 p-4 h-[80vh] mt-[3rem] bg-[#1DEEA3] shadow-md bg-opacity-30 rounded-2xl">
        <div class="w-full flex flex-col gap-5 xl:gap-0 xl:flex-row justify-between">
          <div class="xl:w-1/3 w-full  flex flex-col ">
       <span class="bg-[#FFD600] w-[7rem] font-semibold top-[6.5rem] xl:top-[7.5rem] shadow-md rounded-lg ml-4 absolute  text-center">
-        Nome
+        Nome da Vaga
       </span>
       <input  
      v-model="name" id="name"
-     placeholder="Nome do Cargo"
+     placeholder="Nome da Vaga"
       class="bg-[#2A753D] w-full h-11 p-2 pt-2 shadow-md outline-none rounded-xl text-[#FFF]">   
     </div>
     <div class="xl:w-1/3 w-full flex flex-col ">
@@ -87,7 +111,7 @@ const played = () =>{
       </span>
       <input 
       v-model="level" id="level"
-      placeholder="Nome do Cargo"
+      placeholder="Nível da Vaga"
        class="bg-[#2A753D] w-full h-11 p-2 pt-2 shadow-md outline-none rounded-xl text-[#FFF]">   
     </div>
        </div>
@@ -118,7 +142,7 @@ const played = () =>{
                 placeholder="Descrição de atitude será gerada..."
                 class="w-5/6 h-[75%] bg-[#2A753D] p-4 focus:outline-none flex resize-none shadow-xl justify-start rounded-xl">
               </textarea>
-             <div @click="getResponseChatgpt(name , level )"
+             <div @click="getResponseChatgpt()"
              class="bg-black cursor-pointer rounded-full shadow-md xl:p-5 p-2  flex justify-center  xl:h-[3.7rem]  h-[2rem] ">
               <div class="xl:flex hidden">
                 <img src="/assets/play.svg" width="20" height="20" alt="" srcset="">
@@ -128,7 +152,7 @@ const played = () =>{
               </div>
              </div>
             </div>
-            
+            <p v-if="loading">Carregando CHA...</p>
             <!-- <div    
             v-if="Play"
             @click="habilitarInput"
@@ -137,10 +161,15 @@ const played = () =>{
                 <p v-else class="font-bold text-base" >Voltar</p>
             </div> -->
           </div>
-          <div class="w-full flex justify-center text-[#fff] ">
-              <button class="bg-[#263001] w-[15rem] rounded-xl" @click="cadastrar" type="submit" value="Cadastrar" >
+          <div v-if="Play" class="w-full flex justify-center text-[#fff] ">
+              <button class="bg-[#263001] w-[15rem] rounded-xl" @click="editar" type="submit" value="Editar" >
               <p class="text-lg font-bold p-1">
-                Cadastrar
+                Editar
+              </p>
+            </button>
+            <button class="bg-[#263001] w-[15rem] rounded-xl" @click="match" type="submit" value="Enviar para busca" >
+              <p class="text-lg font-bold p-1">
+                Enviar para busca
               </p>
             </button>
           </div>
