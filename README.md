@@ -1,22 +1,38 @@
 # Inodevs-front-vue-
-Repositório para aplicação Frontend em Vue.js para interface e iteração com o usuário.
+Repository for Frontend application in Vue.js for user interface and iteration.
 
-## Pré-requisitos:
-- Node.js: Certifique-se de ter o Node.js instalado. Você pode baixá-lo em [nodejs.org](https://nodejs.org/);
+## Tools:
+- [Node.js](https://nodejs.org/en/download): Make sure you have Node.js installed. 
+- [VScode](https://code.visualstudio.com/download): IDE used in this project.
 
-- Um editor de códigos, nesse exemplo usaremos o Visual Studio Code. Disponivel para download em  [code.visualstudio.com](https://code.visualstudio.com/).
-
-
-## Extensões para o Visual Studio Code:
+## Vue.js extensions for Visual Studio Code required:
 - TypeScript Vue Plugin(Volar) ; 
-
 - Vue Language Features (Volar);
-
 - Vue 3 Snippets.
 
-## Executar o projeto localmente:
-- Em um terminal navegue até a pasta do projeto ;
+## Local installation manual:
 
-- Digite o comando npm install e aguarde a instalação das dependências;
+1. Clone github:
+```console
+git clone https://github.com/Inodevs-6/Inodevs-front-vue.git
+```
 
-- Digite o comando npm start.
+2. Enter the cloned folder:
+```console
+cd Inodevs-front-vue
+```
+
+3. Install the Node.js dependencies:
+```console
+npm install
+```
+
+4. Start the project:
+```console
+npm run dev
+```
+
+5. Access the triggered local URL:
+```console
+http://localhost:5173/
+```
