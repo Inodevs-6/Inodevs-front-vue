@@ -14,6 +14,8 @@ const isDisabled = ref(true);
 const isDone = ref(false);
 const Play = ref(false);
 const loading = ref(false)
+const matching = ref(false)
+const scrapping = ref(false)
 
 
 async function editar() {
@@ -33,11 +35,15 @@ async function editar() {
 
 async function match(){
   try {
+    scrapping.value = true;
+    matching.value = false;  
     await ia.post('/scrap')
+    scrapping.value = false;
     await ia.post('/match', {
        cargo: name.value,
        nivel: level.value
     })
+    matching.value = true;
   } catch (err) {
     erro.value = (err as Error).message
   }
@@ -162,17 +168,27 @@ const played = () =>{
             </div> -->
           </div>
           <div v-if="Play" class="w-full flex justify-center text-[#fff] ">
-              <button class="bg-[#263001] w-[15rem] rounded-xl" @click="editar" type="submit" value="Editar" >
+              <!-- <button class="bg-[#263001] w-[15rem] rounded-xl" @click="editar" type="submit" value="Editar" >
               <p class="text-lg font-bold p-1">
                 Editar
               </p>
-            </button>
+            </button> -->
             <button class="bg-[#263001] w-[15rem] rounded-xl" @click="match" type="submit" value="Enviar para busca" >
               <p class="text-lg font-bold p-1">
-                Enviar para busca
+                Buscar Candidatos
               </p>
             </button>
           </div>
+          <button v-if="scrapping" class="bg-[#2A753D] w-[15rem] rounded-xl" type="submit">
+              <p class="text-[#fff] text-lg font-bold p-1">
+                Iniciando Busca de Canadidatos.
+              </p>
+          </button>
+          <button v-if="matching" class="bg-[#2A753D] w-[15rem] rounded-xl" type="submit">
+              <p class="text-[#fff] text-lg font-bold p-1">
+                Match de Candidatos Finalizado!.
+              </p>
+          </button>
          
         </div>
     </div>
