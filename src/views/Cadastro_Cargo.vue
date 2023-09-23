@@ -13,7 +13,7 @@ const atitudes = ref('')
 const erro = ref('')
 const isDisabled = ref(true)
 const isDone = ref(false)
-const Play = ref(false)
+const Play = ref(true)
 const loading = ref(false)
 const matching = ref(false)
 const scrapping = ref(false)
@@ -50,28 +50,30 @@ async function match() {
 }
 
 async function getResponseChatgpt() {
-  loading.value = true;
-  try{
-    const response = (await ia.post('/chat',{
-      cargo: name.value,
-      nivel: level.value
-    })).data;
-    for (let i=0; i < response.descricao.Conhecimentos.length; i++) {
-      conhecimentos.value += response.descricao.Conhecimentos[i] + '\n';
+  loading.value = true
+  try {
+    const response = (
+      await ia.post('/chat', {
+        cargo: name.value,
+        nivel: level.value
+      })
+    ).data
+    for (let i = 0; i < response.descricao.Conhecimentos.length; i++) {
+      conhecimentos.value += response.descricao.Conhecimentos[i] + '\n'
     }
-    for (let i=0; i < response.descricao.Habilidades.length; i++) {
-      habilidades.value += response.descricao.Habilidades[i] + '\n';
+    for (let i = 0; i < response.descricao.Habilidades.length; i++) {
+      habilidades.value += response.descricao.Habilidades[i] + '\n'
     }
-    for (let i=0; i < response.descricao.Atitudes.length; i++) {
-      atitudes.value += response.descricao.Atitudes[i] + '\n';
+    for (let i = 0; i < response.descricao.Atitudes.length; i++) {
+      atitudes.value += response.descricao.Atitudes[i] + '\n'
     }
     habilitarInput()
     played()
-  }catch(err){
+  } catch (err) {
     erro.value = (err as Error).message
   }
   // played()
-  loading.value = false;
+  loading.value = false
 }
 
 const habilitarInput = () => {
@@ -138,6 +140,7 @@ const played = () => {
 
           <div class="h-full flex flex-col gap-8 justify-between">
             <textarea
+              v-if="!loading"
               rows="4"
               v-model="conhecimentos"
               id="conhecimentos"
@@ -146,7 +149,14 @@ const played = () => {
               class="h-[10rem] bg-[#2A753D] p-4 focus:outline-none flex resize-none shadow-xl justify-start rounded-xl"
             >
             </textarea>
+            <div
+              class="h-[10rem] bg-[#2A753D] p-4 focus:outline-none flex resize-none shadow-xl justify-center items-center rounded-xl"
+              v-else="loading"
+            >
+              <Loader />
+            </div>
             <textarea
+              v-if="!loading"
               rows="4"
               v-model="habilidades"
               id="habilidades"
@@ -155,7 +165,14 @@ const played = () => {
               class="h-[10rem] bg-[#2A753D] p-4 focus:outline-none flex resize-none shadow-xl justify-start rounded-xl"
             >
             </textarea>
+            <div
+              class="h-[10rem] bg-[#2A753D] p-4 focus:outline-none flex resize-none shadow-xl justify-center items-center rounded-xl"
+              v-else="loading"
+            >
+              <Loader />
+            </div>
             <textarea
+              v-if="!loading"
               rows="4"
               v-model="atitudes"
               id="atitudes"
@@ -165,18 +182,24 @@ const played = () => {
             >
             </textarea>
             <div
-                @click="getResponseChatgpt()"
-                class="bg-black cursor-pointer absolute top-[1rem] right-12 xl:right-[5rem] rounded-full shadow-md xl:p-5 p-2 flex justify-center xl:h-[3.7rem] h-[2rem]"
-              >
-                <div class="xl:flex hidden">
-                  <img src="/assets/play.svg" width="20" height="20" alt="" srcset="" />
-                </div>
-                <div class="flex xl:hidden">
-                  <img src="/assets/play.svg" width="14" height="14" alt="" srcset="" />
-                </div>
+              class="h-[10rem] bg-[#2A753D] p-4 focus:outline-none flex resize-none shadow-xl justify-center items-center rounded-xl"
+              v-else="loading"
+            >
+              <Loader />
+            </div>
+            <div
+              @click="getResponseChatgpt()"
+              class="bg-black cursor-pointer absolute top-[1rem] right-12 xl:right-[5rem] rounded-full shadow-md xl:p-5 p-2 flex justify-center xl:h-[3.7rem] h-[2rem]"
+            >
+              <div class="xl:flex hidden">
+                <img src="/assets/play.svg" width="20" height="20" alt="" srcset="" />
               </div>
+              <div class="flex xl:hidden">
+                <img src="/assets/play.svg" width="14" height="14" alt="" srcset="" />
+              </div>
+            </div>
           </div>
-          <p v-if="loading">Carregando CHA...</p>
+          <!-- <p v-if="loading">Carregando CHA...</p> -->
           <!-- <div    
             v-if="Play"
             @click="habilitarInput"
@@ -195,7 +218,7 @@ const played = () => {
             class="bg-[#263001] w-[15rem] rounded-xl"
             @click="match"
             type="submit"
-            value="Enviar para busca"
+            value="Enviar para Busca"
           >
             <p class="text-lg font-bold p-1">Buscar Candidatos</p>
           </button>
