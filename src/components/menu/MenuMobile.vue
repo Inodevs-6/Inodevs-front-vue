@@ -4,14 +4,14 @@
     @click="openMenu"
     class="m-2 bg-slate-100 p-2 hover:bg-slate-200 flex xl:hidden rounded-full fixed"
   >
-    <img src="assets/Menu.svg" width="27" height="27" />
+    <img src="/assets/Menu.svg" width="27" height="27" />
   </button>
   <div v-else class="w-screen z-30 flex absolute h-screen bg-white">
     <button
       @click="openMenu"
       class="m-2 bg-slate-100 p-2 hover:bg-slate-200 flex xl:hidden rounded-full fixed"
     >
-      <img src="assets/close.svg" width="27" height="27" />
+      <img src="/assets/close.svg" width="27" height="27" />
     </button>
     <div class="bg-[#CCFF00] w-full flex justify-start p-3 pt-16 gap-8 flex-col items-start">
       <div class="flex flex-row">
