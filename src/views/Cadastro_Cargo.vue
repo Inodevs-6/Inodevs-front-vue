@@ -14,9 +14,11 @@ const erro = ref('')
 const isDisabled = ref(true)
 const isDone = ref(false)
 const Play = ref(false)
+const playMatch = ref(false)
 const loading = ref(false)
 const matching = ref(false)
 const scrapping = ref(false)
+const valid = ref(false)
 
 async function editar() {
   try {
@@ -35,15 +37,17 @@ async function editar() {
 
 async function match() {
   try {
+    played()
     scrapping.value = true
     matching.value = false
     await ia.post('/scrap')
     scrapping.value = false
     await ia.post('/match', {
-      cargo: name.value,
-      nivel: level.value
+      cargo: name.value.replace(' ', ''),
+      nivel: level.value.replace(' ', '')
     })
     matching.value = true
+    played()
   } catch (err) {
     erro.value = (err as Error).message
   }
@@ -51,28 +55,33 @@ async function match() {
 
 async function getResponseChatgpt() {
   loading.value = true
+  valid.value = false
   try {
-    const response = (
-      await ia.post('/chat', {
-        cargo: name.value,
-        nivel: level.value
-      })
-    ).data
-    for (let i = 0; i < response.descricao.Conhecimentos.length; i++) {
-      conhecimentos.value += response.descricao.Conhecimentos[i] + '\n'
+    if (name.value != '' && level.value != '') {
+      played()
+      const response = (
+        await ia.post('/chat', {
+          cargo: name.value.replace(' ', ''),
+          nivel: level.value.replace(' ', '')
+        })
+      ).data
+      for (let i = 0; i < response.descricao.Conhecimentos.length; i++) {
+        conhecimentos.value += response.descricao.Conhecimentos[i] + '\n'
+      }
+      for (let i = 0; i < response.descricao.Habilidades.length; i++) {
+        habilidades.value += response.descricao.Habilidades[i] + '\n'
+      }
+      for (let i = 0; i < response.descricao.Atitudes.length; i++) {
+        atitudes.value += response.descricao.Atitudes[i] + '\n'
+      }
+      habilitarInput()
+      playMatch.value = true
+    } else {
+      valid.value = true
     }
-    for (let i = 0; i < response.descricao.Habilidades.length; i++) {
-      habilidades.value += response.descricao.Habilidades[i] + '\n'
-    }
-    for (let i = 0; i < response.descricao.Atitudes.length; i++) {
-      atitudes.value += response.descricao.Atitudes[i] + '\n'
-    }
-    habilitarInput()
-    played()
   } catch (err) {
     erro.value = (err as Error).message
   }
-  // played()
   loading.value = false
 }
 
@@ -97,7 +106,6 @@ const played = () => {
       >
         Cadastro de Vaga
       </h1>
-      <p class="text-red-700 fixed">{{ erro }}</p>
       <div
         class="xl:w-[88vw] w-[90%] flex flex-col gap-10 p-4 mt-[3rem] bg-[#1DEEA3] shadow-md bg-opacity-30 rounded-2xl"
       >
@@ -113,6 +121,7 @@ const played = () => {
               id="name"
               placeholder="Nome da Vaga"
               class="bg-[#2b8341e2] w-full h-11 p-2 pt-2 shadow-md outline-none rounded-xl text-[#FFF] relative z-0"
+              :disabled="!isDisabled"
             />
           </div>
           <div class="xl:w-1/3 w-full flex flex-col relative">
@@ -126,6 +135,7 @@ const played = () => {
               id="level"
               placeholder="Nível da Vaga"
               class="bg-[#2b8341e2] w-full h-11 p-2 pt-2 shadow-md outline-none rounded-xl text-[#FFF] relative z-0"
+              :disabled="!isDisabled"
             />
           </div>
         </div>
@@ -187,7 +197,7 @@ const played = () => {
             >
               <Loader />
             </div>
-            <div
+            <div v-if="!Play"
               @click="getResponseChatgpt()"
               class="bg-black cursor-pointer absolute top-[1rem] right-12 xl:right-[5rem] rounded-full shadow-md xl:p-5 p-2 flex justify-center xl:h-[3.7rem] h-[2rem]"
             >
@@ -208,7 +218,7 @@ const played = () => {
                 <p v-else class="font-bold text-base" >Voltar</p>
             </div> -->
         </div>
-        <div v-if="Play" class="w-full flex justify-center text-[#fff]">
+        <div v-if="playMatch" class="w-full flex justify-center text-[#fff]">
           <!-- <button class="bg-[#263001] w-[15rem] rounded-xl" @click="editar" type="submit" value="Editar" >
               <p class="text-lg font-bold p-1">
                 Editar
@@ -223,12 +233,30 @@ const played = () => {
             <p class="text-lg font-bold p-1">Buscar Candidatos</p>
           </button>
         </div>
-        <button v-if="scrapping" class="bg-[#2A753D] w-[15rem] rounded-xl" type="submit">
-          <p class="text-[#fff] text-lg font-bold p-1">Iniciando Busca de Canadidatos.</p>
-        </button>
-        <button v-if="matching" class="bg-[#2A753D] w-[15rem] rounded-xl" type="submit">
-          <p class="text-[#fff] text-lg font-bold p-1">Match de Candidatos Finalizado!.</p>
-        </button>
+        <div v-if="scrapping" class="fixed bottom-2 right-5">
+          <button class="bg-[#2A753D] w-[25rem] rounded-xl border-solid border-white border-2 text-center" type="submit">
+            <p class="text-[#fff] text-lg font-bold p-1 ">Realizando Busca de Canadidatos...</p>
+          </button>
+        </div>
+
+        <div class="fixed bottom-2 right-5">
+          <div v-if="matching" class="bg-[#2A753D] w-[25rem] rounded-xl border-solid border-white border-2 text-center" type="submit">
+            <p class="text-[#fff] text-lg font-bold p-1">Match de Candidatos Finalizado!</p>
+          </div>
+        </div>
+
+        <div class="fixed bottom-2 right-5">
+          <div v-if="valid" class="bg-[#cc0000] w-[25rem] rounded-xl border-solid border-white border-2 text-center" type="submit">
+            <p class="text-[#fff] text-lg font-bold p-1">Preencha todos os campos!</p>
+          </div>
+        </div>
+
+        <div class="fixed bottom-2 right-5">
+          <div v-if="erro" class="bg-[#cc0000] w-[25rem] rounded-xl border-solid border-white border-2 text-center" type="submit">
+            <p class="text-[#fff] text-lg font-bold p-1">{{ erro }}</p>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
