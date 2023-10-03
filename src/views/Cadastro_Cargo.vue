@@ -197,7 +197,8 @@ const played = () => {
             >
               <Loader />
             </div>
-            <div v-if="!Play"
+            <div
+              v-if="!Play"
               @click="getResponseChatgpt()"
               class="bg-black cursor-pointer absolute top-[1rem] right-12 xl:right-[5rem] rounded-full shadow-md xl:p-5 p-2 flex justify-center xl:h-[3.7rem] h-[2rem]"
             >
@@ -234,29 +235,43 @@ const played = () => {
           </button>
         </div>
         <div v-if="scrapping" class="fixed bottom-2 right-5">
-          <button class="bg-[#2A753D] w-[25rem] rounded-xl border-solid border-white border-2 text-center" type="submit">
-            <p class="text-[#fff] text-lg font-bold p-1 ">Realizando Busca de Canadidatos...</p>
+          <button
+            class="bg-[#2A753D] w-[25rem] rounded-xl border-solid border-white border-2 text-center"
+            type="submit"
+          >
+            <p class="text-[#fff] text-lg font-bold p-1">Realizando Busca de Canadidatos...</p>
           </button>
         </div>
 
         <div class="fixed bottom-2 right-5">
-          <div v-if="matching" class="bg-[#2A753D] w-[25rem] rounded-xl border-solid border-white border-2 text-center" type="submit">
+          <div
+            v-if="matching"
+            class="bg-[#2A753D] w-[25rem] rounded-xl border-solid border-white border-2 text-center"
+            type="submit"
+          >
             <p class="text-[#fff] text-lg font-bold p-1">Match de Candidatos Finalizado!</p>
           </div>
         </div>
 
         <div class="fixed bottom-2 right-5">
-          <div v-if="valid" class="bg-[#cc0000] w-[25rem] rounded-xl border-solid border-white border-2 text-center" type="submit">
+          <div
+            v-if="valid"
+            class="bg-[#cc0000] w-[25rem] rounded-xl border-solid border-white border-2 text-center"
+            type="submit"
+          >
             <p class="text-[#fff] text-lg font-bold p-1">Preencha todos os campos!</p>
           </div>
         </div>
 
         <div class="fixed bottom-2 right-5">
-          <div v-if="erro" class="bg-[#cc0000] w-[25rem] rounded-xl border-solid border-white border-2 text-center" type="submit">
+          <div
+            v-if="erro"
+            class="bg-[#cc0000] w-[25rem] rounded-xl border-solid border-white border-2 text-center"
+            type="submit"
+          >
             <p class="text-[#fff] text-lg font-bold p-1">{{ erro }}</p>
           </div>
         </div>
-
       </div>
     </div>
   </div>
