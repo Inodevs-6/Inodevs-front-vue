@@ -1,24 +1,24 @@
 <script  setup>
     import OpenMenu from '@/components/menu/OpenMenu.vue'
 </script>
-<template class="conteudo-candidatos">
-  <div class="bg-white flex w-screen overflow-x-hidden overflow-y-scroll h-screen">
+<template >
+  <div >
     <OpenMenu/>
-  </div>
-  
-  <div>
-    <h1>Ranqueamento de Candidatos</h1>
-    <div v-for="(candidato, index) in candidatos" :key="index" class="candidato-card">
-      <div class="info">
-        <span class="nome">{{ candidato.nome }}</span>
-        <span class="match">{{ candidato.match }}%</span>
+ 
+    <div>
+      <h1 class="titulo">Ranqueamento de Candidatos</h1>
+      <div v-for="(candidato, index) in candidatos" :key="index" class="candidato-card">
+        <div class="conteudo-candidatos">
+          <span class="nome">{{ candidato.nome }}</span>
+          <div class="barra">
+            <div class="barra-preenchida" :style="{ width: `${candidato.match}%` }"></div>
+          </div>
+          <span class="match">{{ candidato.match }}%</span>
+          <router-link :to="'/visualizar/' + candidato.id">
+            <button class="visualizar-button">Visualizar</button>
+          </router-link>
+        </div>
       </div>
-      <div class="barra">
-        <div class="barra-preenchida" :style="{ width: `${candidato.match}%` }"></div>
-      </div>
-      <router-link :to="'/visualizar/' + candidato.id">
-        <button class="visualizar-button">Visualizar</button>
-      </router-link>
     </div>
   </div>
 </template>
@@ -28,7 +28,7 @@ export default {
   data() {
     return {
       candidatos: [
-        { id: 1, nome: 'Candidato 1', match: 80 },
+        { id: 1, nome: 'Candidato 1', match: 30 },
         { id: 2, nome: 'Candidato 2', match: 70 },
         { id: 3, nome: 'Candidato 3', match: 60 },
         { id: 4, nome: 'Candidato 4', match: 90 },
@@ -43,43 +43,53 @@ export default {
 </script>
 
 <style scoped>
+.titulo {
+  text-align: center;
+  margin-bottom: 30px;
+  font-weight: bold;
+  font-size: 20px;
+}
+
 .candidato-card {
   border: 1px solid #ddd;
   padding: 16px;
-  margin: 16px;
+  margin-bottom: 30px;
+  margin-left: 85px;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
 .conteudo-candidatos {
-  margin-top: 100px;
-}
-.info {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   width: 100%;
 }
 
-.nome {
-  font-weight: bold;
+.nome,
+.match {
+  flex: 1;
+  text-align: center;
 }
 
 .barra {
-  width: 100%;
+  flex: 4;
   background-color: #eee;
   height: 10px;
-  margin-top: 8px;
+  margin: 0 10px;
+  display: flex;
+  align-items: center;
 }
 
 .barra-preenchida {
+  flex: 1;
   height: 100%;
   background-color: #007bff;
 }
 
 .visualizar-button {
-  margin-top: 8px;
+  flex: 1;
   background-color: #007bff;
   color: white;
   border: none;
