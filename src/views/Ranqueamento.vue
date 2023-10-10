@@ -106,6 +106,9 @@ export default {
 
 .borda-filtro {
   border: 1px solid #000;
+  width: 70px;
+  margin-left: 5px;
+  margin-right: 10px;
 }
 
 .filtro {
