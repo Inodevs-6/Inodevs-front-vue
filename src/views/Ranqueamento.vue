@@ -28,8 +28,10 @@
               class="barra-preenchida"
               :style="{ width: `${candidato.match}%`, backgroundColor: getCor(candidato.match) }"
             ></div>
+            <div class="match-circle" :style="{ backgroundColor: getCor(candidato.match) }">
+              <span class="match">{{ candidato.match }}%</span>
+            </div>
           </div>
-          <span class="match">{{ candidato.match }}%</span>
           <router-link :to="'/visualizar/' + candidato.id">
             <button class="visualizar-button">Visualizar</button>
           </router-link>
@@ -123,23 +125,41 @@ export default {
   width: 100%;
 }
 
-.nome,
+
 .match {
   flex: 1;
   text-align: center;
 }
 
 .barra {
+  position: relative;
   width: 100%;
   background-color: #eee;
   height: 10px;
   margin-top: 8px;
+  margin-right: 40px;
+  margin-left: 10px;
 }
 
 .barra-preenchida {
   height: 100%;
   width: 0;
   transition: width 0.5s ease;
+}
+
+.match-circle {
+  width: 40px;
+  height: 40px;
+  background-color: #007bff;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  right: -30px;
+  top: -19px;
+  font-size: 16px;
 }
 
 .visualizar-button {
