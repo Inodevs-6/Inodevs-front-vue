@@ -7,19 +7,15 @@
     <div>
       <h1 class="titulo">Ranqueamento de Candidatos</h1>
 
-      <!-- Caixa de filtro por porcentagem de match -->
+      
       <div class="filtro">
-        <label for="filtroMatch">Selecionar porcentagem de match:</label>
-        <select id="filtroMatch" v-model="filtroSelecionado" @change="filtrarCandidatos" class="borda-filtro">
-          <option value="todos">Todas</option>
-          <option value="0-25">0% - 25%</option>
-          <option value="26-50">26% - 50%</option>
-          <option value="51-75">51% - 75%</option>
-          <option value="76-100">76% - 100%</option>
-        </select>
+        <label for="minMatch">Mínimo Match (%):</label>
+        <input type="number" id="minMatch" v-model="minMatch" @input="filtrarCandidatos" class="borda-filtro" />
+        <label for="maxMatch">Máximo Match (%):</label>
+        <input type="number" id="maxMatch" v-model="maxMatch" @input="filtrarCandidatos" class="borda-filtro" />
       </div>
 
-      <!-- Lista de candidatos filtrados -->
+      
       <div v-for="(candidato, index) in candidatosFiltrados" :key="index" class="candidato-card">
         <div class="conteudo-candidatos">
           <span class="nome">{{ candidato.nome }}</span>
@@ -54,29 +50,38 @@ export default {
         { id: 6, nome: 'Candidato 6', match: 85 },
         { id: 7, nome: 'Candidato 7', match: 95 },
         { id: 8, nome: 'Candidato 8', match: 65 },
+        { id: 9, nome: 'Candidato 8', match: 5 },
+        { id: 10, nome: 'Candidato 8', match: 15 },
+        { id: 11, nome: 'Candidato 8', match: 24 },
+        { id: 12, nome: 'Candidato 8', match: 30 },
+        { id: 13, nome: 'Candidato 8', match: 43 },
+        { id: 14, nome: 'Candidato 8', match: 50 },
       ],
-      filtroSelecionado: '',
+      minMatch: '', 
+      maxMatch: '', 
     };
   },
   computed: {
     candidatosFiltrados() {
-      if (this.filtroSelecionado === '0-25') {
-        return this.candidatos.filter(candidato => candidato.match >= 0 && candidato.match <= 25);
-      } else if (this.filtroSelecionado === '26-50') {
-        return this.candidatos.filter(candidato => candidato.match >= 26 && candidato.match <= 50);
-      } else if (this.filtroSelecionado === '51-75') {
-        return this.candidatos.filter(candidato => candidato.match >= 51 && candidato.match <= 75);
-      } else if (this.filtroSelecionado === '76-100') {
-        return this.candidatos.filter(candidato => candidato.match >= 76 && candidato.match <= 100);
-      } else {
-        return this.candidatos;
+      return this.candidatos.filter(candidato => {
+        if (this.minMatch === '' && this.maxMatch === '') {
+          return true;
+        } else if (this.minMatch === '') {
+          return candidato.match <= parseInt(this.maxMatch);
+        } else if (this.maxMatch === '') {
+          return candidato.match >= parseInt(this.minMatch);
+        } else {
+          return (
+            candidato.match >= parseInt(this.minMatch) && candidato.match <= parseInt(this.maxMatch)
+          );
       }
+      });
     },
   },
   methods: {
     filtrarCandidatos() {},
     getCor(match) {
-      // Definir cores com base na porcentagem de match
+      
       if (match >= 0 && match <= 25) {
         return 'red';
       } else if (match >= 26 && match <= 50) {
