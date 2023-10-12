@@ -113,7 +113,7 @@ onMounted(fetchVagas)
           <div class="pl-4 w-[25%]">
             <span>{{ vaga.nivel }} </span>
           </div>
-          <div class="pl-6 w-[25%] flex justify-center">
+          <router-link :to="'/ranking/'+ vaga.id" class="pl-6 w-[25%] flex justify-center">
             <div class="p-1 rounded-full bg-[#f3f048f9]  ">
               <img
                 alt="Vue logo"
@@ -123,7 +123,7 @@ onMounted(fetchVagas)
                 height="30"
               />
             </div>
-          </div>
+          </router-link>
         </li>
       </section>
       <section
@@ -146,7 +146,7 @@ onMounted(fetchVagas)
           <div class="pl-4 w-[25%]">
             <span>{{ i.nivel }} </span>
           </div>
-          <div class="pl-6 w-[25%] flex justify-center">
+          <router-link :to="'/ranking/'+ i.id" class="pl-6 w-[25%] flex justify-center">
             <div class="p-1 rounded-full bg-[#f3f048f9]  ">
               <img
                 alt="Vue logo"
@@ -156,7 +156,7 @@ onMounted(fetchVagas)
                 height="30"
               />
             </div>
-          </div>
+          </router-link>
         </li>
     </section>
     </div>

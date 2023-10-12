@@ -22,9 +22,10 @@ const router = createRouter({
       component: ListaVaga
     },
     {
-      path: '/Ranqueamento',
+      path: '/Ranking/:id',
       name: 'Ranque',
-      component: Ranqueamento
+      component: Ranqueamento,
+      props: true
     }
   ]
 })

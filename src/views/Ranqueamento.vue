@@ -1,13 +1,58 @@
 <script  setup>
     import OpenMenu from '@/components/menu/OpenMenu.vue'
     import LabelLista from '@/components/labels/Label-lista.vue';
+    import { defineProps, onMounted, ref } from 'vue';
+    import api from '@/services/api';
+    const erro = ref('')
+    const vaga = ref([])
+    const loading = ref(true)
+    const props = defineProps({
+      id: {
+        type: String,
+        required: true,
+      },
+    });
+
+const fetchVagas = async () => {
+  loading.value = true 
+  try{
+    const response = await api.get(`/vaga/match/${props.id}`)
+    vaga.value = response.data 
+    console.log(repose.data)
+  }catch(error){
+    if (error instanceof Error) {
+    erro.value = error.message;
+  } else {
+    erro.value = 'Ocorreu um erro desconhecido.';
+  }
+  }
+  loading.value = false
+}
+
+const fetchCandidatos = async () => {
+  loading.value = true 
+  try{
+    const response = await api.get(`/vaga/match/${props.id}`)
+    vaga.value = response.data 
+    console.log(repose.data)
+  }catch(error){
+    if (error instanceof Error) {
+    erro.value = error.message;
+  } else {
+    erro.value = 'Ocorreu um erro desconhecido.';
+  }
+  }
+  loading.value = false
+}
+onMounted(fetchVagas)
+onMounted(fetchCandidatos)
 </script>
 <template>
   <div class="bg-white relative flex w-screen  overflow-x-hidden overflow-y-scroll h-screen">
     <OpenMenu />
     <div class="flex xl:ml-[5rem] w-screen items-center flex-col bg-white">
       <h1 class="text-center font-medium xl:text-3xl text-xl xl:mt-7 mt-3 flex w-full h-10 justify-center items-center">
-        Ranqueamento de Candidatos
+        Ranqueamento de {{ vaga.nome }}
       </h1>
 
       
@@ -22,20 +67,22 @@
       <LabelLista name="Porcetagem" estilo="bg-[#FFD600] w-[7rem] absolute font-bold top-[9.4rem] right-[7rem] shadow-md rounded-lg text-center z-10"/>
       <section class="xl:w-[88vw] h-[70vh] w-[90%] relative overflow-auto flex flex-col gap-4 p-4 pt-7 mt-[3rem] bg-[#1DEEA3] shadow-md bg-opacity-30 rounded-2xl">
         <div v-for="(candidato, index) in candidatosFiltrados" :key="index" class="h-[3rem] text-white font-bold w-full flex-row flex justify-around items-center rounded-lg bg-[#2A753D]">
-        <div class="conteudo-candidatos">
-          <span class="nome">{{ candidato.nome }}</span>
-          <div class="barra rounded-full border-black bor">
+        <div class="conteudo-candidatos flex items-center justify-around h-[3rem]">
+          <span class="nome w-[20%]  pl-4">{{ candidato.nome }}</span>
+          <div class="barra rounded-full shadow-md border-black">
             <div
-              class="barra-preenchida rounded-full "
+              class="barra-preenchida shadow-md rounded-full  "
               :style="{ width: `${candidato.match}%`, backgroundColor: getCor(candidato.match) }"
             ></div>
-            <div class="match-circle" :style="{ backgroundColor: getCor(candidato.match) }">
-              <span class="match">{{ candidato.match }}%</span>
-            </div>
           </div>
-          <router-link :to="'/visualizar/' + candidato.id">
+          <div class="w-[10%] flex justify-center items-center ">
+              <div class="match-circle  shadow-md" :style="{ backgroundColor: getCor(candidato.match) }">
+              <span class="match text-black">{{ candidato.match }}%</span>
+            </div>
+            </div>
+          <!-- <router-link :to="'/visualizar/' + candidato.id">
             <button class="visualizar-button">Visualizar</button>
-          </router-link>
+          </router-link> -->
         </div>
       </div>
       </section>
@@ -44,7 +91,7 @@
   </div>
 </template>
 
-<script>
+<script >
 export default {
   data() {
     return {
@@ -126,8 +173,8 @@ export default {
 .candidato-card {
   border: 1px solid #ddd;
   padding: 16px;
-  margin-bottom: 30px;
-  margin-left: 85px;
+  /* margin-bottom: 30px; */
+  /* margin-left: 85px; */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -136,24 +183,23 @@ export default {
 .conteudo-candidatos {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   width: 100%;
 }
 
 
 .match {
-  flex: 1;
+  display: flex;
   text-align: center;
+  /* width: 10%; */
 }
 
 .barra {
   position: relative;
-  width: 100%;
+  width: 60%;
   background-color: #eee;
   height: 10px;
-  margin-top: 8px;
-  margin-right: 40px;
-  margin-left: 10px;
+  
   
 }
 
@@ -161,6 +207,7 @@ export default {
   height: 100%;
   width: 0;
   transition: width 0.5s ease;
+  border: solid 1px black
 }
 
 .match-circle {
@@ -172,10 +219,10 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  position: absolute;
-  right: -30px;
+  /* position: absolute; */
+  /* right: -30px;
   top: -19px;
-  font-size: 16px;
+  font-size: 16px; */
 }
 
 .visualizar-button {
