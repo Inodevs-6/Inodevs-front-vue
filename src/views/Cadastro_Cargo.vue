@@ -16,23 +16,146 @@ const isDone = ref(false)
 const Play = ref(false)
 const playMatch = ref(true)
 const loading = ref(false)
+const loadingC = ref(false)
+const loadingH = ref(false)
+const loadingA = ref(false)
 const matching = ref(false)
 const scrapping = ref(false)
 const valid = ref(false)
+const comentario = ref('')
+const id = ref(0)
+const save = ref(false)
 
-async function editar() {
+async function salvar() {
+  erro.value = ''
   try {
-    await api.post('/vaga', {
-      nome: name.value,
-      nivel: level.value,
+    const empresaId = 1
+    api.patch('/editar/' + empresaId + '/' + id.value, {
       conhecimentos: conhecimentos.value,
       habilidades: habilidades.value,
       atitudes: atitudes.value
     })
-    isDone.value = true
-  } catch (err) {
-    erro.value = (err as Error).message
+    save.value = true
+  } catch (error) {
+    erro.value = (error as Error).message
   }
+}
+
+async function aprimorar(campo: String) {
+  erro.value = ''
+
+  if (campo == 'Conhecimentos') {
+    loadingC.value = true
+  }
+  if (campo == 'Habilidades') {
+    loadingH.value = true
+  }
+  if (campo == 'Atitudes') {
+    loadingA.value = true
+  }
+  if (campo == 'Geral') {
+    loadingC.value = true
+    loadingH.value = true
+    loadingA.value = true
+  }
+
+  try {
+    let cha = ''
+
+    if (campo == 'Geral') {
+      cha += '{"descricao": '
+    }
+    if (campo == 'Conhecimentos' || campo == 'Geral') {
+      cha += '{"Conhecimentos": ['
+      conhecimentos.value.trim().split('\n').forEach((palavra, index) => {
+        if (index != 0) {
+          cha += ', "' + palavra + '"'
+        } else {
+          cha += '"' + palavra + '"'
+        }
+      })
+      cha += ']}'
+    }
+    if (campo == 'Geral') {
+      cha += ', '
+    }
+    if (campo == 'Habilidades' || campo == 'Geral') {
+      cha += '{"Habilidades": ['
+      habilidades.value.trim().split('\n').forEach((palavra, index) => {
+        if (index != 0) {
+          cha += ', "' + palavra + '"'
+        } else {
+          cha += '"' + palavra + '"'
+        }
+      })
+      cha += ']}'
+    }
+    if (campo == 'Geral') {
+      cha += ', '
+    }
+    if (campo == 'Atitudes' || campo == 'Geral') {
+      cha += '{"Atitudes": ['
+      atitudes.value.trim().split('\n').forEach((palavra, index) => {
+        if (index != 0) {
+          cha += ', "' + palavra + '"'
+        } else {
+          cha += '"' + palavra + '"'
+        }
+      })
+      cha += ']}'
+    }
+    if (campo == 'Geral') {
+      cha += '}'
+    }
+
+    console.log(cha)
+    
+    const response = await ia.post('/upgrade', {
+      cargo: name.value,
+      nivel: level.value,
+      cha: cha,
+      campo: campo,
+      comentario: comentario.value
+    })
+
+    if (campo == 'Conhecimentos') {
+      conhecimentos.value = '' 
+      response.data.Conhecimentos.forEach((palavra: string) => {
+        conhecimentos.value += palavra + '\n'
+      })
+    }
+    if (campo == 'Habilidades') {
+      habilidades.value = '' 
+      response.data.Habilidades.forEach((palavra: string) => {
+        habilidades.value += palavra + '\n'
+      })
+    }
+    if (campo == 'Atitudes') {
+      atitudes.value = '' 
+      response.data.Atitudes.forEach((palavra: string) => {
+        atitudes.value += palavra + '\n'
+      })
+    }
+    if (campo == 'Geral') {
+      conhecimentos.value = '' 
+      response.data.descricao.Conhecimentos.forEach((palavra: string) => {
+        conhecimentos.value += palavra + '\n'
+      })
+      habilidades.value = '' 
+      response.data.descricao.Habilidades.forEach((palavra: string) => {
+        habilidades.value += palavra + '\n'
+      })
+      atitudes.value = '' 
+      response.data.descricao.Atitudes.forEach((palavra: string) => {
+        atitudes.value += palavra + '\n'
+      })
+    }
+  } catch (error) {
+    erro.value = (error as Error).message
+  }
+  loadingC.value = false
+  loadingH.value = false
+  loadingA.value = false
 }
 
 async function match() {
@@ -40,6 +163,7 @@ async function match() {
     played()
     scrapping.value = true
     matching.value = false
+    salvar()
     await ia.post('/scrap')
     scrapping.value = false
     await ia.post('/match', {
@@ -54,7 +178,9 @@ async function match() {
 }
 
 async function getResponseChatgpt() {
-  loading.value = true
+  loadingC.value = true
+  loadingH.value = true
+  loadingA.value = true
   valid.value = false
   try {
     if (name.value != '' && level.value != '') {
@@ -65,6 +191,7 @@ async function getResponseChatgpt() {
           nivel: level.value.replace(' ', '')
         })
       ).data
+      id.value = response.id
       for (let i = 0; i < response.descricao.Conhecimentos.length; i++) {
         conhecimentos.value += response.descricao.Conhecimentos[i] + '\n'
       }
@@ -82,7 +209,9 @@ async function getResponseChatgpt() {
   } catch (err) {
     erro.value = (err as Error).message
   }
-  loading.value = false
+  loadingC.value = false
+  loadingH.value = false
+  loadingA.value = false
 }
 
 const habilitarInput = () => {
@@ -146,92 +275,105 @@ const played = () => {
             Conhecimentos
           </span>
           <textarea
-            v-if="!loading"
+            v-if="!loadingC"
             rows="4"
             v-model="conhecimentos"
             id="conhecimentos"
             placeholder="Descrição de conhecimentos será gerada"
-            class="h-[10rem] bg-[#2A753D] p-4 focus:outline-none flex resize-none shadow-xl justify-start rounded-xl"
+            :disabled="isDisabled"
+            class="h-[10rem] bg-[#2A753D] p-4 focus:outline-none flex resize-none shadow-xl justify-start rounded-xl text-white"
           >
           </textarea>
-          <button
-            v-if="!loading"
-            class="bg-[#FFD600] w-[9rem] relative top-[-2rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
-          >
-            Aprimorar
-          </button>
           <div
             class="h-[10rem] bg-[#2A753D] p-4 focus:outline-none flex resize-none shadow-xl justify-center items-center rounded-xl"
             v-else
           >
             <Loader />
           </div>
+          <button
+            v-if="!loadingC && Play"
+            @click="aprimorar('Conhecimentos')"
+            class="bg-[#FFD600] w-[9rem] relative top-[-2rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
+          >
+            Aprimorar
+          </button>
           <span
             class="bg-[#FFD600] w-[9rem] relative top-[1rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
           >
             Habilidades
           </span>
           <textarea
-            v-if="!loading"
+            v-if="!loadingH"
             rows="4"
             v-model="habilidades"
             id="habilidades"
             placeholder="Descrição de habilidade será gerada..."
-            class="h-[10rem] bg-[#2A753D] p-4 focus:outline-none flex resize-none shadow-xl justify-start rounded-xl"
+            :disabled="isDisabled"
+            class="h-[10rem] bg-[#2A753D] p-4 focus:outline-none flex resize-none shadow-xl justify-start rounded-xl  text-white"
           >
           </textarea>
-          <button
-            v-if="!loading"
-            class="bg-[#FFD600] w-[9rem] relative top-[-2rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
-          >
-            Aprimorar
-          </button>
           <div
             class="h-[10rem] bg-[#2A753D] p-4 focus:outline-none flex resize-none shadow-xl justify-center items-center rounded-xl"
             v-else
           >
             <Loader />
           </div>
+          <button
+            v-if="!loadingH && Play"
+            @click="aprimorar('Habilidades')"
+            class="bg-[#FFD600] w-[9rem] relative top-[-2rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
+          >
+            Aprimorar
+          </button>
           <span
             class="bg-[#FFD600] w-[9rem] relative top-[1rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
           >
             Atitudes
           </span>
           <textarea
-            v-if="!loading"
+            v-if="!loadingA"
             rows="4"
             v-model="atitudes"
             id="atitudes"
             placeholder="Descrição de atitude será gerada..."
-            class="h-[10rem] bg-[#2A753D] p-4 focus:outline-none flex resize-none shadow-xl justify-start rounded-xl"
+            :disabled="isDisabled"
+            class="h-[10rem] bg-[#2A753D] p-4 focus:outline-none flex resize-none shadow-xl justify-start rounded-xl text-white"
           >
           </textarea>
-          <button
-            v-if="!loading"
-            class="bg-[#FFD600] w-[9rem] relative top-[-2rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
-          >
-            Aprimorar
-          </button>
+
           <div
             class="h-[10rem] bg-[#2A753D] p-4 focus:outline-none flex resize-none shadow-xl justify-center items-center rounded-xl"
             v-else
           >
             <Loader />
           </div>
+          <button
+            v-if="!loadingA && Play"
+            @click="aprimorar('Atitudes')"
+            class="bg-[#FFD600] w-[9rem] relative top-[-2rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
+            >
+            Aprimorar
+          </button>
           <span
             class="bg-[#FFD600] w-[9rem] relative top-[1rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
           >
             Comentário
           </span>
           <textarea
-            v-if="!loading"
             rows="4"
-            v-model="conhecimentos"
-            id="conhecimentos"
-            placeholder="Descrição de conhecimentos será gerada"
-            class="h-[7rem] bg-[#2A753D] p-4 focus:outline-none flex resize-none shadow-xl justify-start rounded-xl"
+            v-model="comentario"
+            id="comentario"
+            placeholder="Adicione um comentário caso necessário para fazer o aprimoramento com configurações mais avançadas."
+            :disabled="isDisabled"
+            class="h-[8rem] bg-[#2A753D] p-4 focus:outline-none flex resize-none shadow-xl justify-start rounded-xl text-white"
           >
           </textarea>
+          <button
+            @click="aprimorar('Geral')"
+            class="bg-[#FFD600] w-[9rem] relative top-[-2rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
+          >
+            Aprimorar
+          </button>
           <div
             v-if="!Play"
             @click="getResponseChatgpt()"
@@ -264,7 +406,7 @@ const played = () => {
 
             <button
               class="bg-[#263001] w-[10rem] rounded-xl"
-              @click="match"
+              @click="salvar"
               type="submit"
               value="Enviar para Busca"
             >
@@ -307,6 +449,16 @@ const played = () => {
             type="submit"
           >
             <p class="text-[#fff] text-lg font-bold p-1">Preencha todos os campos!</p>
+          </div>
+        </div>
+
+        <div class="fixed bottom-2 right-5">
+          <div
+            v-if="save"
+            class="bg-[#2A753D] w-[25rem] rounded-xl border-solid border-white border-2 text-center"
+            type="submit"
+          >
+            <p class="text-[#fff] text-lg font-bold p-1">Vaga salva com sucesso!</p>
           </div>
         </div>
 

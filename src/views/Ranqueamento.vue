@@ -1,54 +1,54 @@
 <script setup lang="ts">
-    import OpenMenu from '@/components/menu/OpenMenu.vue'
-    import LabelLista from '@/components/labels/Label-lista.vue';
-    import { defineProps, onMounted, ref } from 'vue';
-    import api from '@/services/api';
+import OpenMenu from '@/components/menu/OpenMenu.vue'
+import LabelLista from '@/components/labels/Label-lista.vue'
+import { defineProps, onMounted, ref } from 'vue'
+import api from '@/services/api'
 
-    interface Candidato {
-      id: number,
-      experiencia: string,
-      link: string
-    }
+interface Candidato {
+  id: number
+  experiencia: string
+  link: string
+}
 
-    interface CandidatoVaga {
-      candidato: Candidato
-      rank: number,
-      pontosCha: number,
-      percent_match: number
-    }
+interface CandidatoVaga {
+  candidato: Candidato
+  rank: number
+  pontosCha: number
+  percent_match: number
+}
 
-    interface Vaga {
-      id: number
-      nome: string ;
-      nivel: string;
-      candidatos: CandidatoVaga[]
-    }
+interface Vaga {
+  id: number
+  nome: string
+  nivel: string
+  candidatos: CandidatoVaga[]
+}
 
-    const minMatch = ref('')
-    const maxMatch = ref('')
-    const erro = ref('')
-    const vaga = ref() as Vaga | any
-    const loading = ref(true)
-    const props = defineProps({
-      id: {
-        type: String,
-        required: true,
-      },
-    });
+const minMatch = ref('')
+const maxMatch = ref('')
+const erro = ref('')
+const vaga = ref() as Vaga | any
+const loading = ref(true)
+const props = defineProps({
+  id: {
+    type: String,
+    required: true
+  }
+})
 
-    let candidatosFiltrados = ref([] as CandidatoVaga[])
+let candidatosFiltrados = ref([] as CandidatoVaga[])
 
 const fetchCandidatos = async () => {
-  loading.value = true 
-  try{
+  loading.value = true
+  try {
     const response = await api.get(`/vaga/match/${props.id}`)
-    vaga.value = response.data 
+    vaga.value = response.data
     filtrarCandidatos()
-  }catch(error){
+  } catch (error) {
     if (error instanceof Error) {
-      erro.value = error.message;
+      erro.value = error.message
     } else {
-      erro.value = 'Ocorreu um erro desconhecido.';
+      erro.value = 'Ocorreu um erro desconhecido.'
     }
   }
   loading.value = false
@@ -56,76 +56,109 @@ const fetchCandidatos = async () => {
 
 function getCor(percentageMatch: number) {
   if (percentageMatch >= 0 && percentageMatch <= 25) {
-      return 'red';
-    } else if (percentageMatch >= 26 && percentageMatch <= 50) {
-      return 'orange';
-    } else if (percentageMatch >= 51 && percentageMatch <= 75) {
-      return 'yellow';
-    } else {
-      return 'green';
+    return 'red'
+  } else if (percentageMatch >= 26 && percentageMatch <= 50) {
+    return 'orange'
+  } else if (percentageMatch >= 51 && percentageMatch <= 75) {
+    return 'yellow'
+  } else {
+    return 'green'
   }
 }
 
 function filtrarCandidatos() {
   candidatosFiltrados.value = vaga.value.candidatos.filter((candidato: CandidatoVaga) => {
     if (minMatch.value === '' && maxMatch.value === '') {
-      return true;
+      return true
     } else if (minMatch.value === '') {
-      return candidato.percent_match <= parseInt(maxMatch.value);
+      return candidato.percent_match <= parseInt(maxMatch.value)
     } else if (maxMatch.value === '') {
-      return candidato.percent_match >= parseInt(minMatch.value);
+      return candidato.percent_match >= parseInt(minMatch.value)
     } else {
       return (
-        candidato.percent_match >= parseInt(minMatch.value) && candidato.percent_match <= parseInt(maxMatch.value)
-      );
-  }
-  });
+        candidato.percent_match >= parseInt(minMatch.value) &&
+        candidato.percent_match <= parseInt(maxMatch.value)
+      )
+    }
+  })
 }
 
 onMounted(fetchCandidatos)
-
 </script>
 <template>
-  <div class="bg-white relative flex w-screen  overflow-x-hidden overflow-y-scroll h-screen">
+  <div class="bg-white relative flex w-screen overflow-x-hidden overflow-y-scroll h-screen">
     <OpenMenu />
     <div class="flex xl:ml-[5rem] w-screen items-center flex-col bg-white">
-      <h1 class="text-center font-medium xl:text-3xl text-xl xl:mt-7 mt-3 flex w-full h-10 justify-center items-center" v-if="vaga">
+      <h1
+        class="text-center font-medium xl:text-3xl text-xl xl:mt-7 mt-3 flex w-full h-10 justify-center items-center"
+        v-if="vaga"
+      >
         Ranqueamento de {{ vaga.nome }} com nível {{ vaga.nivel }}
-        
       </h1>
 
-      
       <div class="filtro">
         <label for="minMatch">Mínimo Match (%):</label>
-        <input type="number" id="minMatch" v-model="minMatch" @input="filtrarCandidatos" class="borda-filtro" />
+        <input
+          type="number"
+          id="minMatch"
+          v-model="minMatch"
+          @input="filtrarCandidatos"
+          class="borda-filtro"
+        />
         <label for="maxMatch">Máximo Match (%):</label>
-        <input type="number" id="maxMatch" v-model="maxMatch" @input="filtrarCandidatos" class="borda-filtro" />
+        <input
+          type="number"
+          id="maxMatch"
+          v-model="maxMatch"
+          @input="filtrarCandidatos"
+          class="borda-filtro"
+        />
       </div>
-      <LabelLista name="Nome"  estilo="bg-[#FFD600] w-[7rem] absolute font-bold top-[9.4rem] left-[9rem] shadow-md rounded-lg text-center z-10"/>
-      <LabelLista name="Match" estilo="bg-[#FFD600] w-[7rem] absolute font-bold top-[9.4rem] right-[32rem] shadow-md rounded-lg text-center z-10"/>
-      <LabelLista name="Porcetagem" estilo="bg-[#FFD600] w-[7rem] absolute font-bold top-[9.4rem] right-[7rem] shadow-md rounded-lg text-center z-10"/>
-      <section class="xl:w-[88vw] h-[70vh] w-[90%] relative overflow-auto flex flex-col gap-4 p-4 pt-7 mt-[3rem] bg-[#1DEEA3] shadow-md bg-opacity-30 rounded-2xl">
-        <div v-for="(candidato, index) in candidatosFiltrados" :key="index" class="h-[3rem] text-white font-bold w-full flex-row flex justify-around items-center rounded-lg bg-[#2A753D]">
-        <div class="conteudo-candidatos flex items-center justify-around h-[3rem]">
-          <span class="nome w-[20%]  pl-4">{{ candidato.candidato.link }}</span>
-          <div class="barra rounded-full shadow-md border-black">
-            <div
-              class="barra-preenchida shadow-md rounded-full  "
-              :style="{ width: `${candidato.percent_match}%`, backgroundColor: getCor(candidato.percent_match) }"
-            ></div>
-          </div>
-          <div class="w-[10%] flex justify-center items-center ">
-              <div class="match-circle  shadow-md" :style="{ backgroundColor: getCor(candidato.percent_match) }">
-              <span class="match text-black">{{ Math.round(candidato.percent_match) }}%</span>
+      <LabelLista
+        name="Nome"
+        estilo="bg-[#FFD600] w-[7rem] absolute font-bold top-[9.4rem] left-[9rem] shadow-md rounded-lg text-center z-10"
+      />
+      <LabelLista
+        name="Match"
+        estilo="bg-[#FFD600] w-[7rem] absolute font-bold top-[9.4rem] right-[32rem] shadow-md rounded-lg text-center z-10"
+      />
+      <LabelLista
+        name="Porcetagem"
+        estilo="bg-[#FFD600] w-[7rem] absolute font-bold top-[9.4rem] right-[7rem] shadow-md rounded-lg text-center z-10"
+      />
+      <section
+        class="xl:w-[88vw] h-[70vh] w-[90%] relative overflow-auto flex flex-col gap-4 p-4 pt-7 mt-[3rem] bg-[#1DEEA3] shadow-md bg-opacity-30 rounded-2xl"
+      >
+        <div
+          v-for="(candidato, index) in candidatosFiltrados"
+          :key="index"
+          class="h-[3rem] text-white font-bold w-full flex-row flex justify-around items-center rounded-lg bg-[#2A753D]"
+        >
+          <div class="conteudo-candidatos flex items-center justify-around h-[3rem]">
+            <span class="nome w-[20%] pl-4">{{ candidato.candidato.link }}</span>
+            <div class="barra rounded-full shadow-md border-black">
+              <div
+                class="barra-preenchida shadow-md rounded-full"
+                :style="{
+                  width: `${candidato.percent_match}%`,
+                  backgroundColor: getCor(candidato.percent_match)
+                }"
+              ></div>
             </div>
+            <div class="w-[10%] flex justify-center items-center">
+              <div
+                class="match-circle shadow-md"
+                :style="{ backgroundColor: getCor(candidato.percent_match) }"
+              >
+                <span class="match text-black">{{ Math.round(candidato.percent_match) }}%</span>
+              </div>
             </div>
-          <!-- <router-link :to="'/visualizar/' + candidato.id">
+            <!-- <router-link :to="'/visualizar/' + candidato.id">
             <button class="visualizar-button">Visualizar</button>
           </router-link> -->
+          </div>
         </div>
-      </div>
       </section>
-    
     </div>
   </div>
 </template>
@@ -167,7 +200,6 @@ onMounted(fetchCandidatos)
   width: 100%;
 }
 
-
 .match {
   display: flex;
   text-align: center;
@@ -179,15 +211,13 @@ onMounted(fetchCandidatos)
   width: 60%;
   background-color: #eee;
   height: 10px;
-  
-  
 }
 
 .barra-preenchida {
   height: 100%;
   width: 0;
   transition: width 0.5s ease;
-  border: solid 1px black
+  border: solid 1px black;
 }
 
 .match-circle {
