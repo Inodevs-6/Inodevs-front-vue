@@ -1,10 +1,33 @@
-<script  setup>
+<script setup lang="ts">
     import OpenMenu from '@/components/menu/OpenMenu.vue'
     import LabelLista from '@/components/labels/Label-lista.vue';
     import { defineProps, onMounted, ref } from 'vue';
     import api from '@/services/api';
+
+    interface Candidato {
+      id: number,
+      experiencia: string,
+      link: string
+    }
+
+    interface CandidatoVaga {
+      candidato: Candidato
+      rank: number,
+      pontosCha: number,
+      percent_match: number
+    }
+
+    interface Vaga {
+      id: number
+      nome: string ;
+      nivel: string;
+      candidatos: CandidatoVaga[]
+    }
+
+    const minMatch = ref('')
+    const maxMatch = ref('')
     const erro = ref('')
-    const vaga = ref([])
+    const vaga = ref() as Vaga | any
     const loading = ref(true)
     const props = defineProps({
       id: {
@@ -13,46 +36,62 @@
       },
     });
 
-const fetchVagas = async () => {
-  loading.value = true 
-  try{
-    const response = await api.get(`/vaga/match/${props.id}`)
-    vaga.value = response.data 
-    console.log(repose.data)
-  }catch(error){
-    if (error instanceof Error) {
-    erro.value = error.message;
-  } else {
-    erro.value = 'Ocorreu um erro desconhecido.';
-  }
-  }
-  loading.value = false
-}
+    let candidatosFiltrados = ref([] as CandidatoVaga[])
 
 const fetchCandidatos = async () => {
   loading.value = true 
   try{
     const response = await api.get(`/vaga/match/${props.id}`)
     vaga.value = response.data 
-    console.log(repose.data)
+    filtrarCandidatos()
   }catch(error){
     if (error instanceof Error) {
-    erro.value = error.message;
-  } else {
-    erro.value = 'Ocorreu um erro desconhecido.';
-  }
+      erro.value = error.message;
+    } else {
+      erro.value = 'Ocorreu um erro desconhecido.';
+    }
   }
   loading.value = false
 }
-onMounted(fetchVagas)
+
+function getCor(percentageMatch: number) {
+  if (percentageMatch >= 0 && percentageMatch <= 25) {
+      return 'red';
+    } else if (percentageMatch >= 26 && percentageMatch <= 50) {
+      return 'orange';
+    } else if (percentageMatch >= 51 && percentageMatch <= 75) {
+      return 'yellow';
+    } else {
+      return 'green';
+  }
+}
+
+function filtrarCandidatos() {
+  candidatosFiltrados.value = vaga.value.candidatos.filter((candidato: CandidatoVaga) => {
+    if (minMatch.value === '' && maxMatch.value === '') {
+      return true;
+    } else if (minMatch.value === '') {
+      return candidato.percent_match <= parseInt(maxMatch.value);
+    } else if (maxMatch.value === '') {
+      return candidato.percent_match >= parseInt(minMatch.value);
+    } else {
+      return (
+        candidato.percent_match >= parseInt(minMatch.value) && candidato.percent_match <= parseInt(maxMatch.value)
+      );
+  }
+  });
+}
+
 onMounted(fetchCandidatos)
+
 </script>
 <template>
   <div class="bg-white relative flex w-screen  overflow-x-hidden overflow-y-scroll h-screen">
     <OpenMenu />
     <div class="flex xl:ml-[5rem] w-screen items-center flex-col bg-white">
-      <h1 class="text-center font-medium xl:text-3xl text-xl xl:mt-7 mt-3 flex w-full h-10 justify-center items-center">
-        Ranqueamento de {{ vaga.nome }}
+      <h1 class="text-center font-medium xl:text-3xl text-xl xl:mt-7 mt-3 flex w-full h-10 justify-center items-center" v-if="vaga">
+        Ranqueamento de {{ vaga.nome }} com nível {{ vaga.nivel }}
+        
       </h1>
 
       
@@ -68,16 +107,16 @@ onMounted(fetchCandidatos)
       <section class="xl:w-[88vw] h-[70vh] w-[90%] relative overflow-auto flex flex-col gap-4 p-4 pt-7 mt-[3rem] bg-[#1DEEA3] shadow-md bg-opacity-30 rounded-2xl">
         <div v-for="(candidato, index) in candidatosFiltrados" :key="index" class="h-[3rem] text-white font-bold w-full flex-row flex justify-around items-center rounded-lg bg-[#2A753D]">
         <div class="conteudo-candidatos flex items-center justify-around h-[3rem]">
-          <span class="nome w-[20%]  pl-4">{{ candidato.nome }}</span>
+          <span class="nome w-[20%]  pl-4">{{ candidato.candidato.link }}</span>
           <div class="barra rounded-full shadow-md border-black">
             <div
               class="barra-preenchida shadow-md rounded-full  "
-              :style="{ width: `${candidato.match}%`, backgroundColor: getCor(candidato.match) }"
+              :style="{ width: `${candidato.percent_match}%`, backgroundColor: getCor(candidato.percent_match) }"
             ></div>
           </div>
           <div class="w-[10%] flex justify-center items-center ">
-              <div class="match-circle  shadow-md" :style="{ backgroundColor: getCor(candidato.match) }">
-              <span class="match text-black">{{ candidato.match }}%</span>
+              <div class="match-circle  shadow-md" :style="{ backgroundColor: getCor(candidato.percent_match) }">
+              <span class="match text-black">{{ Math.round(candidato.percent_match) }}%</span>
             </div>
             </div>
           <!-- <router-link :to="'/visualizar/' + candidato.id">
@@ -90,65 +129,6 @@ onMounted(fetchCandidatos)
     </div>
   </div>
 </template>
-
-<script >
-export default {
-  data() {
-    return {
-      candidatos: [
-        { id: 1, nome: 'Candidato 1', match: 30 },
-        { id: 2, nome: 'Candidato 2', match: 70 },
-        { id: 3, nome: 'Candidato 3', match: 60 },
-        { id: 4, nome: 'Candidato 4', match: 90 },
-        { id: 5, nome: 'Candidato 5', match: 75 },
-        { id: 6, nome: 'Candidato 6', match: 85 },
-        { id: 7, nome: 'Candidato 7', match: 95 },
-        { id: 8, nome: 'Candidato 8', match: 65 },
-        { id: 9, nome: 'Candidato 9', match: 5 },
-        { id: 10, nome: 'Candidato 10', match: 15 },
-        { id: 11, nome: 'Candidato 11', match: 24 },
-        { id: 12, nome: 'Candidato 12', match: 30 },
-        { id: 13, nome: 'Candidato 13', match: 43 },
-        { id: 14, nome: 'Candidato 14', match: 50 },
-      ],
-      minMatch: '', 
-      maxMatch: '', 
-    };
-  },
-  computed: {
-    candidatosFiltrados() {
-      return this.candidatos.filter(candidato => {
-        if (this.minMatch === '' && this.maxMatch === '') {
-          return true;
-        } else if (this.minMatch === '') {
-          return candidato.match <= parseInt(this.maxMatch);
-        } else if (this.maxMatch === '') {
-          return candidato.match >= parseInt(this.minMatch);
-        } else {
-          return (
-            candidato.match >= parseInt(this.minMatch) && candidato.match <= parseInt(this.maxMatch)
-          );
-      }
-      });
-    },
-  },
-  methods: {
-    filtrarCandidatos() {},
-    getCor(match) {
-      
-      if (match >= 0 && match <= 25) {
-        return 'red';
-      } else if (match >= 26 && match <= 50) {
-        return 'orange';
-      } else if (match >= 51 && match <= 75) {
-        return 'yellow';
-      } else {
-        return 'green';
-      }
-    },
-  },
-};
-</script>
 
 <style scoped>
 .titulo {
@@ -234,5 +214,3 @@ export default {
   cursor: pointer;
 }
 </style>
-
-
