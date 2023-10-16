@@ -43,6 +43,7 @@ async function salvar() {
 
 async function aprimorar(campo: String) {
   erro.value = ''
+  let sendComment = ''
 
   if (campo == 'Conhecimentos') {
     loadingC.value = true
@@ -54,6 +55,7 @@ async function aprimorar(campo: String) {
     loadingA.value = true
   }
   if (campo == 'Geral') {
+    sendComment = comentario.value
     loadingC.value = true
     loadingH.value = true
     loadingA.value = true
@@ -74,13 +76,16 @@ async function aprimorar(campo: String) {
           cha += '"' + palavra + '"'
         }
       })
-      cha += ']}'
+      cha += ']'
     }
     if (campo == 'Geral') {
       cha += ', '
+    } 
+    if (campo == 'Habilidades'){
+      cha += '{'
     }
     if (campo == 'Habilidades' || campo == 'Geral') {
-      cha += '{"Habilidades": ['
+      cha += '"Habilidades": ['
       habilidades.value.trim().split('\n').forEach((palavra, index) => {
         if (index != 0) {
           cha += ', "' + palavra + '"'
@@ -88,13 +93,16 @@ async function aprimorar(campo: String) {
           cha += '"' + palavra + '"'
         }
       })
-      cha += ']}'
+      cha += ']'
     }
     if (campo == 'Geral') {
       cha += ', '
     }
+    if (campo == 'Atitudes'){
+      cha += '{'
+    }
     if (campo == 'Atitudes' || campo == 'Geral') {
-      cha += '{"Atitudes": ['
+      cha += '"Atitudes": ['
       atitudes.value.trim().split('\n').forEach((palavra, index) => {
         if (index != 0) {
           cha += ', "' + palavra + '"'
@@ -102,12 +110,10 @@ async function aprimorar(campo: String) {
           cha += '"' + palavra + '"'
         }
       })
-      cha += ']}'
+      cha += ']'
     }
-    if (campo == 'Geral') {
-      cha += '}'
-    }
-
+    cha += '}'
+  
     console.log(cha)
     
     const response = await ia.post('/upgrade', {
@@ -115,8 +121,10 @@ async function aprimorar(campo: String) {
       nivel: level.value,
       cha: cha,
       campo: campo,
-      comentario: comentario.value
+      comentario: sendComment
     })
+
+    console.log(response.data)
 
     if (campo == 'Conhecimentos') {
       conhecimentos.value = '' 
