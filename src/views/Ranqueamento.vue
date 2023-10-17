@@ -43,6 +43,7 @@ const fetchCandidatos = async () => {
   try {
     const response = await api.get(`/vaga/match/${props.id}`)
     vaga.value = response.data
+    vaga.value.candidatos.sort((a: CandidatoVaga,b:CandidatoVaga) => (a.rank > b.rank) ? 1 : ((b.rank > a.rank) ? -1 : 0))
     filtrarCandidatos()
   } catch (error) {
     if (error instanceof Error) {
