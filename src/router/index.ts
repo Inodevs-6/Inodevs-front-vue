@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import Cadastro_Cargo from '@/views/Cadastro_Cargo.vue'
+import Cadastro_Empresa from '@/views/Cadastro_Empresa.vue'
 import ListaVaga from '@/views/ListaVaga.vue'
 import Ranqueamento from '@/views/Ranqueamento.vue'
 const router = createRouter({
@@ -15,6 +16,12 @@ const router = createRouter({
       path: '/Cadastro_Cargo',
       name: 'Cadastro_Cargo',
       component: Cadastro_Cargo
+    },
+    {
+      path: '/Cadastro_Empresa',
+      name: 'Cadastro_Empresa',
+      component: Cadastro_Empresa
+      
     },
     {
       path: '/Vagas',
