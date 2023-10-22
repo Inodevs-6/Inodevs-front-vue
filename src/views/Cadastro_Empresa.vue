@@ -28,7 +28,10 @@ const save = ref(false)
 const salvar = () => {
   erro.value = '';
   
-  if (!name.value || !cnpj.value || !email.value || senha.value || senhaNovamente.value ) {
+  if (!name.value || !cnpj.value || !email.value || !senha.value || !senhaNovamente.value || senha.value !== senhaNovamente.value) {
+    if (senha.value !== senhaNovamente.value) {
+      erro.value = 'As senhas não estão iguais';
+    }
     valid.value = true;
     return; 
   }
@@ -134,12 +137,12 @@ const played = () => {
             v-model="descricao"
             id="descricao"
             placeholder="Empresa voltada para IA"
-            :disabled="isDisabled"
+            
             class="h-[10rem] bg-[#2A753D] p-4 focus:outline-none flex resize-none shadow-xl justify-start rounded-xl text-white"
           >
           </textarea>
         </div>
-        <p v-if="senha !== senhaNovamente" class="text-red-600">As senhas não estão iguais</p>
+        <p v-if="senha !== senhaNovamente" class="text-red-600 text-lg font-bold  " >As senhas não estão iguais !</p>
         <div class="w-full flex justify-center">
           <div v-if="playMatch" class="w-[60%] flex justify-center text-[#fff]">
             <button class="bg-[#263001] w-[10rem] rounded-xl" @click="salvar" type="submit" value="Enviar para Busca">
