@@ -21,7 +21,6 @@ const router = createRouter({
       path: '/Cadastro_Empresa',
       name: 'Cadastro_Empresa',
       component: Cadastro_Empresa
-      
     },
     {
       path: '/Vagas',

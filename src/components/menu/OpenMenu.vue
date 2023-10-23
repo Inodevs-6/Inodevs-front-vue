@@ -18,7 +18,7 @@
     <RouterLink to="/Cadastro_Cargo">
       <BtnMenu caminho="/assets/Sum.svg" />
     </RouterLink>
-   
+
     <RouterLink to="/Vagas">
       <BtnMenu caminho="/assets/listicone.svg" />
     </RouterLink>
