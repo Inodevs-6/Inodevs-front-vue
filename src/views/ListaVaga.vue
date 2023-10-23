@@ -97,7 +97,11 @@ onMounted(fetchVagas)
       />
       <LabelLista
         name="Nível"
-        estilo="bg-[#FFD600] w-[7rem] absolute font-bold top-[8.7rem] right-[32rem] shadow-md rounded-lg text-center z-10"
+        estilo="bg-[#FFD600] w-[7rem] absolute font-bold top-[8.7rem] left-[30rem] shadow-md rounded-lg text-center z-10"
+      />
+      <LabelLista
+        name="Editar"
+        estilo="bg-[#FFD600] w-[7rem] absolute font-bold top-[8.7rem] right-[20rem] shadow-md rounded-lg text-center z-10"
       />
       <LabelLista
         name="Visualizar"
@@ -114,14 +118,25 @@ onMounted(fetchVagas)
           v-else
           v-for="vaga in vagas"
           :key="vaga.id"
-          class="h-[3rem] text-white font-bold w-full flex-row flex justify-around items-center rounded-lg bg-[#2A753D]"
+          class="h-[3rem] text-white font-bold w-full flex-row flex  items-center rounded-lg bg-[#2A753D]"
         >
-          <div class="pl-4 w-[45%]">
+          <div class="w-[30%] ml-7">
             <span> {{ vaga.nome }} </span>
           </div>
-          <div class="pl-4 w-[25%]">
+          <div class=" w-[30%] ml-7">
             <span>{{ vaga.nivel }} </span>
           </div>
+          <router-link :to="'/Edicao_vaga/' + vaga.id" class="pl-6 w-[25%] flex justify-center">
+            <div class="p-1 rounded-full bg-[#f3f048f9]">
+              <img
+                alt="Vue logo"
+                class="hover:bg-[#f3f048f9] cursor-pointer rounded-xl"
+                src="/assets/Edit.svg"
+                width="30"
+                height="30"
+              />
+            </div>
+          </router-link>
           <router-link :to="'/ranking/' + vaga.id" class="pl-6 w-[25%] flex justify-center">
             <div class="p-1 rounded-full bg-[#f3f048f9]">
               <img
