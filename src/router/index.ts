@@ -4,6 +4,7 @@ import Cadastro_Cargo from '@/views/Cadastro_Cargo.vue'
 import Edicao_vaga from '@/views/Edicao_vaga.vue'
 import ListaVaga from '@/views/ListaVaga.vue'
 import Ranqueamento from '@/views/Ranqueamento.vue'
+import Login from '@/views/Login.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -13,7 +14,7 @@ const router = createRouter({
       component: Cadastro_Cargo
     },
     {
-      path: '/',
+      path: '/home',
       name: 'ListaVaga',
       component: ListaVaga
     },
@@ -23,11 +24,16 @@ const router = createRouter({
       component: Ranqueamento,
       props: true
     },
-    {
+     {
       path: '/Edicao_vaga/:id',
       name: 'edicao',
       component: Edicao_vaga,
       props: true
+    },
+    {
+      path: '/',
+      name: 'login',
+      component: Login
     }
   ]
 })

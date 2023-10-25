@@ -12,7 +12,7 @@
     >
       <p class="text-white font-bold px-[0.4rem]">{{ notify }}</p>
     </div>
-    <RouterLink to="/">
+    <RouterLink to="/home">
       <BtnMenu caminho="/assets/Home.svg" />
     </RouterLink>
     <RouterLink to="/Cadastro_Cargo">
@@ -21,9 +21,11 @@
     <!-- <RouterLink to="/Vagas">
       <BtnMenu caminho="/assets/listicone.svg" />
     </RouterLink> -->
-    <div class="flex absolute bottom-2 mb-[0.7rem] cursor-pointer flex-row gap-5">
+    <!-- <div class="flex absolute bottom-2 mb-[0.7rem] cursor-pointer flex-row gap-5"> -->
+    <!-- </RouterLink> -->
+    <RouterLink to="/" class="flex absolute bottom-2 mb-[0.7rem] cursor-pointer flex-row gap-5">
       <img alt="Vue logo" class="logo" src="/assets/Export.svg" width="40" height="40" />
-    </div>
+    </RouterLink>
   </div>
   <div>
     <MenuMobile></MenuMobile>

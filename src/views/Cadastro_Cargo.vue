@@ -13,7 +13,7 @@ const atitudes = ref('')
 const erro = ref('')
 const isDisabled = ref(true)
 const isDone = ref(false)
-const Play = ref(false)
+const Play = ref(false )
 const playMatch = ref(true)
 const loading = ref(false)
 const loadingC = ref(false)
@@ -67,13 +67,16 @@ async function aprimorar(campo: String) {
     }
     if (campo == 'Conhecimentos' || campo == 'Geral') {
       cha += '{"Conhecimentos": ['
-      conhecimentos.value.trim().split('\n').forEach((palavra, index) => {
-        if (index != 0) {
-          cha += ', "' + palavra + '"'
-        } else {
-          cha += '"' + palavra + '"'
-        }
-      })
+      conhecimentos.value
+        .trim()
+        .split('\n')
+        .forEach((palavra, index) => {
+          if (index != 0) {
+            cha += ', "' + palavra + '"'
+          } else {
+            cha += '"' + palavra + '"'
+          }
+        })
       cha += ']}'
     }
     if (campo == 'Geral') {
@@ -81,13 +84,16 @@ async function aprimorar(campo: String) {
     }
     if (campo == 'Habilidades' || campo == 'Geral') {
       cha += '{"Habilidades": ['
-      habilidades.value.trim().split('\n').forEach((palavra, index) => {
-        if (index != 0) {
-          cha += ', "' + palavra + '"'
-        } else {
-          cha += '"' + palavra + '"'
-        }
-      })
+      habilidades.value
+        .trim()
+        .split('\n')
+        .forEach((palavra, index) => {
+          if (index != 0) {
+            cha += ', "' + palavra + '"'
+          } else {
+            cha += '"' + palavra + '"'
+          }
+        })
       cha += ']}'
     }
     if (campo == 'Geral') {
@@ -95,13 +101,16 @@ async function aprimorar(campo: String) {
     }
     if (campo == 'Atitudes' || campo == 'Geral') {
       cha += '{"Atitudes": ['
-      atitudes.value.trim().split('\n').forEach((palavra, index) => {
-        if (index != 0) {
-          cha += ', "' + palavra + '"'
-        } else {
-          cha += '"' + palavra + '"'
-        }
-      })
+      atitudes.value
+        .trim()
+        .split('\n')
+        .forEach((palavra, index) => {
+          if (index != 0) {
+            cha += ', "' + palavra + '"'
+          } else {
+            cha += '"' + palavra + '"'
+          }
+        })
       cha += ']}'
     }
     if (campo == 'Geral') {
@@ -109,7 +118,7 @@ async function aprimorar(campo: String) {
     }
 
     console.log(cha)
-    
+
     const response = await ia.post('/upgrade', {
       cargo: name.value,
       nivel: level.value,
@@ -119,33 +128,33 @@ async function aprimorar(campo: String) {
     })
 
     if (campo == 'Conhecimentos') {
-      conhecimentos.value = '' 
+      conhecimentos.value = ''
       response.data.Conhecimentos.forEach((palavra: string) => {
         conhecimentos.value += palavra + '\n'
       })
     }
     if (campo == 'Habilidades') {
-      habilidades.value = '' 
+      habilidades.value = ''
       response.data.Habilidades.forEach((palavra: string) => {
         habilidades.value += palavra + '\n'
       })
     }
     if (campo == 'Atitudes') {
-      atitudes.value = '' 
+      atitudes.value = ''
       response.data.Atitudes.forEach((palavra: string) => {
         atitudes.value += palavra + '\n'
       })
     }
     if (campo == 'Geral') {
-      conhecimentos.value = '' 
+      conhecimentos.value = ''
       response.data.descricao.Conhecimentos.forEach((palavra: string) => {
         conhecimentos.value += palavra + '\n'
       })
-      habilidades.value = '' 
+      habilidades.value = ''
       response.data.descricao.Habilidades.forEach((palavra: string) => {
         habilidades.value += palavra + '\n'
       })
-      atitudes.value = '' 
+      atitudes.value = ''
       response.data.descricao.Atitudes.forEach((palavra: string) => {
         atitudes.value += palavra + '\n'
       })
@@ -293,7 +302,7 @@ const played = () => {
           <button
             v-if="!loadingC && Play"
             @click="aprimorar('Conhecimentos')"
-            class="bg-[#FFD600] w-[9rem] relative top-[-2rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
+            class="bg-[#FFD600] w-[9rem] relative top-[-2rem] left-[58rem] font-semibold shadow-md rounded-lg text-center z-10"
           >
             Aprimorar
           </button>
@@ -309,7 +318,7 @@ const played = () => {
             id="habilidades"
             placeholder="Descrição de habilidade será gerada..."
             :disabled="isDisabled"
-            class="h-[10rem] bg-[#2A753D] p-4 focus:outline-none flex resize-none shadow-xl justify-start rounded-xl  text-white"
+            class="h-[10rem] bg-[#2A753D] p-4 focus:outline-none flex resize-none shadow-xl justify-start rounded-xl text-white"
           >
           </textarea>
           <div
@@ -321,7 +330,7 @@ const played = () => {
           <button
             v-if="!loadingH && Play"
             @click="aprimorar('Habilidades')"
-            class="bg-[#FFD600] w-[9rem] relative top-[-2rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
+            class="bg-[#FFD600] w-[9rem] relative top-[-2rem] left-[58rem] font-semibold shadow-md rounded-lg text-center z-10"
           >
             Aprimorar
           </button>
@@ -350,8 +359,8 @@ const played = () => {
           <button
             v-if="!loadingA && Play"
             @click="aprimorar('Atitudes')"
-            class="bg-[#FFD600] w-[9rem] relative top-[-2rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
-            >
+            class="bg-[#FFD600] w-[9rem] relative top-[-2rem] left-[58rem] font-semibold shadow-md rounded-lg text-center z-10"
+          >
             Aprimorar
           </button>
           <span
@@ -369,8 +378,9 @@ const played = () => {
           >
           </textarea>
           <button
+          v-if="Play"
             @click="aprimorar('Geral')"
-            class="bg-[#FFD600] w-[9rem] relative top-[-2rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
+            class="bg-[#FFD600] w-[9rem] relative top-[-2rem] left-[58rem]  font-semibold shadow-md rounded-lg text-center z-10"
           >
             Aprimorar
           </button>
