@@ -70,39 +70,37 @@ const salvar = () => {
         class="xl:w-[80vw] w-[90%] flex flex-col gap-8 p-4 mt-[3rem] bg-[#1DEEA3] shadow-md bg-opacity-30 rounded-2xl relative"
       >
         
-        <div class="flex flex-col gap-5 xl:gap-0 xl:flex-row justify-between">
-          <div class="w-full">
-            
-            <div class="w-[82%] flex flex-col relative top-[3rem] left-2">
-              <span
-                class="bg-[#FFD600] w-[7rem] absolute bottom-[2.1rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
-              >
-                Nova Senha
-              </span>
-              <input
-                v-model="senha"
-                id="senha"
-                placeholder="******"
-                class="bg-[#084808] w-full h-11 p-2 pt-2 shadow-md outline-none rounded-xl text-[#FFF] relative z-0"
-                :disabled="!isDisabled"
-              />
-            </div>
-            <div class="w-[82%] flex flex-col relative top-[5rem] left-2">
-              <span
-                class="bg-[#FFD600] w-[13rem] absolute bottom-[2.1rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
-              >
-                Confirme a Nova Senha
-              </span>
-              <input
-                v-model="senhaNovamente"
-                id="senhaNovamente"
-                placeholder="******"
-                class="bg-[#084808] w-full h-11 p-2 pt-2 shadow-md outline-none rounded-xl text-[#FFF] relative z-0"
-                :disabled="!isDisabled"
-              />
-            </div>
-          </div>
-        </div>
+      <div class="flex flex-col justify-center items-center">
+  <div class="w-[82%] flex flex-col mb-4 items-center">
+    <span
+      class="bg-[#FFD600] w-[7rem]  font-semibold shadow-md rounded-lg text-center relative z-10"
+    >
+      Nova Senha
+    </span>
+    <input
+      v-model="senha"
+      id="senha"
+      placeholder="******"
+      class="bg-[#084808] w-[30rem] h-11 p-2 pt-2 pl-10 shadow-md outline-none rounded-xl text-[#FFF] relative z-0 text-black"
+      :disabled="!isDisabled"
+    />
+  </div>
+  <div class="w-[82%] flex flex-col items-center">
+    <span
+      class="bg-[#FFD600] w-[13rem] mx-2  font-semibold shadow-md rounded-lg text-center relative z-10"
+    >
+      Confirme a Nova Senha
+    </span>
+    <input
+      v-model="senhaNovamente"
+      id="senhaNovamente"
+      placeholder="******"
+      class="bg-[#084808] w-[30rem] h-11 p-2 pt-2 pl-10 shadow-md outline-none rounded-xl text-[#FFF] relative z-0 text-black"
+      :disabled="!isDisabled"
+    />
+  </div>
+</div>
+
         <p v-if="senha !== senhaNovamente" class="text-red-600 text-lg font-bold">
           As senhas não estão iguais !
         </p>
