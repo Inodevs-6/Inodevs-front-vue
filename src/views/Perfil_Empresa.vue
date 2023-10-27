@@ -3,11 +3,13 @@ import OpenMenu from '@/components/menu/OpenMenu.vue'
 import Loader from '@/components/Loader.vue'
 import Alert from '@/components/alert/Alert.vue'
 import api from '../services/api'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 const nome = ref('')
 const cnpj = ref('')
 const email = ref('')
 const descricao = ref('')
+const segmento = ref('')
+const porte = ref('')
 const erro = ref('')
 const isDisabled = ref(true)
 const isDone = ref(false)
@@ -19,19 +21,39 @@ const id = ref(0)
 const save = ref(false)
 
 async function editar() {
-  erro.value = ''
   try {
     const empresaId = 1
-    api.patch('/editar/' + empresaId, {
-      conhecimentos: nome.value,
-      habilidades: email.value,
-      atitudes: descricao.value
+    api.patch('/empresa/editar-empresa/' + empresaId, {
+      nome: nome.value,
+      email: email.value,
+      descricao: descricao.value,
+      segmento: segmento.value,
+      porte: porte.value
     })
     save.value = true
   } catch (error) {
     erro.value = (error as Error).message
   }
 }
+
+const fetchEmpresa = async () => {
+  const empresaId = 1
+  loading.value = true
+  try {
+    const response = await api.get('/empresa/'+ empresaId)
+    nome.value = response.data.nome,
+    cnpj.value = response.data.cnpj,
+    email.value = response.data.email,
+    descricao.value = response.data.descricao,
+    segmento.value = response.data.segmento,
+    porte.value = response.data.porte
+  } catch (error) {
+    erro.value = (error as Error).message
+  }
+  loading.value = false
+}
+
+onMounted(fetchEmpresa)
 
 const habilitarInput = () => {
   isDisabled.value = !isDisabled.value
@@ -107,6 +129,34 @@ const habilitarInput = () => {
           >
           </textarea>
         </div>
+        <div class="flex flex-col items-center">
+          <span
+            class="bg-[#FFD600] w-[7rem] relative top-[0.6rem] right-[28.2rem] font-semibold rounded-lg text-center z-10"
+          >
+            Segmento
+          </span>
+          <textarea
+            v-if="!loadingC"
+            rows="4"
+            v-model="segmento"
+            id="email"
+            class="h-[3rem] w-[65.8rem] bg-[#084808] p-3 shadow-xl rounded-xl text-white"
+          >
+          </textarea>
+          <span
+            class="bg-[#FFD600] w-[9rem] relative top-[0.6rem] right-[27rem] font-semibold shadow-md rounded-lg text-center z-10"
+          >
+            Porte
+          </span>
+          <textarea
+            v-if="!loadingC"
+            rows="4"
+            v-model="porte"
+            id="descricao"
+            class="h-[3rem] w-[65.8rem] bg-[#084808] p-3 focus:outline-none flex resize-none shadow-xl justify-start rounded-xl text-white"
+          >
+          </textarea>
+        </div>
         <div class="fixed bottom-2 right-5">
           <div
             v-if="save"
@@ -140,12 +190,11 @@ const habilitarInput = () => {
           </div>
         </div>
         <div class="w-full flex justify-center">
-          <div v-if="playMatch" class="w-[15rem] h-[2.5rem] justify-between text-[#fff]">
+          <div class="w-[15rem] h-[2.5rem] justify-between text-[#fff]">
             <button
               class="bg-[#263001] w-[10rem] rounded-xl"
-              @click="'salvar'"
+              @click="editar"
               type="submit"
-              value="Enviar para Busca"
             >
               <p class="text-lg font-bold p-1">Editar</p>
             </button>
