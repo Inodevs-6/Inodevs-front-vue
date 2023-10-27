@@ -3,12 +3,9 @@
 import Alert from '@/components/alert/Alert.vue'
 import api from '../services/api'
 import { ref } from 'vue'
-const nome = ref('')
-const cnpj = ref('')
-const email = ref('')
+
 const senha = ref('')
 const senhaNovamente = ref('')
-const descricao = ref('')
 const erro = ref('')
 const isDisabled = ref(true)
 const isDone = ref(false)
@@ -22,9 +19,7 @@ const salvar = () => {
   erro.value = ''
 
   if (
-    !nome.value ||
-    !cnpj.value ||
-    !email.value ||
+ 
     !senha.value ||
     !senhaNovamente.value ||
     senha.value !== senhaNovamente.value
@@ -40,11 +35,8 @@ const salvar = () => {
   try {
     
     api.post('/empresa', {
-      nome: nome.value,
-      cnpj: cnpj.value,
-      email: email.value,
       senha: senha.value,
-      descricao: descricao.value
+      senhaNovamente: senhaNovamente.value
     })
     save.value = true
   } catch (error) {
@@ -67,11 +59,11 @@ const salvar = () => {
         Redefinição de Senha
       </h1>
       <div
-        class="xl:w-[80vw] w-[90%] flex flex-col gap-8 p-4 mt-[3rem] bg-[#1DEEA3] shadow-md bg-opacity-30 rounded-2xl relative"
+        class="xl:w-[80vw] h-[30vw] w-[90%] flex flex-col gap-8 p-4 mt-[3rem] bg-[#1DEEA3] shadow-md bg-opacity-30 rounded-2xl relative"
       >
         
       <div class="flex flex-col justify-center items-center">
-  <div class="w-[82%] flex flex-col mb-4 items-center">
+  <div class="w-[10%] flex flex-col mb-4 items-center">
     <span
       class="bg-[#FFD600] w-[7rem]  font-semibold shadow-md rounded-lg text-center relative z-10"
     >
@@ -81,7 +73,7 @@ const salvar = () => {
       v-model="senha"
       id="senha"
       placeholder="******"
-      class="bg-[#084808] w-[30rem] h-11 p-2 pt-2 pl-10 shadow-md outline-none rounded-xl text-[#FFF] relative z-0 text-black"
+      class="bg-[#084808] w-[30rem] h-11 p-2 pt-2 pl-10 shadow-md outline-none rounded-xl text-[#FFF] relative z-0"
       :disabled="!isDisabled"
     />
   </div>
@@ -95,7 +87,7 @@ const salvar = () => {
       v-model="senhaNovamente"
       id="senhaNovamente"
       placeholder="******"
-      class="bg-[#084808] w-[30rem] h-11 p-2 pt-2 pl-10 shadow-md outline-none rounded-xl text-[#FFF] relative z-0 text-black"
+      class="bg-[#084808] w-[30rem] h-11 p-2 pt-2 pl-10 shadow-md outline-none rounded-xl text-[#FFF] relative z-0"
       :disabled="!isDisabled"
     />
   </div>
@@ -104,13 +96,13 @@ const salvar = () => {
         <p v-if="senha !== senhaNovamente" class="text-red-600 text-lg font-bold">
           As senhas não estão iguais !
         </p>
-        <div class="w-full flex justify-center">
+        <div class="w-full flex justify-center mt-[10]">
           <div v-if="playMatch" class="w-[60%] flex justify-center text-[#fff]">
             <button
               class="bg-[#263001] w-[10rem] rounded-xl"
               @click="salvar"
               type="submit"
-              value="Enviar para Busca"
+              value="Confirmar"
             >
               <p class="text-lg font-bold p-1">Confirmar</p>
             </button>
@@ -143,7 +135,7 @@ const salvar = () => {
             class="bg-[#2A753D] w-[25rem] rounded-xl border-solid border-white border-2 text-center"
             type="submit"
           >
-            <p class="text-[#fff] text-lg font-bold p-1">Empresa cadastrada com sucesso!</p>
+            <p class="text-[#fff] text-lg font-bold p-1">Nova senha cadastrada com sucesso!</p>
           </div>
         </div>
         <div class="fixed bottom-2 right-5">
