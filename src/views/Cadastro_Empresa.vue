@@ -9,6 +9,8 @@ const email = ref('')
 const senha = ref('')
 const senhaNovamente = ref('')
 const descricao = ref('')
+const segmento = ref('')
+const porte = ref('')
 const erro = ref('')
 const isDisabled = ref(true)
 const isDone = ref(false)
@@ -27,6 +29,8 @@ const salvar = () => {
     !email.value ||
     !senha.value ||
     !senhaNovamente.value ||
+    !segmento.value ||
+    !porte.value ||
     senha.value !== senhaNovamente.value
   ) {
     if (senha.value !== senhaNovamente.value) {
@@ -43,7 +47,9 @@ const salvar = () => {
       cnpj: cnpj.value,
       email: email.value,
       senha: senha.value,
-      descricao: descricao.value
+      descricao: descricao.value,
+      segmento: segmento.value,
+      porte: porte.value
     })
     save.value = true
   } catch (error) {
@@ -76,7 +82,7 @@ const salvar = () => {
             </span>
             <input
               v-model="nome"
-              id="none"
+              id="nome"
               placeholder="Nome da empresa"
               class="bg-[#084808] w-full h-11 p-2 pt-2 shadow-md outline-none rounded-xl text-[#FFF] relative z-0"
               :disabled="!isDisabled"
@@ -155,6 +161,36 @@ const salvar = () => {
               class="h-[12rem] bg-[#084808] p-4 focus:outline-none flex resize-none shadow-xl justify-start rounded-xl text-white"
             >
             </textarea>
+          </div>
+        </div>
+        <div class="w-full flex flex-col gap-5 xl:gap-0 xl:flex-row justify-between">
+          <div class="xl:w-[45%] w-full flex flex-col relative left-2 top-[1rem]">
+            <span
+              class="bg-[#FFD600] w-[7rem] absolute bottom-[2.1rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
+            >
+              Segmento
+            </span>
+            <input
+              v-model="segmento"
+              id="segmento"
+              placeholder="Tecnologia"
+              class="bg-[#084808] w-full h-11 p-2 pt-2 shadow-md outline-none rounded-xl text-[#FFF] relative z-0"
+              :disabled="!isDisabled"
+            />
+          </div>
+          <div class="xl:w-[45%] w-full flex flex-col relative right-2 top-[1rem]">
+            <span
+              class="bg-[#FFD600] w-[7rem] absolute bottom-[2.1rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
+            >
+              Porte
+            </span>
+            <input
+              v-model="porte"
+              id="porte"
+              placeholder="micro | pequeno | medio | grande"
+              class="bg-[#084808] w-full h-11 p-2 pt-2 shadow-md outline-none rounded-xl text-[#FFF] relative z-0"
+              :disabled="!isDisabled"
+            />
           </div>
         </div>
         <p v-if="senha !== senhaNovamente" class="text-red-600 text-lg font-bold">
