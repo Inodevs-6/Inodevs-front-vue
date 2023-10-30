@@ -57,7 +57,7 @@ const salvar = () => {
 <template>
   <div class="bg-white flex w-screen overflow-x-hidden overflow-y-scroll h-screen">
     <OpenMenu />
-    <div class="flex xl:ml-[5rem] w-screen items-center flex-col bg-white">
+    <div class=" flex xl:ml-[5rem] w-screen items-center flex-col bg-white">
       <div v-if="isDone">
         <Alert variant="success" />
       </div>
@@ -67,7 +67,7 @@ const salvar = () => {
         Cadastro de Empresa
       </h1>
       <div
-        class="xl:w-[80vw] w-[90%] flex flex-col gap-8 p-4 mt-[3rem] bg-[#1DEEA3] shadow-md bg-opacity-30 rounded-2xl relative"
+        class="xl:w-[60vw] w-[90%] flex flex-col gap-8 p-4 mt-[3rem] bg-[#1DEEA3] shadow-md bg-opacity-30 rounded-2xl relative"
       >
         <div class="w-full flex flex-col gap-5 xl:gap-0 xl:flex-row justify-between">
           <div class="xl:w-[45%] w-full flex flex-col relative left-2 top-[1rem]">
@@ -78,13 +78,13 @@ const salvar = () => {
             </span>
             <input
               v-model="nome"
-              id="none"
+              id="nome"
               placeholder="Nome da empresa"
               class="bg-[#084808] w-full h-11 p-2 pt-2 shadow-md outline-none rounded-xl text-[#FFF] relative z-0"
               :disabled="!isDisabled"
             />
           </div>
-          <div class="xl:w-[45%] w-full flex flex-col relative right-2 top-[1rem]">
+          <div class="xl:w-[50%] w-full flex flex-col relative right-2 top-[1rem]">
             <span
               class="bg-[#FFD600] w-[7rem] absolute bottom-[2.1rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
             >
@@ -101,7 +101,7 @@ const salvar = () => {
         </div>
         <div class="flex flex-col gap-5 xl:gap-0 xl:flex-row justify-between">
           <div class="w-full">
-            <div class="w-[82%] flex flex-col relative left-2 top-[1rem]">
+            <div class="w-[90%] flex flex-col relative left-2 top-[1rem]">
               <span
                 class="bg-[#FFD600] w-[7rem] absolute bottom-[2.1rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
               >
@@ -115,7 +115,7 @@ const salvar = () => {
                 :disabled="!isDisabled"
               />
             </div>
-            <div class="w-[82%] flex flex-col relative top-[3rem] left-2">
+            <div class="w-[90%] flex flex-col relative top-[3rem] left-2">
               <span
                 class="bg-[#FFD600] w-[7rem] absolute bottom-[2.1rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
               >
@@ -124,12 +124,12 @@ const salvar = () => {
               <input
                 v-model="senha"
                 id="senha"
-                placeholder="******"
+                placeholder="**"
                 class="bg-[#084808] w-full h-11 p-2 pt-2 shadow-md outline-none rounded-xl text-[#FFF] relative z-0"
                 :disabled="!isDisabled"
               />
             </div>
-            <div class="w-[82%] flex flex-col relative top-[5rem] left-2">
+            <div class="w-[90%] flex flex-col relative top-[5rem] left-2">
               <span
                 class="bg-[#FFD600] w-[13rem] absolute bottom-[2.1rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
               >
@@ -138,13 +138,13 @@ const salvar = () => {
               <input
                 v-model="senhaNovamente"
                 id="senhaNovamente"
-                placeholder="******"
+                placeholder="**"
                 class="bg-[#084808] w-full h-11 p-2 pt-2 shadow-md outline-none rounded-xl text-[#FFF] relative z-0"
                 :disabled="!isDisabled"
               />
             </div>
           </div>
-          <div class="w-[82%] w-full flex flex-col relative right-2 top-[-0.4rem]">
+          <div class="w-[90%] w-full flex flex-col relative right-2 top-[-0.4rem]">
             <span
               class="bg-[#FFD600] w-[9rem] relative top-[1rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
             >
@@ -157,6 +157,40 @@ const salvar = () => {
               class="h-[12rem] bg-[#084808] p-4 focus:outline-none flex resize-none shadow-xl justify-start rounded-xl text-white"
             >
             </textarea>
+          </div>
+        </div>
+        <div class="w-full flex flex-col gap-5 xl:gap-0 xl:flex-row justify-between">
+          <div class="xl:w-[45%] w-full flex flex-col relative left-2 top-[0rem]">
+            <span
+              class="bg-[#FFD600] w-[7rem] absolute bottom-[2.1rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
+            >
+              Segmento
+            </span>
+            <input
+              v-model="segmento"
+              id="segmento"
+              placeholder="Tecnologia"
+              class="bg-[#084808] w-full h-11 p-2 pt-2 shadow-md outline-none rounded-xl text-[#FFF] relative z-0"
+              :disabled="!isDisabled"
+            />
+          </div>
+          <div class="xl:w-[50%] w-full flex flex-col relative right-2 top-[0rem]">
+            <span
+              class="bg-[#FFD600] w-[7rem] absolute bottom-[2.1rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
+            >
+              Porte
+            </span>
+            <select
+              v-model="porte"
+              id="porte"
+              class="bg-[#084808] w-full h-11 p-2 pt-2 shadow-md outline-none rounded-xl text-[#FFF] relative z-0"
+              :disabled="!isDisabled"
+            >
+              <option value="micro">Micro Empresa</option>
+              <option value="pequeno">Pequena Empresa</option>
+              <option value="médio">Média Empresa</option>
+              <option value="grande">Grande Empresa</option>
+          </select>
           </div>
         </div>
         <p v-if="senha !== senhaNovamente" class="text-red-600 text-lg font-bold">
