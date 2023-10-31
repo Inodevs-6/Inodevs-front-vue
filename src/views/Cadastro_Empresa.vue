@@ -38,7 +38,6 @@ const salvar = () => {
 
   erro.value = ''
   try {
-    
     api.post('/empresa', {
       nome: nome.value,
       cnpj: cnpj.value,
@@ -51,7 +50,6 @@ const salvar = () => {
     erro.value = (error as Error).message
   }
 }
-
 </script>
 
 <template>

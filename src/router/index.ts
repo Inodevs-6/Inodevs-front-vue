@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import Cadastro_Cargo from '@/views/Cadastro_Cargo.vue'
+import Redefinir_Senha from '@/views/Redefinir_Senha.vue'
 import Cadastro_Empresa from '@/views/Cadastro_Empresa.vue'
 import ListaVaga from '@/views/ListaVaga.vue'
 import Ranqueamento from '@/views/Ranqueamento.vue'
@@ -16,6 +17,11 @@ const router = createRouter({
       path: '/Cadastro_Cargo',
       name: 'Cadastro_Cargo',
       component: Cadastro_Cargo
+    },
+    {
+      path: '/Redefinir_Senha',
+      name: 'Redefinir_Senha',
+      component: Redefinir_Senha
     },
     {
       path: '/Cadastro_Empresa',
