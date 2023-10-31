@@ -5,6 +5,7 @@ import Redefinir_Senha from '@/views/Redefinir_Senha.vue'
 import Cadastro_Empresa from '@/views/Cadastro_Empresa.vue'
 import ListaVaga from '@/views/ListaVaga.vue'
 import Ranqueamento from '@/views/Ranqueamento.vue'
+import Perfil_Empresa from '@/views/Perfil_Empresa.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -32,6 +33,11 @@ const router = createRouter({
       path: '/Vagas',
       name: 'ListaVaga',
       component: ListaVaga
+    },
+    {
+      path: '/Perfil',
+      name: 'Perfil_Empresa',
+      component: Perfil_Empresa
     },
     {
       path: '/Ranking/:id',

@@ -9,6 +9,8 @@ const email = ref('')
 const senha = ref('')
 const senhaNovamente = ref('')
 const descricao = ref('')
+const segmento = ref('')
+const porte = ref('')
 const erro = ref('')
 const isDisabled = ref(true)
 const isDone = ref(false)
@@ -27,6 +29,8 @@ const salvar = () => {
     !email.value ||
     !senha.value ||
     !senhaNovamente.value ||
+    !segmento.value ||
+    !porte.value ||
     senha.value !== senhaNovamente.value
   ) {
     if (senha.value !== senhaNovamente.value) {
@@ -43,7 +47,9 @@ const salvar = () => {
       cnpj: cnpj.value,
       email: email.value,
       senha: senha.value,
-      descricao: descricao.value
+      descricao: descricao.value,
+      segmento: segmento.value,
+      porte: porte.value
     })
     save.value = true
   } catch (error) {
