@@ -1,17 +1,48 @@
 <script lang="ts" setup>
 import SobreInfo from "@/components/Login/SobreInfo.vue"
-const Email = "a"
-const senha = "a"
-const Logar = () => {
-    console.log("loguei")
-}
+import Loader from "@/components/Loaderlogin.vue";
+import {ref } from "vue"
+import { useRouter } from 'vue-router';
+import api from "@/services/api";
+import router from "@/router";
+const Email = ref()
+const senha = ref()
+const erro = ref()
+const dataMessage = ref()
+const loading = ref(false)
+const Logando = async () => {
+      erro.value = '';
+      loading.value = true;
+
+      try {
+        const response = await api.post('/login', {
+          username: Email.value,
+          password: senha.value,
+        });
+        dataMessage.value = response.data;
+
+        if (response.data.token) {
+          console.log("Token recebido. Redirecionando para outra página...");
+          router.push('/home');
+          console.log(response.data.token)
+        } else {
+          console.log("Token não recebido.");
+        }
+
+      } catch (error) {
+        erro.value = (error as Error).message;
+        console.log(erro);
+      }
+
+      loading.value = false;
+    };
 </script>
 
 <template>
 <section class="w-screen p-5 h-screen flex justify-center items-center overflow-hidden bg-[#2A753D]">
-<div class="bg-[#ffff] p-5 flex flex-row w-[95%] h-[95%] rounded-2xl shadow-xl">
+<div class="bg-[#ffff]  p-5 flex flex-row w-[95%] h-[95%]  rounded-2xl shadow-xl">
 <SobreInfo/>
-<div class="w-[50%] h-full bg-[#2A753D] rounded-2xl p-3 flex flex-col items-center gap-7  shadow-md">
+<div class="xl:w-[50%] w-[100%] h-full bg-[#2A753D] rounded-2xl p-3 flex flex-col items-center gap-7  shadow-md">
     <img
     alt="Vue logo"
     class="mt-3"
@@ -20,6 +51,7 @@ const Logar = () => {
     height="120"
   />
   <div class="relative w-[80%]">
+    <span class="text-base text-center flex text-red-950 justify-center pb-3">{{ erro }}</span>
     <span
         class="bg-[#FFD600] w-[7rem] absolute bottom-[2.1rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
         >
@@ -46,22 +78,25 @@ const Logar = () => {
         class="bg-[#ffffff] w-full h-11 p-4 pt-4 shadow-md outline-none rounded-xl text-[#000] relative z-0"
          />
   </div> 
-  <div>
+  <div class="flex items-start gap-2 flex-col">
     <span class="border-b-4 border-white text-white">
         Ainda nao tenho uma conta
+    </span>
+    <span class="border-b-4 border-white text-white">
+       Esqueci minha senha 
     </span>
   </div>
  
     <button
-              class="bg-[#263001] w-[10rem] rounded-xl"
-              @click="Logar"
+              class="bg-[#273201] w-[10rem] rounded-xl"
+              @click="Logando"
               type="submit"
-              value="Enviar para Busca"
             >
-              <p class="text-lg font-bold p-1 text-white">Logar</p>
+              <p v-if="!loading" class="text-lg font-bold p-1 text-white">Logar</p>
+              <div class="flex justify-center items-center p-1" v-else><Loader/></div>
+
             </button>
 </div>
 </div>
 </section>
 </template>
-
