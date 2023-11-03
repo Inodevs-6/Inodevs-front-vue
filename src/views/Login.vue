@@ -22,10 +22,14 @@ const Logando = async () => {
         });
         dataMessage.value = response.data;
 
+        localStorage.setItem('token', response.data.token);
+
         if (response.data.token) {
           console.log("Token recebido. Redirecionando para outra página...");
           router.push('/home');
           console.log(response.data.token)
+          const responseLogado = await api.get('/empresa/' + Email.value)
+          localStorage.setItem('empresaId', JSON.stringify(responseLogado.data))
         } else {
           console.log("Token não recebido.");
         }
