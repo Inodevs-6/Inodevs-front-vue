@@ -2,9 +2,9 @@
 import Alert from '@/components/alert/Alert.vue'
 import api from '../services/api'
 import { ref } from 'vue'
-import router from '@/router';
 
 const senha = ref('')
+const email = ref('')
 const senhaNovamente = ref('')
 const erro = ref('')
 const isDisabled = ref(true)
@@ -19,14 +19,6 @@ const confirmarSenha = () => {
   isDisabled.value = false
 }
 
-const props = defineProps({
-  id: {
-    type: String,
-    required: true
-  }
-})
-
-
 const salvar = () => {
   erro.value = ''
 
@@ -40,22 +32,15 @@ const salvar = () => {
 
   erro.value = ''
   try {
-    api.patch(`/empresa/editar-senha/${props.id}`, {
-      id: props.id,
-      senha: senha.value
+    api.post('/empresa', {
+      senha: senha.value,
+      senhaNovamente: senhaNovamente.value
     })
-    sucesso()
+    save.value = true
   } catch (error) {
     erro.value = (error as Error).message
   }
 }
-
-async function sucesso () {
-    save.value = true
-    setTimeout(() => {
-      router.push('/Perfil') 
-    },2000)
-  }
 </script>
 
 <template>
@@ -68,7 +53,7 @@ async function sucesso () {
 
       <div class="w-full flex justify-left mt-5">
           <div v-if="playMatch" class="w-[11rem] h-[2.5rem] justify-between text-[#fff]">
-            <router-link to="/Perfil">
+            <router-link to="/">
               <button
                 class="bg-[#263001] w-[12rem] rounded-xl"              
                 type="submit"
@@ -88,7 +73,21 @@ async function sucesso () {
         class="xl:w-[80vw] h-[30vw] w-[90%] flex flex-col gap-8 p-4 mt-[3rem] bg-[#1DEEA3] shadow-md bg-opacity-30 rounded-2xl relative"
       >
         <div class="flex flex-col justify-center items-center">
-          <div class="xl:w-[45%] w-full flex flex-col relative left-2 top-[1rem]">
+            <div class="xl:w-[45%] w-full flex flex-col relative left-2 top-[1rem]">
+            <span
+              class="bg-[#FFD600] w-[7rem] absolute bottom-[2.1rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
+            >
+              Email
+            </span>
+            <input
+              v-model="email"
+              id="email"
+              placeholder="Email"
+              class="bg-[#084808] w-full h-11 p-2 pt-2 shadow-md outline-none rounded-xl text-[#FFF] relative z-0"
+              type="text"
+            />
+          </div>
+            <div class="xl:w-[45%] w-full flex flex-col relative left-2 top-[1rem]">
             <span
               class="bg-[#FFD600] w-[7rem] absolute bottom-[2.1rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
             >

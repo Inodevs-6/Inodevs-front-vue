@@ -258,7 +258,7 @@ const played = () => {
               v-model="name"
               id="name"
               placeholder="Nome da Vaga"
-              class="bg-[#2A753D] w-full h-11 p-2 pt-2 shadow-md outline-none rounded-xl text-[#FFF] relative z-0"
+              class="bg-[#084808] w-full h-11 p-2 pt-2 shadow-md outline-none rounded-xl text-[#FFF] relative z-0"
               :disabled="!isDisabled"
             />
           </div>
@@ -272,7 +272,7 @@ const played = () => {
               v-model="level"
               id="level"
               placeholder="Nível da Vaga"
-              class="bg-[#2A753D] w-full h-11 p-2 pt-2 shadow-md outline-none rounded-xl text-[#FFF] relative z-0"
+              class="bg-[#084808] w-full h-11 p-2 pt-2 shadow-md outline-none rounded-xl text-[#FFF] relative z-0"
               :disabled="!isDisabled"
             />
           </div>
@@ -290,11 +290,11 @@ const played = () => {
             id="conhecimentos"
             placeholder="Descrição de conhecimentos será gerada"
             :disabled="isDisabled"
-            class="h-[10rem] bg-[#2A753D] p-4 focus:outline-none flex resize-none shadow-xl justify-start rounded-xl text-white"
+            class="h-[10rem] bg-[#084808] p-4 focus:outline-none flex resize-none shadow-xl justify-start rounded-xl text-white"
           >
           </textarea>
           <div
-            class="h-[10rem] bg-[#2A753D] p-4 focus:outline-none flex resize-none shadow-xl justify-center items-center rounded-xl"
+            class="h-[10rem] bg-[#084808] p-4 focus:outline-none flex resize-none shadow-xl justify-center items-center rounded-xl"
             v-else
           >
             <Loader />
@@ -318,11 +318,11 @@ const played = () => {
             id="habilidades"
             placeholder="Descrição de habilidade será gerada..."
             :disabled="isDisabled"
-            class="h-[10rem] bg-[#2A753D] p-4 focus:outline-none flex resize-none shadow-xl justify-start rounded-xl text-white"
+            class="h-[10rem] bg-[#084808] p-4 focus:outline-none flex resize-none shadow-xl justify-start rounded-xl text-white"
           >
           </textarea>
           <div
-            class="h-[10rem] bg-[#2A753D] p-4 focus:outline-none flex resize-none shadow-xl justify-center items-center rounded-xl"
+            class="h-[10rem] bg-[#084808] p-4 focus:outline-none flex resize-none shadow-xl justify-center items-center rounded-xl"
             v-else
           >
             <Loader />
@@ -346,12 +346,12 @@ const played = () => {
             id="atitudes"
             placeholder="Descrição de atitude será gerada..."
             :disabled="isDisabled"
-            class="h-[10rem] bg-[#2A753D] p-4 focus:outline-none flex resize-none shadow-xl justify-start rounded-xl text-white"
+            class="h-[10rem] bg-[#084808] p-4 focus:outline-none flex resize-none shadow-xl justify-start rounded-xl text-white"
           >
           </textarea>
 
           <div
-            class="h-[10rem] bg-[#2A753D] p-4 focus:outline-none flex resize-none shadow-xl justify-center items-center rounded-xl"
+            class="h-[10rem] bg-[#084808] p-4 focus:outline-none flex resize-none shadow-xl justify-center items-center rounded-xl"
             v-else
           >
             <Loader />
@@ -374,7 +374,7 @@ const played = () => {
             id="comentario"
             placeholder="Adicione um comentário caso necessário para fazer o aprimoramento com configurações mais avançadas."
             :disabled="isDisabled"
-            class="h-[8rem] bg-[#2A753D] p-4 focus:outline-none flex resize-none shadow-xl justify-start rounded-xl text-white"
+            class="h-[8rem] bg-[#084808] p-4 focus:outline-none flex resize-none shadow-xl justify-start rounded-xl text-white"
           >
           </textarea>
           <button
@@ -434,7 +434,7 @@ const played = () => {
         </div>
         <div v-if="scrapping" class="fixed bottom-2 right-5">
           <button
-            class="bg-[#2A753D] w-[25rem] rounded-xl border-solid border-white border-2 text-center"
+            class="bg-[#084808] w-[25rem] rounded-xl border-solid border-white border-2 text-center"
             type="submit"
           >
             <p class="text-[#fff] text-lg font-bold p-1">Realizando Busca de Canadidatos...</p>
@@ -444,7 +444,7 @@ const played = () => {
         <div class="fixed bottom-2 right-5">
           <div
             v-if="matching"
-            class="bg-[#2A753D] w-[25rem] rounded-xl border-solid border-white border-2 text-center"
+            class="bg-[#084808] w-[25rem] rounded-xl border-solid border-white border-2 text-center"
             type="submit"
           >
             <p class="text-[#fff] text-lg font-bold p-1">Match de Candidatos Finalizado!</p>
@@ -464,7 +464,7 @@ const played = () => {
         <div class="fixed bottom-2 right-5">
           <div
             v-if="save"
-            class="bg-[#2A753D] w-[25rem] rounded-xl border-solid border-white border-2 text-center"
+            class="bg-[#084808] w-[25rem] rounded-xl border-solid border-white border-2 text-center"
             type="submit"
           >
             <p class="text-[#fff] text-lg font-bold p-1">Vaga salva com sucesso!</p>
