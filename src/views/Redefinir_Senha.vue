@@ -49,6 +49,20 @@ const salvar = () => {
       <div v-if="isDone">
         <Alert variant="success" />
       </div>
+
+      <div class="w-full flex justify-left mt-5">
+          <div v-if="playMatch" class="w-[11rem] h-[2.5rem] justify-between text-[#fff]">
+            <router-link to="/Perfil">
+              <button
+                class="bg-[#263001] w-[12rem] rounded-xl"              
+                type="submit"
+                value="Voltar"
+              >
+                <p class="text-lg font-bold p-1">Voltar</p>
+              </button>
+            </router-link>
+          </div>
+        </div>
       <h1
         class="text-center font-medium xl:text-3xl text-xl xl:mt-7 mt-3 flex w-full h-10 justify-center items-center"
       >

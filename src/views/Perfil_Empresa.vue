@@ -76,7 +76,7 @@ const habilitarInput = () => {
         class="xl:w-[80vw] w-[90%] flex flex-col gap-8 p-4 mt-[3rem] bg-[#1DEEA3] shadow-md bg-opacity-30 rounded-2xl relative"
       >
         <div class="w-full flex flex-col gap-5 xl:gap-0 xl:flex-row justify-between">
-          <div class="xl:w-1/2 w-full flex flex-col relative left-[1.5rem] top-[0.7rem]">
+          <div class="xl:w-1/2 w-full flex flex-col relative left-[29.9rem] top-[0.7rem]">
             <span
               class="bg-[#FFD600] w-[7rem] absolute bottom-[2.1rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
             >
@@ -101,9 +101,9 @@ const habilitarInput = () => {
             />
           </div>
         </div>
-        <div class="flex flex-col items-center ">
+        <div class="flex flex-col items-center top-[0.7rem]">
           <span
-            class="bg-[#FFD600] w-[7rem] relative top-[0.6rem] right-[28.2rem] font-semibold rounded-lg text-center z-10"
+            class="bg-[#FFD600] w-[7rem] relative top-[0.7rem] right-[28.2rem] font-semibold rounded-lg text-center z-10"
           >
             Email
           </span>
@@ -116,7 +116,7 @@ const habilitarInput = () => {
           >
           </textarea>
           <span
-            class="bg-[#FFD600] w-[9rem] relative top-[0.6rem] right-[27rem] font-semibold shadow-md rounded-lg text-center z-10"
+            class="bg-[#FFD600] w-[9rem] relative top-[0.7rem] right-[27rem] font-semibold shadow-md rounded-lg text-center z-10"
           >
             Descrição
           </span>
@@ -129,9 +129,9 @@ const habilitarInput = () => {
           >
           </textarea>
         </div>
-        <div class="flex flex-col items-center">
+        <div class="flex flex-col items-center top-[0.7rem]">
           <span
-            class="bg-[#FFD600] w-[7rem] relative top-[0.6rem] right-[28.2rem] font-semibold rounded-lg text-center z-10"
+            class="bg-[#FFD600] w-[7rem] relative top-[0.7rem] right-[28.2rem] font-semibold rounded-lg text-center z-10"
           >
             Segmento
           </span>
@@ -144,7 +144,7 @@ const habilitarInput = () => {
           >
           </textarea>
           <span
-            class="bg-[#FFD600] w-[9rem] relative top-[0.6rem] right-[27rem] font-semibold shadow-md rounded-lg text-center z-10"
+            class="bg-[#FFD600] w-[9rem] relative top-[0.7rem] right-[27rem] font-semibold shadow-md rounded-lg text-center z-10"
           >
             Porte
           </span>
