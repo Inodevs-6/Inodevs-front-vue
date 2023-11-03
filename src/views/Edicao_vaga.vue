@@ -4,6 +4,7 @@ import Loader from '@/components/Loader.vue'
 import Alert from '@/components/alert/Alert.vue'
 import api from '../services/api'
 import ia from '../services/ia'
+import router from "@/router";
 import { ref , defineProps, onMounted} from 'vue'
 const name = ref('')
 const level = ref('')
@@ -65,9 +66,15 @@ const fetchCha = async () => {
   }
   loading.value = false
 }
-
+async function sucesso () {
+    save.value = true
+    setTimeout(() => {
+      router.push('/home') 
+    },2000)
+  }
 
 async function editar() {
+  loading.value = true
   erro.value = ''
   try {
     const empresaId = 1
@@ -79,9 +86,11 @@ async function editar() {
       atitudes: atitudes.value
     })
     save.value = true
+    sucesso()
   } catch (error) {
     erro.value = (error as Error).message
   }
+  loading.value = false
 }
 
 async function aprimorar(campo: String) {
@@ -279,7 +288,7 @@ onMounted(fetchCha)
         class="text-center font-medium xl:text-3xl text-xl xl:mt-7 mt-3 flex w-full h-10 justify-center items-center"
         v-if="vaga"
         >
-        Ranqueamento de {{ vaga.nome }} com nível {{ vaga.nivel }} {{ props.i }}
+        Ranqueamento de {{ name }} com nível {{ level }} 
       </h1>
       <div
         class="xl:w-[88vw] w-[90%] flex flex-col gap-8 p-4 mt-[3rem] bg-[#1DEEA3] shadow-md bg-opacity-30 rounded-2xl relative"
@@ -296,7 +305,7 @@ onMounted(fetchCha)
               id="name"
               placeholder="Nome da Vaga"
               class="bg-[#2A753D] w-full h-11 p-2 pt-2 shadow-md outline-none rounded-xl text-[#FFF] relative z-0"
-              :disabled="isDisabled"
+              disabled
             />
           </div>
           <div class="xl:w-1/3 w-full flex flex-col relative">
@@ -310,7 +319,7 @@ onMounted(fetchCha)
               id="level"
               placeholder="Nível da Vaga"
               class="bg-[#2A753D] w-full h-11 p-2 pt-2 shadow-md outline-none rounded-xl text-[#FFF] relative z-0"
-              :disabled="isDisabled"
+              disabled
             />
           </div>
         </div>
