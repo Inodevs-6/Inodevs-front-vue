@@ -31,6 +31,14 @@
         <BtnMenu caminho="/assets/Sum.svg" />
         <p class="font-bold text-2xl">Add CHA</p>
       </RouterLink>
+      <RouterLink to="/Cadastro_Empresa" class="flex flex-row justify-between items-center">
+        <BtnMenu caminho="/assets/Sum.svg" />
+        <p class="font-bold text-2xl">Add CHA</p>
+      </RouterLink>
+      <RouterLink to="/Perfil" class="flex flex-row justify-between items-center">
+        <BtnMenu caminho="/assets/Sum.svg" />
+        <p class="font-bold text-2xl">Perfil</p>
+      </RouterLink>
       <div class="flex absolute bottom-2 mb-[0.7rem] cursor-pointer flex-row">
         <img alt="Vue logo" class="logo" src="/assets/Export.svg" width="40" height="40" />
         <p class="font-bold text-2xl">Logout</p>

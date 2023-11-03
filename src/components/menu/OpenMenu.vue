@@ -18,11 +18,15 @@
     <RouterLink to="/Cadastro_Cargo">
       <BtnMenu caminho="/assets/Sum.svg" />
     </RouterLink>
-      <BtnMenu caminho="/assets/listicone.svg" />
+    <RouterLink to="/Perfil">
+      <BtnMenu caminho="/assets/perfil.png" />
+    </RouterLink>
+      <!-- <BtnMenu caminho="/assets/listicone.svg" /> -->
     <!-- </RouterLink> -->
     <RouterLink to="/" class="flex absolute bottom-2 mb-[0.7rem] cursor-pointer flex-row gap-5">
       <img alt="Vue logo" class="logo" src="/assets/Export.svg" width="40" height="40" />
     </RouterLink>
+
   </div>
   <div>
     <MenuMobile></MenuMobile>

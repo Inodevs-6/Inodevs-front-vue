@@ -2,6 +2,8 @@
 import SobreInfo from "@/components/Login/SobreInfo.vue"
 import Loader from "@/components/Loaderlogin.vue";
 import {ref } from "vue"
+// import { useRouter } from 'vue-router';
+import { RouterLink, RouterView } from 'vue-router'
 import api from "@/services/api";
 import router from "@/router";
 const Email = ref()
@@ -82,12 +84,13 @@ const Logando = async () => {
          />
   </div> 
   <div class="flex items-start gap-2 flex-col">
-    <span class="border-b-4 border-white text-white">
+    <RouterLink to="/Cadastro_Empresa" class="border-b-4 border-white text-white">
         Ainda nao tenho uma conta
-    </span>
-    <span class="border-b-4 border-white text-white">
+    </RouterLink>
+
+    <RouterLink to="/Redefinir_Senha" class="border-b-4 border-white text-white">
        Esqueci minha senha 
-    </span>
+    </RouterLink>
   </div>
  
     <button
