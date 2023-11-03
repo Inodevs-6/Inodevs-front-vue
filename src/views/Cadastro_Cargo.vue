@@ -29,7 +29,13 @@ const save = ref(false)
 async function salvar() {
   erro.value = ''
   try {
-    const empresaId = 1
+    const empresaDataString = localStorage.getItem('empresa');
+    let empresaId;
+    if (empresaDataString !== null) {
+      const empresaData = JSON.parse(empresaDataString);
+      if (empresaData && empresaData.id) {
+        empresaId = empresaData.id;
+      }}
     api.patch('/editar/' + empresaId + '/' + id.value, {
       conhecimentos: conhecimentos.value,
       habilidades: habilidades.value,

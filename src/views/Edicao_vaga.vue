@@ -37,7 +37,14 @@ const props = defineProps({
 const fetchCha = async () => {
   loading.value = true
   try {
-    const response = await api.get(`/editar/1/${props.id}`)
+    const empresaDataString = localStorage.getItem('empresa');
+    let empresaId;
+    if (empresaDataString !== null) {
+      const empresaData = JSON.parse(empresaDataString);
+      if (empresaData && empresaData.id) {
+        empresaId = empresaData.id;
+      }}
+    const response = await api.get(`/editar/${empresaId}/${props.id}`)
     vaga.value = response.data
     name.value = response.data.vaga.nome
     level.value = response.data.vaga.nivel
