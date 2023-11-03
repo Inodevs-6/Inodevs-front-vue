@@ -8,7 +8,7 @@ import ListaVaga from '@/views/ListaVaga.vue'
 import Ranqueamento from '@/views/Ranqueamento.vue'
 import Login from '@/views/Login.vue'
 import Perfil_Empresa from '@/views/Perfil_Empresa.vue'
-import RedefinirSenha_Login from '@/views/RedefinirSenha_Login.vue'
+import LoginRedefinicao from '@/views/LoginRedefinicao.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -25,13 +25,13 @@ const router = createRouter({
     {
       path: '/Redefinir_Senha/:id',
       name: 'Redefinir_Senha',
+      component: Redefinir_Senha,
       props: true,
-      component: Redefinir_Senha
     },
     {
       path: '/Redefinir_Senha',
-      name: 'Redefinir_Senha',
-      component: RedefinirSenha_Login
+      name: 'LoginRedefinicao',
+      component: LoginRedefinicao
     },
     {
       path: '/Cadastro_Empresa',
