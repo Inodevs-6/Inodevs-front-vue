@@ -101,10 +101,10 @@ onMounted(fetchVagas)
       />
       <LabelLista
         name="Editar"
-        estilo="bg-[#FFD600] w-[7rem] absolute font-bold top-[8.7rem] right-[20rem] shadow-md rounded-lg text-center z-10"
+        estilo="bg-[#FFD600] w-[7rem] absolute font-bold top-[8.7rem] right-[23rem] shadow-md rounded-lg text-center z-10"
       />
       <LabelLista
-        name="Visualizar"
+        name="Rank"
         estilo="bg-[#FFD600] w-[7rem] absolute font-bold top-[8.7rem] right-[7rem] shadow-md rounded-lg text-center z-10"
       />
       <section

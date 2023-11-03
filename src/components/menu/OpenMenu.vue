@@ -12,7 +12,7 @@
     >
       <p class="text-white font-bold px-[0.4rem]">{{ notify }}</p>
     </div>
-    <RouterLink to="/">
+    <RouterLink to="/home">
       <BtnMenu caminho="/assets/Home.svg" />
     </RouterLink>
     <RouterLink to="/Cadastro_Cargo">

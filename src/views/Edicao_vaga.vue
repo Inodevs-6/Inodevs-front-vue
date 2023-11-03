@@ -23,7 +23,7 @@ const matching = ref(false)
 const scrapping = ref(false)
 const valid = ref(false)
 const comentario = ref('')
-const id = ref(0)
+const idd = ref(0)
 const vaga = ref([])
 
 const save = ref(false)
@@ -37,6 +37,16 @@ const props = defineProps({
 const fetchCha = async () => {
   loading.value = true
   try {
+    const response = await api.get(`/editar/1/${props.id}`)
+    vaga.value = response.data
+    name.value = response.data.vaga.nome
+    level.value = response.data.vaga.nivel
+    conhecimentos.value = response.data.conhecimentosEditado
+    habilidades.value = response.data.habilidadesEditado
+    atitudes.value = response.data.atitudesEditado
+    console.log(response.data)
+  } catch {
+    try {
     const response = await api.get(`/vaga/match/${props.id}`)
     vaga.value = response.data
     name.value = response.data.nome
@@ -52,15 +62,18 @@ const fetchCha = async () => {
       erro.value = 'Ocorreu um erro desconhecido.'
     }
   }
+  }
   loading.value = false
 }
 
 
-async function salvar() {
+async function editar() {
   erro.value = ''
   try {
     const empresaId = 1
-    api.patch('/editar/' + empresaId + '/' + id.value, {
+    api.patch('/editar/' + empresaId + '/' + props.id , {
+      nome: name.value,
+		  nivel: level.value,
       conhecimentos: conhecimentos.value,
       habilidades: habilidades.value,
       atitudes: atitudes.value
@@ -193,7 +206,7 @@ async function match() {
     played()
     scrapping.value = true
     matching.value = false
-    salvar()
+    editar()
     await ia.post('/scrap')
     scrapping.value = false
     await ia.post('/match', {
@@ -221,7 +234,7 @@ async function getResponseChatgpt() {
           nivel: level.value.replace(' ', '')
         })
       ).data
-      id.value = response.id
+      idd.value = response.id
       for (let i = 0; i < response.descricao.Conhecimentos.length; i++) {
         conhecimentos.value += response.descricao.Conhecimentos[i] + '\n'
       }
@@ -251,6 +264,7 @@ const habilitarInput = () => {
 const played = () => {
   Play.value = true
 }
+
 onMounted(fetchCha)
 </script>
 
@@ -282,7 +296,7 @@ onMounted(fetchCha)
               id="name"
               placeholder="Nome da Vaga"
               class="bg-[#2A753D] w-full h-11 p-2 pt-2 shadow-md outline-none rounded-xl text-[#FFF] relative z-0"
-              :disabled="!isDisabled"
+              :disabled="isDisabled"
             />
           </div>
           <div class="xl:w-1/3 w-full flex flex-col relative">
@@ -296,7 +310,7 @@ onMounted(fetchCha)
               id="level"
               placeholder="Nível da Vaga"
               class="bg-[#2A753D] w-full h-11 p-2 pt-2 shadow-md outline-none rounded-xl text-[#FFF] relative z-0"
-              :disabled="!isDisabled"
+              :disabled="isDisabled"
             />
           </div>
         </div>
@@ -323,9 +337,9 @@ onMounted(fetchCha)
             <Loader />
           </div>
           <button
-            v-if="!loadingC && Play"
+            v-if="!loadingC && Play || !isDisabled"
             @click="aprimorar('Conhecimentos')"
-            class="bg-[#FFD600] w-[9rem] relative top-[-2rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
+            class="bg-[#FFD600] w-[9rem] relative top-[-2rem] left-[58rem] font-semibold shadow-md rounded-lg text-center z-10"
           >
             Aprimorar
           </button>
@@ -351,9 +365,9 @@ onMounted(fetchCha)
             <Loader />
           </div>
           <button
-            v-if="!loadingH && Play"
+            v-if="!loadingH && Play || !isDisabled "
             @click="aprimorar('Habilidades')"
-            class="bg-[#FFD600] w-[9rem] relative top-[-2rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
+            class="bg-[#FFD600] w-[9rem] relative top-[-2rem] left-[58rem] font-semibold shadow-md rounded-lg text-center z-10"
           >
             Aprimorar
           </button>
@@ -380,18 +394,20 @@ onMounted(fetchCha)
             <Loader />
           </div>
           <button
-            v-if="!loadingA && Play"
+            v-if="!loadingA && Play || !isDisabled"
             @click="aprimorar('Atitudes')"
-            class="bg-[#FFD600] w-[9rem] relative top-[-2rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
+            class="bg-[#FFD600] w-[9rem] relative top-[-2rem] left-[58rem] font-semibold shadow-md rounded-lg text-center z-10"
             >
             Aprimorar
           </button>
           <span
+          v-if="!isDisabled"
             class="bg-[#FFD600] w-[9rem] relative top-[1rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
           >
             Comentário
           </span>
           <textarea
+          v-if="!isDisabled"
             rows="4"
             v-model="comentario"
             id="comentario"
@@ -401,13 +417,14 @@ onMounted(fetchCha)
           >
           </textarea>
           <button
+          v-if="!isDisabled"
             @click="aprimorar('Geral')"
-            class="bg-[#FFD600] w-[9rem] relative top-[-2rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
+            class="bg-[#FFD600] w-[9rem] relative top-[-2rem] left-[58rem] font-semibold shadow-md rounded-lg text-center z-10"
           >
             Aprimorar
           </button>
           <div
-            v-if="!Play"
+            v-if="!Play && !isDisabled"
             @click="getResponseChatgpt()"
             class="bg-black cursor-pointer absolute top-[5.5rem] right-12 xl:right-[5rem] rounded-full shadow-md xl:p-5 p-2 flex justify-center xl:h-[3.7rem] h-[2rem]"
           >
@@ -437,12 +454,22 @@ onMounted(fetchCha)
               </button> -->
 
             <button
+            v-if="!isDisabled"
               class="bg-[#263001] w-[10rem] rounded-xl"
-              @click="salvar"
+              @click="editar"
               type="submit"
               value="Enviar para Busca"
             >
               <p class="text-lg font-bold p-1">Salvar</p>
+            </button>
+            <button
+            v-if="isDisabled"
+              class="bg-[#263001] w-[10rem] rounded-xl"
+              @click="habilitarInput"
+              type="submit"
+              value="Enviar para Busca"
+            >
+              <p class="text-lg font-bold p-1">Editar</p>
             </button>
 
             <button
