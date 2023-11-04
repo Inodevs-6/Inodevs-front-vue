@@ -6,6 +6,7 @@ import api from '../services/api'
 import ia from '../services/ia'
 import router from "@/router";
 import { ref , defineProps, onMounted} from 'vue'
+import { useAuth } from '@/stores/auth'
 const name = ref('')
 const level = ref('')
 const conhecimentos = ref('')
@@ -26,7 +27,7 @@ const valid = ref(false)
 const comentario = ref('')
 const idd = ref(0)
 const vaga = ref([])
-
+const auth = useAuth()
 const save = ref(false)
 const props = defineProps({
   id: {
@@ -38,13 +39,7 @@ const props = defineProps({
 const fetchCha = async () => {
   loading.value = true
   try {
-    const empresaDataString = localStorage.getItem('empresa');
-    let empresaId;
-    if (empresaDataString !== null) {
-      const empresaData = JSON.parse(empresaDataString);
-      if (empresaData && empresaData.id) {
-        empresaId = empresaData.id;
-      }}
+    const empresaId = auth.getUser.id
     const response = await api.get(`/editar/${empresaId}/${props.id}`)
     vaga.value = response.data
     name.value = response.data.vaga.nome
@@ -84,7 +79,7 @@ async function editar() {
   loading.value = true
   erro.value = ''
   try {
-    const empresaId = 1
+    const empresaId = auth.getUser.id
     api.patch('/editar/' + empresaId + '/' + props.id , {
       nome: name.value,
 		  nivel: level.value,

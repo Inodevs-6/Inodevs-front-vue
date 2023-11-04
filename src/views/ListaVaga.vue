@@ -9,12 +9,14 @@ import OpenMenu from '@/components/menu/OpenMenu.vue'
 import LoaderforList from '@/components/LoaderforList.vue'
 import api from '@/services/api'
 import { onMounted, ref } from 'vue'
+import { useAuth } from '@/stores/auth';
 const namesearch = ref('')
 const erro = ref('')
 const isSeach = ref(false)
 const loading = ref(true)
 const vagas: Vaga = ref([])
 const vagas1: Vaga = ref([])
+const auth = useAuth()
 
 const SearchName = async () => {
   isSeach.value = true
@@ -36,7 +38,8 @@ const closeSeachname = () => {
 const fetchVagas = async () => {
   loading.value = true
   try {
-    const response = await api.get('/vaga')
+    const empresaId = auth.getUser.id
+    const response = await api.get('/vaga/empresa/' + empresaId)
     vagas.value = response.data
   } catch (error) {
     erro.value = (error as Error).message

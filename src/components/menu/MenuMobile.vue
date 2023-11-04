@@ -31,15 +31,11 @@
         <BtnMenu caminho="/assets/Sum.svg" />
         <p class="font-bold text-2xl">Add CHA</p>
       </RouterLink>
-      <RouterLink to="/Cadastro_Empresa" class="flex flex-row justify-between items-center">
-        <BtnMenu caminho="/assets/Sum.svg" />
-        <p class="font-bold text-2xl">Add CHA</p>
-      </RouterLink>
       <RouterLink to="/Perfil" class="flex flex-row justify-between items-center">
         <BtnMenu caminho="/assets/Sum.svg" />
         <p class="font-bold text-2xl">Perfil</p>
       </RouterLink>
-      <div class="flex absolute bottom-2 mb-[0.7rem] cursor-pointer flex-row">
+      <div class="flex absolute bottom-2 mb-[0.7rem] cursor-pointer flex-row" @click="logout">
         <img alt="Vue logo" class="logo" src="/assets/Export.svg" width="40" height="40" />
         <p class="font-bold text-2xl">Logout</p>
       </div>
@@ -49,8 +45,17 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import BtnMenu from '@/components/menu/BtnMenu.vue'
+import { useAuth } from '@/stores/auth';
+import router from '@/router';
 const isOpenMenu = ref(false)
 const notify = null
+function logout (){
+  const auth = useAuth()
+  auth.clear()
+  router.push("/")
+
+
+}
 const openMenu = () => {
   isOpenMenu.value = !isOpenMenu.value
 }

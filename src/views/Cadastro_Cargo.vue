@@ -5,6 +5,7 @@ import Alert from '@/components/alert/Alert.vue'
 import api from '../services/api'
 import ia from '../services/ia'
 import { ref } from 'vue'
+import { useAuth } from '@/stores/auth'
 const name = ref('')
 const level = ref('')
 const conhecimentos = ref('')
@@ -25,17 +26,12 @@ const valid = ref(false)
 const comentario = ref('')
 const id = ref(0)
 const save = ref(false)
+const auth = useAuth()
 
 async function salvar() {
   erro.value = ''
   try {
-    const empresaDataString = localStorage.getItem('empresa');
-    let empresaId;
-    if (empresaDataString !== null) {
-      const empresaData = JSON.parse(empresaDataString);
-      if (empresaData && empresaData.id) {
-        empresaId = empresaData.id;
-      }}
+    const empresaId = auth.getUser.id
     api.patch('/editar/' + empresaId + '/' + id.value, {
       conhecimentos: conhecimentos.value,
       habilidades: habilidades.value,

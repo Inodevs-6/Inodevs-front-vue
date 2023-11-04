@@ -6,6 +6,8 @@ import {ref } from "vue"
 import { RouterLink, RouterView } from 'vue-router'
 import api from "@/services/api";
 import router from "@/router";
+import {useAuth} from "@/stores/auth"
+const auth = useAuth()
 const Email = ref()
 const senha = ref()
 const erro = ref()
@@ -22,14 +24,15 @@ const Logando = async () => {
         });
         dataMessage.value = response.data;
 
-        localStorage.setItem('token', response.data.token);
 
         if (response.data.token) {
           console.log("Token recebido. Redirecionando para outra página...");
+          auth.setToken(response.data.token)
+          auth.setUser(response.data.empresa)
+
           router.push('/home');
           console.log(response.data.token)
-          const responseLogado = await api.get('/empresa/' + Email.value)
-          localStorage.setItem('empresaId', JSON.stringify(responseLogado.data))
+          
         } else {
           console.log("Token não recebido.");
         }

@@ -9,6 +9,7 @@ import Ranqueamento from '@/views/Ranqueamento.vue'
 import Login from '@/views/Login.vue'
 import Perfil_Empresa from '@/views/Perfil_Empresa.vue'
 import LoginRedefinicao from '@/views/LoginRedefinicao.vue'
+import { useAuth } from '@/stores/auth'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -23,10 +24,10 @@ const router = createRouter({
       component: ListaVaga
     },
     {
-      path: '/Redefinir_Senha/:id',
+      path: '/Redefinir_Senha/',
       name: 'Redefinir_Senha',
       component: Redefinir_Senha,
-      props: true,
+    
     },
     {
       path: '/Redefinir_Senha',
@@ -36,7 +37,10 @@ const router = createRouter({
     {
       path: '/Cadastro_Empresa',
       name: 'Cadastro_Empresa',
-      component: Cadastro_Empresa
+      component: Cadastro_Empresa,
+      meta: {
+        noauth: true 
+      }
     },
     {
       path: '/Vagas',
@@ -57,7 +61,10 @@ const router = createRouter({
     {
       path: '/',
       name: 'login',
-      component: Login
+      component: Login,
+      meta: {
+        noauth: true 
+      }
     },
     {
       path: '/Edicao_vaga/:id',
@@ -66,6 +73,25 @@ const router = createRouter({
       props: true
     }
   ]
+})
+
+router.beforeEach(async (to, from, next) => {
+  const auth = useAuth();
+  const isAuthenticated = await auth.checkToken();
+
+  if (!to.meta?.noauth) {
+    if (auth.token && auth.user && isAuthenticated) {
+      next()
+    } else {
+      next({ name: "login" });
+    }
+  } else {
+    if (to.name == 'login' && auth.token && auth.user && isAuthenticated) {
+      next({ name: "home" });
+    } else {
+      next();
+    }
+  } 
 })
 
 export default router

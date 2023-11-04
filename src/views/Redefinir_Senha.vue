@@ -3,6 +3,7 @@ import Alert from '@/components/alert/Alert.vue'
 import api from '../services/api'
 import { ref } from 'vue'
 import router from '@/router';
+import { useAuth } from '@/stores/auth';
 
 const senha = ref('')
 const senhaNovamente = ref('')
@@ -14,17 +15,12 @@ const playMatch = ref(true)
 const valid = ref(false)
 
 const save = ref(false)
+const auth = useAuth()
 
 const confirmarSenha = () => {
   isDisabled.value = false
 }
 
-const props = defineProps({
-  id: {
-    type: String,
-    required: true
-  }
-})
 
 
 const salvar = () => {
@@ -40,8 +36,9 @@ const salvar = () => {
 
   erro.value = ''
   try {
-    api.patch(`/empresa/editar-senha/${props.id}`, {
-      id: props.id,
+    const empresaId = auth.getUser.id
+    api.patch(`/empresa/editar-senha/${empresaId}`, {
+      id: empresaId,
       senha: senha.value
     })
     sucesso()

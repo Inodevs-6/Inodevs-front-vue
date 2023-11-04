@@ -5,6 +5,7 @@ import Alert from '@/components/alert/Alert.vue'
 import api from '../services/api'
 import { onMounted, ref } from 'vue'
 import router from '@/router'
+import { useAuth } from '@/stores/auth'
 const id = ref("")
 const nome = ref('')
 const cnpj = ref('')
@@ -20,10 +21,11 @@ const loading = ref(false)
 const loadingC = ref(false)
 const valid = ref(false)
 const save = ref(false)
+const auth = useAuth()
 
 async function editar() {
   try {
-    const empresaId = 1
+    const empresaId = auth.getUser.id
     api.patch('/empresa/editar-empresa/' + empresaId, {
       nome: nome.value,
       email: email.value,
@@ -38,7 +40,7 @@ async function editar() {
 }
 
 const fetchEmpresa = async () => {
-  const empresaId = 1
+  const empresaId = auth.getUser.id
   loading.value = true
   try {
     const response = await api.get('/empresa/'+ empresaId)
@@ -200,7 +202,7 @@ onMounted(fetchEmpresa)
         <div class="w-[90%] flex justify-center flex-col gap-[7rem]  xl:flex-row top-[2rem]">
         <!-- <div class="w-full flex justify-center"> -->
           <div v-if="playMatch" class="w-[11rem] h-[2.5rem] justify-between text-[#fff]">
-            <router-link :to="'/Redefinir_Senha/'+id">
+            <router-link :to="'/Redefinir_Senha/'">
               <button
                 class="bg-[#263001] w-[12rem] rounded-xl"
                 type="submit"
