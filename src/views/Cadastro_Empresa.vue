@@ -201,7 +201,7 @@ const salvar = () => {
             >
               <option value="micro">Micro Empresa</option>
               <option value="pequeno">Pequena Empresa</option>
-              <option value="médio">Média Empresa</option>
+              <option value="medio">Média Empresa</option>
               <option value="grande">Grande Empresa</option>
             </select>
           </div>

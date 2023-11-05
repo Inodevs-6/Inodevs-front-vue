@@ -25,12 +25,9 @@ const Logando = async () => {
     dataMessage.value = response.data
 
     if (response.data.token) {
-      console.log('Token recebido. Redirecionando para outra página...')
       auth.setToken(response.data.token)
       auth.setUser(response.data.empresa)
-
       router.push('/home')
-      console.log(response.data.token)
     } else {
       console.log('Token não recebido.')
     }
@@ -85,7 +82,7 @@ const Logando = async () => {
         </div>
         <div class="flex items-start gap-2 flex-col">
           <RouterLink to="/Cadastro_Empresa" class="border-b-4 border-white text-white">
-            Ainda nao tenho uma conta
+            Ainda não tenho uma conta
           </RouterLink>
 
           <RouterLink to="/Redefinir_Senha" class="border-b-4 border-white text-white">

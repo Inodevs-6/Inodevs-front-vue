@@ -28,6 +28,7 @@ const minMatch = ref('')
 const maxMatch = ref('')
 const erro = ref('')
 const vaga = ref() as Vaga | any
+const candidatos = ref()
 const loading = ref(true)
 const props = defineProps({
   id: {
@@ -42,8 +43,9 @@ const fetchCandidatos = async () => {
   loading.value = true
   try {
     const response = await api.get(`/vaga/match/${props.id}`)
-    vaga.value = response.data
-    vaga.value.candidatos.sort((a: CandidatoVaga, b: CandidatoVaga) =>
+    vaga.value = (await api.get(`/vaga/${props.id}`)).data
+    candidatos.value = response.data
+    candidatos.value.sort((a: CandidatoVaga, b: CandidatoVaga) =>
       a.rank > b.rank ? 1 : b.rank > a.rank ? -1 : 0
     )
     filtrarCandidatos()
@@ -70,7 +72,7 @@ function getCor(percentageMatch: number) {
 }
 
 function filtrarCandidatos() {
-  candidatosFiltrados.value = vaga.value.candidatos.filter((candidato: CandidatoVaga) => {
+  candidatosFiltrados.value = candidatos.value.filter((candidato: CandidatoVaga) => {
     if (minMatch.value === '' && maxMatch.value === '') {
       return true
     } else if (minMatch.value === '') {
@@ -118,7 +120,7 @@ onMounted(fetchCandidatos)
         />
       </div>
       <LabelLista
-        name="Nome"
+        name="Candidato"
         estilo="bg-[#FFD600] w-[7rem] absolute font-bold top-[9.4rem] left-[9rem] shadow-md rounded-lg text-center z-10"
       />
       <LabelLista
@@ -138,7 +140,7 @@ onMounted(fetchCandidatos)
           class="h-[3rem] text-white font-bold w-full flex-row flex justify-around items-center rounded-lg bg-[#2A753D]"
         >
           <div class="conteudo-candidatos flex items-center justify-around h-[3rem]">
-            <span class="nome w-[20%] pl-4">{{ candidato.candidato.link }}</span>
+            <a class="nome w-[7%] pl-4" :href="candidato.candidato.link"><img class="w-[2rem]" src="/assets/perfil.png" alt="user icon" /></a>
             <div class="barra rounded-full shadow-md border-black">
               <div
                 class="barra-preenchida shadow-md rounded-full"
