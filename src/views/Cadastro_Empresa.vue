@@ -62,16 +62,23 @@ const salvar = () => {
   <div class="bg-white flex w-screen overflow-x-hidden overflow-y-scroll h-screen">
     <!-- <OpenMenu /> -->
     <div class="flex xl:ml-[5rem] w-screen items-center flex-col bg-white">
-      <div v-if="isDone">
-        <Alert variant="success" />
-      </div>
+      <div class="w-full p-2 fixed h-[2.5rem] justify-between text-[#fff]">
+          <router-link to="/Perfil">
+            <button class="bg-[#263001] w-[12rem] rounded-xl" type="submit" value="Voltar">
+              <p class="text-lg font-bold p-1">Voltar</p>
+            </button>
+          </router-link>
+        </div>
       <h1
-        class="text-center font-medium xl:text-3xl text-xl xl:mt-7 mt-3 flex w-full h-10 justify-center items-center"
+        class="text-center font-medium xl:text-3xl text-xl xl:mt-4 mt-3 flex w-full h-10 justify-center items-center"
       >
         Cadastro de Empresa
       </h1>
+      <p v-if="senha !== senhaNovamente" class="text-red-600 text-lg  font-bold">
+          As senhas não estão iguais !
+        </p>
       <div
-        class="xl:w-[60vw] w-[90%] flex flex-col gap-8 p-4 mt-[3rem] bg-[#1DEEA3] shadow-md bg-opacity-30 rounded-2xl relative"
+        class="xl:w-[60vw] w-[90%] flex flex-col gap-8 p-3 mt-[3rem] bg-[#1DEEA3] shadow-md bg-opacity-30 rounded-2xl relative"
       >
         <div class="w-full flex flex-col gap-5 xl:gap-0 xl:flex-row justify-between">
           <div class="xl:w-[45%] w-full flex flex-col relative left-2 top-[1rem]">
@@ -128,9 +135,10 @@ const salvar = () => {
               <input
                 v-model="senha"
                 id="senha"
-                placeholder="**"
+                placeholder="*********"
                 class="bg-[#084808] w-full h-11 p-2 pt-2 shadow-md outline-none rounded-xl text-[#FFF] relative z-0"
                 :disabled="!isDisabled"
+                type="password"
               />
             </div>
             <div class="w-[90%] flex flex-col relative top-[5rem] left-2">
@@ -142,9 +150,10 @@ const salvar = () => {
               <input
                 v-model="senhaNovamente"
                 id="senhaNovamente"
-                placeholder="**"
+                placeholder="*********"
                 class="bg-[#084808] w-full h-11 p-2 pt-2 shadow-md outline-none rounded-xl text-[#FFF] relative z-0"
                 :disabled="!isDisabled"
+                type="password"
               />
             </div>
           </div>
@@ -197,9 +206,6 @@ const salvar = () => {
             </select>
           </div>
         </div>
-        <p v-if="senha !== senhaNovamente" class="text-red-600 text-lg font-bold">
-          As senhas não estão iguais !
-        </p>
         <div class="w-full flex justify-center">
           <div v-if="playMatch" class="w-[60%] flex justify-center text-[#fff]">
             <button
