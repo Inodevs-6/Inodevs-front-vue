@@ -2,8 +2,8 @@
 import Alert from '@/components/alert/Alert.vue'
 import api from '../services/api'
 import { ref } from 'vue'
-import router from '@/router';
-import { useAuth } from '@/stores/auth';
+import router from '@/router'
+import { useAuth } from '@/stores/auth'
 
 const senha = ref('')
 const senhaNovamente = ref('')
@@ -20,8 +20,6 @@ const auth = useAuth()
 const confirmarSenha = () => {
   isDisabled.value = false
 }
-
-
 
 const salvar = () => {
   erro.value = ''
@@ -47,12 +45,12 @@ const salvar = () => {
   }
 }
 
-async function sucesso () {
-    save.value = true
-    setTimeout(() => {
-      router.push('/Perfil') 
-    },2000)
-  }
+async function sucesso() {
+  save.value = true
+  setTimeout(() => {
+    router.push('/Perfil')
+  }, 2000)
+}
 </script>
 
 <template>
@@ -64,18 +62,14 @@ async function sucesso () {
       </div>
 
       <div class="w-full flex justify-left mt-5">
-          <div v-if="playMatch" class="w-[11rem] h-[2.5rem] justify-between text-[#fff]">
-            <router-link to="/Perfil">
-              <button
-                class="bg-[#263001] w-[12rem] rounded-xl"              
-                type="submit"
-                value="Voltar"
-              >
-                <p class="text-lg font-bold p-1">Voltar</p>
-              </button>
-            </router-link>
-          </div>
+        <div v-if="playMatch" class="w-[11rem] h-[2.5rem] justify-between text-[#fff]">
+          <router-link to="/Perfil">
+            <button class="bg-[#263001] w-[12rem] rounded-xl" type="submit" value="Voltar">
+              <p class="text-lg font-bold p-1">Voltar</p>
+            </button>
+          </router-link>
         </div>
+      </div>
       <h1
         class="text-center font-medium xl:text-3xl text-xl xl:mt-7 mt-3 flex w-full h-10 justify-center items-center"
       >

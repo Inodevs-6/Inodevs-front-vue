@@ -45,6 +45,7 @@ async function salvar() {
 
 async function aprimorar(campo: String) {
   erro.value = ''
+  let sendComment = ''
 
   if (campo == 'Conhecimentos') {
     loadingC.value = true
@@ -56,6 +57,7 @@ async function aprimorar(campo: String) {
     loadingA.value = true
   }
   if (campo == 'Geral') {
+    sendComment = comentario.value
     loadingC.value = true
     loadingH.value = true
     loadingA.value = true
@@ -80,9 +82,23 @@ async function aprimorar(campo: String) {
           }
         })
       cha += ']}'
+      conhecimentos.value
+        .trim()
+        .split('\n')
+        .forEach((palavra, index) => {
+          if (index != 0) {
+            cha += ', "' + palavra + '"'
+          } else {
+            cha += '"' + palavra + '"'
+          }
+        })
+      cha += ']'
     }
     if (campo == 'Geral') {
       cha += ', '
+    }
+    if (campo == 'Habilidades') {
+      cha += '{'
     }
     if (campo == 'Habilidades' || campo == 'Geral') {
       cha += '{"Habilidades": ['
@@ -97,9 +113,24 @@ async function aprimorar(campo: String) {
           }
         })
       cha += ']}'
+      cha += '"Habilidades": ['
+      habilidades.value
+        .trim()
+        .split('\n')
+        .forEach((palavra, index) => {
+          if (index != 0) {
+            cha += ', "' + palavra + '"'
+          } else {
+            cha += '"' + palavra + '"'
+          }
+        })
+      cha += ']'
     }
     if (campo == 'Geral') {
       cha += ', '
+    }
+    if (campo == 'Atitudes') {
+      cha += '{'
     }
     if (campo == 'Atitudes' || campo == 'Geral') {
       cha += '{"Atitudes": ['
@@ -114,10 +145,20 @@ async function aprimorar(campo: String) {
           }
         })
       cha += ']}'
+      cha += '"Atitudes": ['
+      atitudes.value
+        .trim()
+        .split('\n')
+        .forEach((palavra, index) => {
+          if (index != 0) {
+            cha += ', "' + palavra + '"'
+          } else {
+            cha += '"' + palavra + '"'
+          }
+        })
+      cha += ']'
     }
-    if (campo == 'Geral') {
-      cha += '}'
-    }
+    cha += '}'
 
     console.log(cha)
 
@@ -126,8 +167,10 @@ async function aprimorar(campo: String) {
       nivel: level.value,
       cha: cha,
       campo: campo,
-      comentario: comentario.value
+      comentario: sendComment
     })
+
+    console.log(response.data)
 
     if (campo == 'Conhecimentos') {
       conhecimentos.value = ''
@@ -304,7 +347,7 @@ const played = () => {
           <button
             v-if="!loadingC && Play"
             @click="aprimorar('Conhecimentos')"
-            class="bg-[#FFD600] w-[9rem] relative top-[-2rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
+            class="bg-[#FFD600] w-[9rem] relative top-[-2rem] left-[58rem] font-semibold shadow-md rounded-lg text-center z-10"
           >
             Aprimorar
           </button>
@@ -332,7 +375,7 @@ const played = () => {
           <button
             v-if="!loadingH && Play"
             @click="aprimorar('Habilidades')"
-            class="bg-[#FFD600] w-[9rem] relative top-[-2rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
+            class="bg-[#FFD600] w-[9rem] relative top-[-2rem] left-[58rem] font-semibold shadow-md rounded-lg text-center z-10"
           >
             Aprimorar
           </button>
@@ -381,7 +424,7 @@ const played = () => {
           </textarea>
           <button
             @click="aprimorar('Geral')"
-            class="bg-[#FFD600] w-[9rem] relative top-[-2rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
+            class="bg-[#FFD600] w-[9rem] relative top-[-2rem] left-[58rem] font-semibold shadow-md rounded-lg text-center z-10"
           >
             Aprimorar
           </button>

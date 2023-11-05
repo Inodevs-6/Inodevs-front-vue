@@ -148,7 +148,7 @@ const salvar = () => {
               />
             </div>
           </div>
-          <div class="w-full  flex flex-col relative right-2 top-[-0.4rem]">
+          <div class="w-full flex flex-col relative right-2 top-[-0.4rem]">
             <span
               class="bg-[#FFD600] w-[9rem] relative top-[1rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
             >
@@ -194,7 +194,7 @@ const salvar = () => {
               <option value="pequeno">Pequena Empresa</option>
               <option value="médio">Média Empresa</option>
               <option value="grande">Grande Empresa</option>
-          </select>
+            </select>
           </div>
         </div>
         <p v-if="senha !== senhaNovamente" class="text-red-600 text-lg font-bold">

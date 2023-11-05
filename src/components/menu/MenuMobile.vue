@@ -45,16 +45,14 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import BtnMenu from '@/components/menu/BtnMenu.vue'
-import { useAuth } from '@/stores/auth';
-import router from '@/router';
+import { useAuth } from '@/stores/auth'
+import router from '@/router'
 const isOpenMenu = ref(false)
 const notify = null
-function logout (){
+function logout() {
   const auth = useAuth()
   auth.clear()
-  router.push("/")
-
-
+  router.push('/')
 }
 const openMenu = () => {
   isOpenMenu.value = !isOpenMenu.value

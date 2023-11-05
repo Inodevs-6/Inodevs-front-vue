@@ -21,12 +21,15 @@
     <RouterLink to="/Perfil">
       <BtnMenu caminho="/assets/perfil.png" />
     </RouterLink>
-      <!-- <BtnMenu caminho="/assets/listicone.svg" /> -->
+    <!-- <BtnMenu caminho="/assets/listicone.svg" /> -->
     <!-- </RouterLink> -->
-    <div to="/" class="flex absolute bottom-2 mb-[0.7rem] cursor-pointer flex-row gap-5" @click="logout">
+    <div
+      to="/"
+      class="flex absolute bottom-2 mb-[0.7rem] cursor-pointer flex-row gap-5"
+      @click="logout"
+    >
       <img alt="Vue logo" class="logo" src="/assets/Export.svg" width="40" height="40" />
     </div>
-
   </div>
   <div>
     <MenuMobile></MenuMobile>
@@ -36,16 +39,13 @@
 import BtnMenu from '@/components/menu/BtnMenu.vue'
 import MenuMobile from '@/components/menu/MenuMobile.vue'
 import { RouterLink, RouterView } from 'vue-router'
-import { useAuth } from '@/stores/auth';
-import router from '@/router';
+import { useAuth } from '@/stores/auth'
+import router from '@/router'
 const notify = null
 
-function logout (){
+function logout() {
   const auth = useAuth()
   auth.clear()
-  router.push("/")
-
-
+  router.push('/')
 }
 </script>
-

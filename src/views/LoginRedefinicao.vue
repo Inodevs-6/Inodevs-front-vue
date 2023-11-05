@@ -52,31 +52,27 @@ const salvar = () => {
       </div>
 
       <div class="w-full flex justify-left mt-5">
-          <div v-if="playMatch" class="w-[11rem] h-[2.5rem] justify-between text-[#fff]">
-            <router-link to="/">
-              <button
-                class="bg-[#263001] w-[12rem] rounded-xl"              
-                type="submit"
-                value="Voltar"
-              >
-                <p class="text-lg font-bold p-1">Voltar</p>
-              </button>
-            </router-link>
-          </div>
+        <div v-if="playMatch" class="w-[11rem] h-[2.5rem] justify-between text-[#fff]">
+          <router-link to="/">
+            <button class="bg-[#263001] w-[12rem] rounded-xl" type="submit" value="Voltar">
+              <p class="text-lg font-bold p-1">Voltar</p>
+            </button>
+          </router-link>
         </div>
+      </div>
       <h1
         class="text-center font-medium xl:text-3xl text-xl flex w-full h-10 justify-center items-center"
       >
         Redefinição de Senha
       </h1>
       <p v-if="senha !== senhaNovamente" class="text-red-600 text-lg font-bold">
-          As senhas não estão iguais !
-        </p>
+        As senhas não estão iguais !
+      </p>
       <div
         class="xl:w-[80vw] h-[30vw] w-[90%] flex flex-col gap-4 p-4 mt-[3rem] bg-[#1DEEA3] shadow-md bg-opacity-30 rounded-2xl relative"
       >
         <div class="flex flex-col justify-center pt-4 gap-6 items-center">
-            <div class="xl:w-[45%] w-full flex flex-col relative ">
+          <div class="xl:w-[45%] w-full flex flex-col relative">
             <span
               class="bg-[#FFD600] w-[7rem] absolute bottom-[2.1rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
             >
@@ -90,7 +86,7 @@ const salvar = () => {
               type="text"
             />
           </div>
-            <div class="xl:w-[45%] w-full flex flex-col relative ">
+          <div class="xl:w-[45%] w-full flex flex-col relative">
             <span
               class="bg-[#FFD600] w-[7rem] absolute bottom-[2.1rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
             >
@@ -106,7 +102,7 @@ const salvar = () => {
             />
           </div>
 
-          <div class="xl:w-[45%] w-full flex flex-col relative ">
+          <div class="xl:w-[45%] w-full flex flex-col relative">
             <span
               class="bg-[#FFD600] w-[13rem] absolute bottom-[2.1rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
             >
@@ -123,7 +119,6 @@ const salvar = () => {
           </div>
         </div>
 
-        
         <div class="w-full flex justify-center mt-10">
           <div v-if="playMatch" class="w-[60%] flex justify-center text-[#fff]">
             <button

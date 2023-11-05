@@ -4,8 +4,8 @@ import Loader from '@/components/Loader.vue'
 import Alert from '@/components/alert/Alert.vue'
 import api from '../services/api'
 import ia from '../services/ia'
-import router from "@/router";
-import { ref , defineProps, onMounted} from 'vue'
+import router from '@/router'
+import { ref, defineProps, onMounted } from 'vue'
 import { useAuth } from '@/stores/auth'
 const name = ref('')
 const level = ref('')
@@ -50,39 +50,39 @@ const fetchCha = async () => {
     console.log(response.data)
   } catch {
     try {
-    const response = await api.get(`/vaga/match/${props.id}`)
-    vaga.value = response.data
-    name.value = response.data.nome
-    level.value = response.data.nivel
-    conhecimentos.value = response.data.conhecimentos
-    habilidades.value = response.data.habilidades
-    atitudes.value = response.data.atitudes
-    console.log(response.data)
-  } catch (error) {
-    if (error instanceof Error) {
-      erro.value = error.message
-    } else {
-      erro.value = 'Ocorreu um erro desconhecido.'
+      const response = await api.get(`/vaga/match/${props.id}`)
+      vaga.value = response.data
+      name.value = response.data.nome
+      level.value = response.data.nivel
+      conhecimentos.value = response.data.conhecimentos
+      habilidades.value = response.data.habilidades
+      atitudes.value = response.data.atitudes
+      console.log(response.data)
+    } catch (error) {
+      if (error instanceof Error) {
+        erro.value = error.message
+      } else {
+        erro.value = 'Ocorreu um erro desconhecido.'
+      }
     }
-  }
   }
   loading.value = false
 }
-async function sucesso () {
-    save.value = true
-    setTimeout(() => {
-      router.push('/home') 
-    },2000)
-  }
+async function sucesso() {
+  save.value = true
+  setTimeout(() => {
+    router.push('/home')
+  }, 2000)
+}
 
 async function editar() {
   loading.value = true
   erro.value = ''
   try {
     const empresaId = auth.getUser.id
-    api.patch('/editar/' + empresaId + '/' + props.id , {
+    api.patch('/editar/' + empresaId + '/' + props.id, {
       nome: name.value,
-		  nivel: level.value,
+      nivel: level.value,
       conhecimentos: conhecimentos.value,
       habilidades: habilidades.value,
       atitudes: atitudes.value
@@ -121,13 +121,16 @@ async function aprimorar(campo: String) {
     }
     if (campo == 'Conhecimentos' || campo == 'Geral') {
       cha += '{"Conhecimentos": ['
-      conhecimentos.value.trim().split('\n').forEach((palavra, index) => {
-        if (index != 0) {
-          cha += ', "' + palavra + '"'
-        } else {
-          cha += '"' + palavra + '"'
-        }
-      })
+      conhecimentos.value
+        .trim()
+        .split('\n')
+        .forEach((palavra, index) => {
+          if (index != 0) {
+            cha += ', "' + palavra + '"'
+          } else {
+            cha += '"' + palavra + '"'
+          }
+        })
       cha += ']}'
     }
     if (campo == 'Geral') {
@@ -135,13 +138,16 @@ async function aprimorar(campo: String) {
     }
     if (campo == 'Habilidades' || campo == 'Geral') {
       cha += '{"Habilidades": ['
-      habilidades.value.trim().split('\n').forEach((palavra, index) => {
-        if (index != 0) {
-          cha += ', "' + palavra + '"'
-        } else {
-          cha += '"' + palavra + '"'
-        }
-      })
+      habilidades.value
+        .trim()
+        .split('\n')
+        .forEach((palavra, index) => {
+          if (index != 0) {
+            cha += ', "' + palavra + '"'
+          } else {
+            cha += '"' + palavra + '"'
+          }
+        })
       cha += ']}'
     }
     if (campo == 'Geral') {
@@ -149,13 +155,16 @@ async function aprimorar(campo: String) {
     }
     if (campo == 'Atitudes' || campo == 'Geral') {
       cha += '{"Atitudes": ['
-      atitudes.value.trim().split('\n').forEach((palavra, index) => {
-        if (index != 0) {
-          cha += ', "' + palavra + '"'
-        } else {
-          cha += '"' + palavra + '"'
-        }
-      })
+      atitudes.value
+        .trim()
+        .split('\n')
+        .forEach((palavra, index) => {
+          if (index != 0) {
+            cha += ', "' + palavra + '"'
+          } else {
+            cha += '"' + palavra + '"'
+          }
+        })
       cha += ']}'
     }
     if (campo == 'Geral') {
@@ -163,7 +172,7 @@ async function aprimorar(campo: String) {
     }
 
     console.log(cha)
-    
+
     const response = await ia.post('/upgrade', {
       cargo: name.value,
       nivel: level.value,
@@ -173,33 +182,33 @@ async function aprimorar(campo: String) {
     })
 
     if (campo == 'Conhecimentos') {
-      conhecimentos.value = '' 
+      conhecimentos.value = ''
       response.data.Conhecimentos.forEach((palavra: string) => {
         conhecimentos.value += palavra + '\n'
       })
     }
     if (campo == 'Habilidades') {
-      habilidades.value = '' 
+      habilidades.value = ''
       response.data.Habilidades.forEach((palavra: string) => {
         habilidades.value += palavra + '\n'
       })
     }
     if (campo == 'Atitudes') {
-      atitudes.value = '' 
+      atitudes.value = ''
       response.data.Atitudes.forEach((palavra: string) => {
         atitudes.value += palavra + '\n'
       })
     }
     if (campo == 'Geral') {
-      conhecimentos.value = '' 
+      conhecimentos.value = ''
       response.data.descricao.Conhecimentos.forEach((palavra: string) => {
         conhecimentos.value += palavra + '\n'
       })
-      habilidades.value = '' 
+      habilidades.value = ''
       response.data.descricao.Habilidades.forEach((palavra: string) => {
         habilidades.value += palavra + '\n'
       })
-      atitudes.value = '' 
+      atitudes.value = ''
       response.data.descricao.Atitudes.forEach((palavra: string) => {
         atitudes.value += palavra + '\n'
       })
@@ -289,8 +298,8 @@ onMounted(fetchCha)
       <h1
         class="text-center font-medium xl:text-3xl text-xl xl:mt-7 mt-3 flex w-full h-10 justify-center items-center"
         v-if="vaga"
-        >
-        Ranqueamento de {{ name }} com nível {{ level }} 
+      >
+        Ranqueamento de {{ name }} com nível {{ level }}
       </h1>
       <div
         class="xl:w-[88vw] w-[90%] flex flex-col gap-8 p-4 mt-[3rem] bg-[#1DEEA3] shadow-md bg-opacity-30 rounded-2xl relative"
@@ -348,7 +357,7 @@ onMounted(fetchCha)
             <Loader />
           </div>
           <button
-            v-if="!loadingC && Play || !isDisabled"
+            v-if="(!loadingC && Play) || !isDisabled"
             @click="aprimorar('Conhecimentos')"
             class="bg-[#FFD600] w-[9rem] relative top-[-2rem] left-[58rem] font-semibold shadow-md rounded-lg text-center z-10"
           >
@@ -366,7 +375,7 @@ onMounted(fetchCha)
             id="habilidades"
             placeholder="Descrição de habilidade será gerada..."
             :disabled="isDisabled"
-            class="h-[10rem] bg-[#2A753D] p-4 focus:outline-none flex resize-none shadow-xl justify-start rounded-xl  text-white"
+            class="h-[10rem] bg-[#2A753D] p-4 focus:outline-none flex resize-none shadow-xl justify-start rounded-xl text-white"
           >
           </textarea>
           <div
@@ -376,7 +385,7 @@ onMounted(fetchCha)
             <Loader />
           </div>
           <button
-            v-if="!loadingH && Play || !isDisabled "
+            v-if="(!loadingH && Play) || !isDisabled"
             @click="aprimorar('Habilidades')"
             class="bg-[#FFD600] w-[9rem] relative top-[-2rem] left-[58rem] font-semibold shadow-md rounded-lg text-center z-10"
           >
@@ -405,20 +414,20 @@ onMounted(fetchCha)
             <Loader />
           </div>
           <button
-            v-if="!loadingA && Play || !isDisabled"
+            v-if="(!loadingA && Play) || !isDisabled"
             @click="aprimorar('Atitudes')"
             class="bg-[#FFD600] w-[9rem] relative top-[-2rem] left-[58rem] font-semibold shadow-md rounded-lg text-center z-10"
-            >
+          >
             Aprimorar
           </button>
           <span
-          v-if="!isDisabled"
+            v-if="!isDisabled"
             class="bg-[#FFD600] w-[9rem] relative top-[1rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
           >
             Comentário
           </span>
           <textarea
-          v-if="!isDisabled"
+            v-if="!isDisabled"
             rows="4"
             v-model="comentario"
             id="comentario"
@@ -428,7 +437,7 @@ onMounted(fetchCha)
           >
           </textarea>
           <button
-          v-if="!isDisabled"
+            v-if="!isDisabled"
             @click="aprimorar('Geral')"
             class="bg-[#FFD600] w-[9rem] relative top-[-2rem] left-[58rem] font-semibold shadow-md rounded-lg text-center z-10"
           >
@@ -465,7 +474,7 @@ onMounted(fetchCha)
               </button> -->
 
             <button
-            v-if="!isDisabled"
+              v-if="!isDisabled"
               class="bg-[#263001] w-[10rem] rounded-xl"
               @click="editar"
               type="submit"
@@ -474,7 +483,7 @@ onMounted(fetchCha)
               <p class="text-lg font-bold p-1">Salvar</p>
             </button>
             <button
-            v-if="isDisabled"
+              v-if="isDisabled"
               class="bg-[#263001] w-[10rem] rounded-xl"
               @click="habilitarInput"
               type="submit"

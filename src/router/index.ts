@@ -20,14 +20,13 @@ const router = createRouter({
     },
     {
       path: '/home',
-      name: "home",
+      name: 'home',
       component: ListaVaga
     },
     {
       path: '/Redefinir_Senha/',
       name: 'Redefinir_Senha',
-      component: Redefinir_Senha,
-    
+      component: Redefinir_Senha
     },
     {
       path: '/Redefinir_Senha',
@@ -39,7 +38,7 @@ const router = createRouter({
       name: 'Cadastro_Empresa',
       component: Cadastro_Empresa,
       meta: {
-        noauth: true 
+        noauth: true
       }
     },
     {
@@ -63,7 +62,7 @@ const router = createRouter({
       name: 'login',
       component: Login,
       meta: {
-        noauth: true 
+        noauth: true
       }
     },
     {
@@ -76,22 +75,22 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
-  const auth = useAuth();
-  const isAuthenticated = await auth.checkToken();
+  const auth = useAuth()
+  const isAuthenticated = await auth.checkToken()
 
   if (!to.meta?.noauth) {
     if (auth.token && auth.user && isAuthenticated) {
       next()
     } else {
-      next({ name: "login" });
+      next({ name: 'login' })
     }
   } else {
     if (to.name == 'login' && auth.token && auth.user && isAuthenticated) {
-      next({ name: "home" });
+      next({ name: 'home' })
     } else {
-      next();
+      next()
     }
-  } 
+  }
 })
 
 export default router
