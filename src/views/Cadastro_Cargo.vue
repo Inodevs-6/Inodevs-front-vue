@@ -404,7 +404,7 @@ const played = () => {
           <button
             v-if="!loadingA && Play"
             @click="aprimorar('Atitudes')"
-            class="bg-[#FFD600] w-[9rem] relative top-[-2rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
+            class="bg-[#FFD600] w-[9rem] relative top-[-2rem] left-[58rem] font-semibold shadow-md rounded-lg text-center z-10"
           >
             Aprimorar
           </button>
@@ -424,7 +424,7 @@ const played = () => {
           </textarea>
           <button
             @click="aprimorar('Geral')"
-            class="bg-[#FFD600] w-[9rem] relative top-[-2rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
+            class="bg-[#FFD600] w-[9rem] relative top-[-2rem] left-[58rem] font-semibold shadow-md rounded-lg text-center z-10"
           >
             Aprimorar
           </button>
