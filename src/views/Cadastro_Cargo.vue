@@ -226,6 +226,9 @@ async function match() {
     })
     matching.value = true
     played()
+
+    await api.post('/notification/results/' + name + level)
+
   } catch (err) {
     erro.value = (err as Error).message
   }
@@ -260,6 +263,9 @@ async function getResponseChatgpt() {
     } else {
       valid.value = true
     }
+    
+    await api.post('/notification/knowledge/' + name + level)
+
   } catch (err) {
     erro.value = (err as Error).message
   }
