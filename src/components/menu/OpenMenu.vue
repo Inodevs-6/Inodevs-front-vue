@@ -6,7 +6,9 @@
     <RouterLink to="/">
       <BtnMenu caminho="/assets/logo.svg" />
     </RouterLink>
-    <BtnMenu caminho="/assets/Bell.svg" />
+    <RouterLink to="/Notificacao" class="flex flex-row justify-between items-center">
+        <BtnMenu caminho="/assets/Bell.svg" />
+    </RouterLink>
     <div
       class="absolute flex items-center justify-center bg-red-800 left-10 top-[4.7rem] rounded-full"
     >

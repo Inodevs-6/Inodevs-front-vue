@@ -9,6 +9,7 @@ import Ranqueamento from '@/views/Ranqueamento.vue'
 import Login from '@/views/Login.vue'
 import Perfil_Empresa from '@/views/Perfil_Empresa.vue'
 import LoginRedefinicao from '@/views/LoginRedefinicao.vue'
+import Notificacao from '@/views/Notificacao.vue'
 import { useAuth } from '@/stores/auth'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -70,6 +71,11 @@ const router = createRouter({
       name: 'edicao',
       component: Edicao_vaga,
       props: true
+    },
+    {
+      path: '/Notificacao',
+      name: 'Notificacao',
+      component: Notificacao,
     }
   ]
 })

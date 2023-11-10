@@ -104,6 +104,7 @@ const salvar = () => {
             <input
               v-model="cnpj"
               id="cnpj"
+              type="number"
               placeholder="XX. XXX. XXX/0001-XX"
               class="bg-[#084808] w-full h-11 p-2 pt-2 shadow-md outline-none rounded-xl text-[#FFF] relative z-0"
               :disabled="!isDisabled"

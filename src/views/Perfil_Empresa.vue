@@ -79,15 +79,15 @@ onMounted(fetchEmpresa)
         <Alert variant="success" />
       </div>
       <h1
-        class="text-center font-medium xl:text-3xl text-xl xl:mt-7 mt-3 flex w-full h-10 justify-center items-center"
+        class="text-center font-medium xl:text-3xl text-xl xl:mt-1 mt-3 flex w-full h-10 justify-center items-center"
       >
         Perfil
       </h1>
       <div
-        class="xl:w-[80vw] w-[90%] flex items-center flex-col gap-3 p-4 mt-[1rem] bg-[#1DEEA3] shadow-md bg-opacity-30 rounded-2xl relative"
+        class="xl:w-[90%] w-[90%] h-min flex flex-col gap-5 p-3 mt-[1rem] bg-[#1DEEA3] shadow-md bg-opacity-30 rounded-2xl relative"
       >
-        <div class="w-full flex flex-col gap-5 xl:gap-0 xl:flex-row justify-between">
-          <div class="xl:w-1/2 w-full flex flex-col relative top-[0.7rem]">
+        <div class="w-full flex flex-col gap-5 xl:gap-0 pt-2 xl:flex-row justify-between">
+          <div class="xl:w-[45%] w-full flex flex-col relative ">
             <span
               class="bg-[#FFD600] w-[7rem] absolute bottom-[2.1rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
             >
@@ -96,89 +96,110 @@ onMounted(fetchEmpresa)
             <input
               v-model="nome"
               id="nome"
+              placeholder="Nome da empresa"
+              class="bg-[#084808] w-full h-11 p-2 pt-2 shadow-md outline-none rounded-xl text-[#FFF] relative z-0"
               :disabled="isDisabled"
-              class="bg-[#084808] w-[30rem] h-11 p-2 pt-2 shadow-md outline-none rounded-xl text-[#FFF] relative z-0"
             />
           </div>
-          <div class="xl:w-1/2 w-full flex flex-col relative left-[3rem] top-[0.7rem]">
+          <div class="xl:w-[45%] w-full flex flex-col relative ">
             <span
               class="bg-[#FFD600] w-[7rem] absolute bottom-[2.1rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
             >
-              CNPJ
+              Cnpj
             </span>
             <input
               v-model="cnpj"
               id="cnpj"
-              disabled
-              class="bg-[#084808] w-[30rem] h-11 p-2 pt-2 shadow-md outline-none rounded-xl text-[#FFF] relative z-0"
+              placeholder="XX. XXX. XXX/0001-XX"
+              class="bg-[#084808] w-full h-11 p-2 pt-2 shadow-md outline-none rounded-xl text-[#FFF] relative z-0"
+              :disabled="isDisabled"
             />
           </div>
         </div>
-        <div class="flex flex-col items-center top-[0.7rem]">
-          <span
-            class="bg-[#FFD600] w-[7rem] relative top-[0.7rem] right-[28.2rem] font-semibold rounded-lg text-center z-10"
-          >
-            Email
-          </span>
-          <textarea
-            v-if="!loadingC"
-            rows="4"
-            v-model="email"
-            :disabled="isDisabled"
-            id="email"
-            class="h-[3rem] w-[65.8rem] bg-[#084808] p-3 shadow-xl rounded-xl text-white"
-          >
-          </textarea>
-          <span
-            class="bg-[#FFD600] w-[9rem] relative top-[0.7rem] right-[27rem] font-semibold shadow-md rounded-lg text-center z-10"
-          >
-            Descrição
-          </span>
-          <textarea
-            v-if="!loadingC"
-            rows="4"
-            v-model="descricao"
-            :disabled="isDisabled"
-            id="descricao"
-            class="h-[10rem] w-[65.8rem] bg-[#084808] p-3 focus:outline-none flex resize-none shadow-xl justify-start rounded-xl text-white"
-          >
-          </textarea>
+        <div class="flex flex-col w-full xl:gap-0 gap-4 xl:flex-row justify-between">
+            <div class="xl:w-[45%] flex w-full flex-col relative ">
+              <span
+                class="bg-[#FFD600] w-[7rem] absolute bottom-[2.1rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
+              >
+                Email
+              </span>
+              <input
+                v-model="email"
+                id="email"
+                placeholder="empresa@email.com"
+                class="bg-[#084808] w-full h-11 p-2 pt-2 shadow-md outline-none rounded-xl text-[#FFF] relative z-0"
+                :disabled="isDisabled"
+              />
+          </div>
+          <div class="xl:w-[45%] w-full flex flex-col relative ">
+            <span
+              class="bg-[#FFD600] w-[7rem] absolute bottom-[2.1rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
+            >
+              Segmento
+            </span>
+            <input
+              v-model="segmento"
+              id="segmento"
+              placeholder="Tecnologia"
+              class="bg-[#084808] w-full h-11 p-2 pt-2 shadow-md outline-none rounded-xl text-[#FFF] relative z-0"
+              :disabled="isDisabled"
+            />
+          </div>
+          
         </div>
-        <div class="flex flex-col items-center top-[0.7rem]">
-          <span
-            class="bg-[#FFD600] w-[7rem] relative top-[0.7rem] right-[28.2rem] font-semibold rounded-lg text-center z-10"
-          >
-            Segmento
-          </span>
-          <textarea
-            v-if="!loadingC"
-            rows="4"
-            v-model="segmento"
-            :disabled="isDisabled"
-            id="email"
-            class="h-[3rem] w-[65.8rem] bg-[#084808] p-3 shadow-xl rounded-xl text-white"
-          >
-          </textarea>
-          <span
-            class="bg-[#FFD600] w-[9rem] relative top-[0.7rem] right-[27rem] font-semibold shadow-md rounded-lg text-center z-10"
-          >
-            Porte
-          </span>
-          <select
-            v-model="porte"
-            id="porte"
-            class="bg-[#084808] w-full h-11 p-2 pt-2 shadow-md outline-none rounded-xl text-[#FFF] relative z-0"
-            :disabled="isDisabled"
-          >
-            <option selected>
-              {{ porte }}
-            </option>
-            <option value="micro">Micro Empresa</option>
-            <option value="pequeno">Pequena Empresa</option>
-            <option value="médio">Média Empresa</option>
-            <option value="grande">Grande Empresa</option>
-          </select>
+        <div class="w-full flex flex-col gap-5 xl:gap-0 xl:flex-row justify-between">
+          <!-- <div class="xl:w-[45%] w-full flex flex-col relative ">
+            <span
+              class="bg-[#FFD600] w-[7rem] absolute bottom-[2.1rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
+            >
+              Segmento
+            </span>
+            <input
+              v-model="segmento"
+              id="segmento"
+              placeholder="Tecnologia"
+              class="bg-[#084808] w-full h-11 p-2 pt-2 shadow-md outline-none rounded-xl text-[#FFF] relative z-0"
+              :disabled="isDisabled"
+            />
+          </div> -->
+          <div class="xl:w-[45%] w-full flex flex-col relative ">
+            <span
+              class="bg-[#FFD600] w-[7rem] absolute bottom-[2.1rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
+            >
+              Porte
+            </span>
+            <select
+              v-model="porte"
+              id="porte"
+              class="bg-[#084808] w-full h-11 p-2 pt-2 shadow-md outline-none rounded-xl text-[#FFF] relative z-0"
+              :disabled="isDisabled"
+            >
+              <option value="micro">Micro Empresa</option>
+              <option value="pequeno">Pequena Empresa</option>
+              <option value="medio">Média Empresa</option>
+              <option value="grande">Grande Empresa</option>
+            </select>
+          </div>
+          
         </div>
+        <div class="w-full flex flex-col items-center xl:flex-row">
+          <div class="w-full flex justify-center flex-col relative ">
+            <span
+              class="bg-[#FFD600] w-[9rem] relative top-[1rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
+            >
+              Descrição
+            </span>
+            <textarea
+              v-model="descricao"
+              id="descricao"
+              :disabled="isDisabled"
+              placeholder="Descrição"
+              class="h-[12rem] bg-[#084808] p-4 focus:outline-none flex resize-none shadow-xl justify-start rounded-xl text-white"
+            >
+            </textarea>
+          </div>
+        </div>
+       
         <div class="fixed bottom-2 right-5">
           <div
             v-if="save"
@@ -197,7 +218,7 @@ onMounted(fetchEmpresa)
             <p class="text-[#fff] text-lg font-bold p-1">{{ erro }}</p>
           </div>
         </div>
-        <div class="w-[90%] flex justify-center flex-col gap-[7rem] xl:flex-row top-[2rem]">
+        <div class="w-[100%] flex justify-center flex-col gap-[7rem] xl:flex-row top-[2rem]">
           <!-- <div class="w-full flex justify-center"> -->
           <div v-if="playMatch" class="w-[11rem] h-[2.5rem] justify-between text-[#fff]">
             <router-link :to="'/Redefinir_Senha/'">
