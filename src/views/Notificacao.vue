@@ -70,13 +70,13 @@ const deleteNotification = (index: number): void => {
   
         <div v-for="(notification, index) in notifications" :key="index" class="xl:w-[88vw] w-[90%] relative flex flex-col gap-2 p-4 pt-2 mt-[3rem] mb-4 bg-[#1DEEA3] shadow-md bg-opacity-30 border-black">
           <div class="flex items-start"> 
-            <img src="caminho-para-o-icone-de-calendario" alt="Ícone de Calendário" class="w-6 h-6 mr-2" />
+            <img src="/assets/calendar.svg" alt="Ícone de Calendário" class="w-6 h-6 mr-2" />
             <div class="text-sm">{{ notification.dateTime }}</div>
           </div>
           <div class="mt-0"> 
             {{ notification.description }}
           </div>
-         <img src="caminho-para-o-icone-de-lixeira" alt="Ícone de Lixeira" class="w-6 h-6 cursor-pointer absolute bottom-2 right-2" @click="deleteNotification(index)" />
+         <img src="/assets/Trash.svg" alt="Ícone de Lixeira" class="w-6 h-6 cursor-pointer absolute bottom-2 right-2" @click="deleteNotification(index)" />
         </div>
       </div>
     </div>
