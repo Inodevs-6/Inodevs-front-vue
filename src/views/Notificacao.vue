@@ -1,6 +1,4 @@
 <script lang="ts" setup >
-
-import LabelLista from '@/components/labels/Label-lista.vue'
 import OpenMenu from '@/components/menu/OpenMenu.vue'
 import LoaderforList from '@/components/LoaderforList.vue'
 import api from '@/services/api'
@@ -10,7 +8,19 @@ const namesearch = ref('')
 const erro = ref('')
 const isSeach = ref(false)
 const loading = ref(true)
-
+const auth = useAuth()
+const notification = ref()
+const fetchEmpresa = async () => {
+  const empresaId = auth.getUser.id
+  loading.value = true
+  try {
+    const response = await api.get('/notification/' + empresaId)
+    notification.value = response.data
+  } catch (error) {
+    erro.value = (error as Error).message
+  }
+  loading.value = false
+}
 
 const notifications = ref([
   {
@@ -57,6 +67,7 @@ const deleteNotification = (index: number): void => {
   notifications.value.splice(index, 1);
 };
 
+onMounted(fetchEmpresa)
 
 
 </script>
