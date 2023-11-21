@@ -27,7 +27,16 @@ const Logando = async () => {
       username: email.value,
       password: senha.value
     })
-    continuar = true
+
+    if (response.data.token) {
+      auth.setToken(response.data.token)
+      auth.setUser(response.data.empresa)
+      router.push('/home')
+
+      continuar = false
+    } else {
+      continuar = true
+    }
   } catch (error) {
     console.log((error as Error).message)
     erro.value = "Usuário ou senha inválidos!"
@@ -107,8 +116,7 @@ const closeModal = () => {
         class="xl:w-[50%] w-[100%] h-full bg-[#2A753D] rounded-2xl p-3 flex flex-col items-center gap-7 shadow-md"
       >
         <img alt="Vue logo" class="mt-3" src="/assets/profile.svg" width="120" height="120" />
-        <span v-if="erro" class="p-1 text-red-200 bg-red-800 w-[80%] text-center">{{ erro }}</span>
-        <span v-else class="p-1">&nbsp;</span>
+        <span v-if="erro" class="p-1 text-red-200 bg-red-800 w-[33%] bottom-[24rem] absolute text-center">{{ erro }}</span>
         <div class="relative w-[80%]">
           <span
             class="bg-[#FFD600] w-[7rem] absolute bottom-[2.1rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"

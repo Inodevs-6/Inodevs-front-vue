@@ -11,6 +11,7 @@ const nome = ref('')
 const cnpj = ref('')
 const email = ref('')
 const descricao = ref('')
+const isChecked = ref(false)
 const segmento = ref('')
 const porte = ref('')
 const erro = ref('')
@@ -31,7 +32,8 @@ async function editar() {
       email: email.value,
       descricao: descricao.value,
       segmento: segmento.value,
-      porte: porte.value
+      porte: porte.value,
+      tfaAtivado: isChecked.value
     })
     sucesso()
   } catch (error) {
@@ -50,7 +52,8 @@ const fetchEmpresa = async () => {
       (email.value = response.data.email),
       (descricao.value = response.data.descricao),
       (segmento.value = response.data.segmento),
-      (porte.value = response.data.porte)
+      (porte.value = response.data.porte),
+      (isChecked.value = response.data.tfaAtivado)
   } catch (error) {
     erro.value = (error as Error).message
   }
@@ -81,7 +84,7 @@ onMounted(fetchEmpresa)
       <h1
         class="text-center font-medium xl:text-3xl text-xl xl:mt-7 mt-3 flex w-full h-10 justify-center items-center"
       >
-        Perfil
+        Informações de Perfil
       </h1>
       <div
         class="xl:w-[80vw] w-[90%] flex items-center flex-col gap-3 p-4 mt-[1rem] bg-[#1DEEA3] shadow-md bg-opacity-30 rounded-2xl relative"
@@ -178,6 +181,20 @@ onMounted(fetchEmpresa)
             <option value="médio">Média Empresa</option>
             <option value="grande">Grande Empresa</option>
           </select>
+        <div>
+          <label for="toggle" class="flex items-center cursor-pointer mt-4 mb-3">
+            <div class="relative">
+              <input type="checkbox" id="toggle" class="hidden" v-model="isChecked" :disabled="isDisabled">
+
+              <div :class="{ 'bg-[#084808]': isChecked, 'bg-gray-400': !isChecked }" class="toggle__line w-10 h-5 rounded-full shadow-inner"></div>
+
+              <div v-if="isChecked" class="toggle__dot absolute w-6 h-6 bg-white rounded-full shadow inset-y-0 left-0 transform translate-x-full"></div>
+              <div v-else class="toggle__dot absolute w-6 h-6 bg-white rounded-full shadow inset-y-0 right-6"></div>
+            </div>
+
+            <div class="ml-3">Autenticação de dois fatores</div>
+          </label>
+        </div>
         </div>
         <div class="fixed bottom-2 right-5">
           <div
@@ -233,3 +250,14 @@ onMounted(fetchEmpresa)
     </div>
   </div>
 </template>
+
+<style scoped>
+/* Estilos adicionais se necessário */
+.toggle__line {
+  transition: background-color 0.3s;
+}
+
+.toggle__dot {
+  transition: transform 0.3s;
+}
+</style>
