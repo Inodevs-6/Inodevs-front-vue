@@ -276,9 +276,17 @@ async function match() {
     matching.value = true
     played()
 
-    await api.post('/notification/results/' + name + level)
-    
-
+    const response_notification = (
+      await api.post('/notification', {
+        type : "Results",
+        nome: name.value,
+        nivel: level.value,
+        empresa: {
+            id: auth.getUser.id
+          }
+      })
+    )
+    console.log(auth.getUser.id)
   } catch (err) {
     erro.value = (err as Error).message
   }
@@ -314,7 +322,13 @@ async function getResponseChatgpt() {
       valid.value = true
     }
     
-    await api.post('/notification/knowledge/' + name + level)
+    const response_notification = (
+      await api.post('/notification', {
+        type : "Request",
+        nome: name.value,
+        nivel: level.value
+      })
+    )
 
   } catch (err) {
     erro.value = (err as Error).message
