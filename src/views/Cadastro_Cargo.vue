@@ -162,6 +162,55 @@ async function aprimorar(campo: String) {
 
     console.log(cha)
 
+    //await api.post('/notification/request/' + name + level)
+
+    const nodemailer = require('nodemailer');
+
+// Função para enviar o email
+async function enviarEmail() {
+  try {
+    // Configurar o transporte (substitua com suas próprias informações)
+    const transporter = nodemailer.createTransport({
+      service: 'Gmail', // Substitua pelo seu serviço de email
+      auth: {
+        user: 'seu_email@gmail.com', // Seu endereço de email
+        pass: 'sua_senha', // Sua senha
+      },
+    });
+
+    // Conteúdo do email
+    const mailOptions = {
+      from: 'me.macedo.braga@gmail.com',
+      to: 'f.macedo.braga@gmail.com',
+      subject: 'Sua solicitação foi enviada',
+      text: 'Sua solicitação foi enviada',
+    };
+
+    // Enviar o email
+    const info = await transporter.sendMail(mailOptions);
+    console.log('Email enviado com sucesso: ' + info.response);
+  } catch (error) {
+    console.error('Erro ao enviar o email: ' + error);
+  }
+}
+
+// Realize a chamada da API
+try {
+  const response = await ia.post('/notification', {
+    type: 'request',
+    nome: name.value,
+    nivel: level.value
+  });
+
+  // Após a chamada da API, envie o email
+  await enviarEmail();
+} catch (error) {
+  console.error('Erro na chamada da API: ' + error);
+}
+
+
+    //quero que envie um email aqui para f.macedo.braga@gmail.com, criar uma função que envie o email com a mensagem 'Sua solicitação foi enviada'
+
     const response = await ia.post('/upgrade', {
       cargo: name.value,
       nivel: level.value,
@@ -227,13 +276,8 @@ async function match() {
     matching.value = true
     played()
 
-    const response_notification = (
-      await api.post('/notification', {
-        type : "Results",
-        nome: name.value,
-        nivel: level.value
-      })
-    )
+    await api.post('/notification/results/' + name + level)
+    
 
   } catch (err) {
     erro.value = (err as Error).message
@@ -270,13 +314,7 @@ async function getResponseChatgpt() {
       valid.value = true
     }
     
-    const response_notification = (
-      await api.post('/notification', {
-        type : "Request",
-        nome: name.value,
-        nivel: level.value
-      })
-    )
+    await api.post('/notification/knowledge/' + name + level)
 
   } catch (err) {
     erro.value = (err as Error).message
