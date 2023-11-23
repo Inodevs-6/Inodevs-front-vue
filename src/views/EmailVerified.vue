@@ -14,7 +14,34 @@ const valid = ref(false)
 
 const save = ref(false)
 
+<<<<<<< HEAD
 const verificar = () => {
+=======
+const verificar = async () => {
+  erro.value = ''
+  loading.value = true
+  try {
+    router.push('/esqueceu')
+  } catch (error) {
+    erro.value = (error as Error).message
+    console.log(erro)
+  }
+
+  loading.value = false
+}
+
+const salvar = () => {
+  erro.value = ''
+
+  if (!senha.value || !senhaNovamente.value || senha.value !== senhaNovamente.value) {
+    if (senha.value !== senhaNovamente.value) {
+      erro.value = 'As senhas não estão iguais'
+    }
+    valid.value = true
+    return
+  }
+
+>>>>>>> f8992612ccf0dbdba79d7d5ebf7479e40695148b
   erro.value = ''
   if (
     email.value
