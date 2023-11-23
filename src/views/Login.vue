@@ -85,7 +85,7 @@ const Logando = async () => {
             Ainda não tenho uma conta
           </RouterLink>
 
-          <RouterLink to="/Redefinir_Senha" class="border-b-4 border-white text-white">
+          <RouterLink to="/VerificarEmail" class="border-b-4 border-white text-white">
             Esqueci minha senha
           </RouterLink>
         </div>

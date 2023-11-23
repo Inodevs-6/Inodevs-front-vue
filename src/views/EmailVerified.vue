@@ -2,21 +2,30 @@
 import Alert from '@/components/alert/Alert.vue'
 import api from '../services/api'
 import { ref } from 'vue'
-
+import router from '@/router'
 const senha = ref('')
-const codigo = ref('')
+const email = ref('')
 const senhaNovamente = ref('')
 const erro = ref('')
-const isDisabled = ref(true)
 const isDone = ref(false)
 const playMatch = ref(true)
-
+const loading = ref(false)
 const valid = ref(false)
 
 const save = ref(false)
 
-const confirmarSenha = () => {
-  isDisabled.value = false
+const verificar = async() => {
+    erro.value = ''
+    loading.value = true
+    try {
+      
+        router.push('/esqueceu')
+    } catch (error) {
+    erro.value = (error as Error).message
+    console.log(erro)
+  }
+
+  loading.value = false
 }
 
 const salvar = () => {
@@ -63,10 +72,10 @@ const salvar = () => {
       <h1
         class="text-center font-medium xl:text-3xl text-xl flex w-full h-10 justify-center items-center"
       >
-        Redefinição de Senha
+        Digite seu Email
       </h1>
-      <p v-if="senha !== senhaNovamente" class="text-red-600 text-lg font-bold">
-        As senhas não estão iguais !
+      <p v-if="erro" class="text-red-600 text-lg font-bold">
+        {{ erro }}
       </p>
       <div
         class="xl:w-[80vw] h-[30vw] w-[90%] flex flex-col gap-4 p-4 mt-[3rem] bg-[#1DEEA3] shadow-md bg-opacity-30 rounded-2xl relative"
@@ -76,72 +85,27 @@ const salvar = () => {
             <span
               class="bg-[#FFD600] w-[7rem] absolute bottom-[2.1rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
             >
-              Codigo
+              Email
             </span>
             <input
-              v-model="codigo"
-              id="codigo"
-              placeholder="codigo"
+              v-model="email"
+              id="email"
+              placeholder="Email"
               class="bg-[#084808] w-full h-11 p-2 pt-2 shadow-md outline-none rounded-xl text-[#FFF] relative z-0"
               type="text"
-            />
-          </div>
-          <div v-if="codigo" class="xl:w-[45%] w-full flex flex-col relative">
-            <span
-              class="bg-[#FFD600] w-[7rem] absolute bottom-[2.1rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
-            >
-              Nova Senha
-            </span>
-            <input
-              v-model="senha"
-              id="senha"
-              placeholder="******"
-              class="bg-[#084808] w-full h-11 p-2 pt-2 shadow-md outline-none rounded-xl text-[#FFF] relative z-0"
-              :disabled="!isDisabled"
-              type="password"
-            />
-          </div>
-
-          <div v-if="codigo" class="xl:w-[45%] w-full flex flex-col relative">
-            <span
-              class="bg-[#FFD600] w-[13rem] absolute bottom-[2.1rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
-            >
-              Confirme a Nova Senha
-            </span>
-            <input
-              v-model="senhaNovamente"
-              id="senhaNovamente"
-              placeholder="******"
-              class="bg-[#084808] w-full h-11 p-2 pt-2 shadow-md outline-none rounded-xl text-[#FFF] relative z-0"
-              :disabled="!isDisabled"
-              type="password"
             />
           </div>
         </div>
 
         <div class="w-full flex justify-center mt-10">
-          <div v-if="playMatch" class="w-[60%] flex justify-center text-[#fff]">
-            <button
-              class="bg-[#263001] w-[10rem] rounded-xl"
-              @click="confirmarSenha"
-              type="submit"
-              value="Confirmar"
-            >
-              <p class="text-lg font-bold p-1">Confirmar</p>
-            </button>
-          </div>
-        </div>
-        <div class="w-full flex justify-center">
           <div class="w-[60%] flex justify-center text-[#fff]">
             <button
               class="bg-[#263001] w-[10rem] rounded-xl"
-              @click="salvar"
+              @click="verificar"
               type="submit"
-              value="Enviar para Busca"
-              :disabled="isDisabled"
-              :class="{ 'opacity-50': isDisabled }"
+              value="Confirmar"
             >
-              <p class="text-lg font-bold p-1">Cadastrar Nova Senha</p>
+              <p class="text-lg font-bold p-1">Verificar</p>
             </button>
           </div>
         </div>

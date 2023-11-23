@@ -11,6 +11,7 @@ import Perfil_Empresa from '@/views/Perfil_Empresa.vue'
 import LoginRedefinicao from '@/views/LoginRedefinicao.vue'
 import Notificacao from '@/views/Notificacao.vue'
 import { useAuth } from '@/stores/auth'
+import EmailVerified from '@/views/EmailVerified.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -30,9 +31,20 @@ const router = createRouter({
       component: Redefinir_Senha
     },
     {
-      path: '/Redefinir_Senha',
-      name: 'LoginRedefinicao',
-      component: LoginRedefinicao
+      path: '/esqueceu',
+      name: 'esqueceu',
+      component: LoginRedefinicao,
+      meta:{
+        noauth:true
+      }
+    },
+    {
+      path: '/VerificarEmail',
+      name: 'verificarEmail',
+      component: EmailVerified,
+      meta:{
+        noauth:true
+      }
     },
     {
       path: '/Cadastro_Empresa',
