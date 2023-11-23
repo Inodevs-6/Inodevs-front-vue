@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Alert from '@/components/alert/Alert.vue'
 import api from '../services/api'
-import { ref } from 'vue'
+import { ref, defineProps } from 'vue'
 
 const senha = ref('')
 const codigo = ref('')
@@ -14,6 +14,13 @@ const playMatch = ref(true)
 const valid = ref(false)
 
 const save = ref(false)
+
+const props = defineProps({
+  id: {
+    type: String,
+    required: true
+  }
+})
 
 const confirmarSenha = () => {
   isDisabled.value = false
@@ -32,7 +39,7 @@ const salvar = () => {
 
   erro.value = ''
   try {
-    api.post('/empresa', {
+    api.post('empresa/nova-senha/' + empresaEmail, {
       senha: senha.value,
       senhaNovamente: senhaNovamente.value
     })

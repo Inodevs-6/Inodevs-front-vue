@@ -26,13 +26,13 @@ const router = createRouter({
       component: ListaVaga
     },
     {
-      path: '/Redefinir_Senha/',
+      path: '/Redefinir_Senha/:id',
       name: 'Redefinir_Senha',
       component: Redefinir_Senha
     },
     {
-      path: '/esqueceu',
-      name: 'esqueceu',
+      path: '/LoginRedefinicao/' ,
+      name: 'LoginDefinicao',
       component: LoginRedefinicao,
       meta:{
         noauth:true

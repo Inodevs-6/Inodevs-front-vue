@@ -14,40 +14,16 @@ const valid = ref(false)
 
 const save = ref(false)
 
-const verificar = async() => {
-    erro.value = ''
-    loading.value = true
-    try {
-      
-        router.push('/esqueceu')
-    } catch (error) {
-    erro.value = (error as Error).message
-    console.log(erro)
-  }
-
-  loading.value = false
-}
-
-const salvar = () => {
+const verificar = () => {
   erro.value = ''
-
-  if (!senha.value || !senhaNovamente.value || senha.value !== senhaNovamente.value) {
-    if (senha.value !== senhaNovamente.value) {
-      erro.value = 'As senhas não estão iguais'
-    }
-    valid.value = true
-    return
-  }
-
-  erro.value = ''
+  if (
+    email.value
+  )
   try {
-    api.post('/empresa', {
-      senha: senha.value,
-      senhaNovamente: senhaNovamente.value
-    })
-    save.value = true
+    api.patch('empresa/redefinicao-senha/'+ email.value)
   } catch (error) {
     erro.value = (error as Error).message
+    console.log(erro)
   }
 }
 </script>
@@ -105,26 +81,8 @@ const salvar = () => {
               type="submit"
               value="Confirmar"
             >
-              <p class="text-lg font-bold p-1">Verificar</p>
+              <p class="text-lg font-bold p-1">Enviar Email</p>
             </button>
-          </div>
-        </div>
-        <div class="fixed bottom-2 right-5">
-          <div
-            v-if="valid"
-            class="bg-[#cc0000] w-[25rem] rounded-xl border-solid border-white border-2 text-center"
-            type="submit"
-          >
-            <p class="text-[#fff] text-lg font-bold p-1">Preencha todos os campos!</p>
-          </div>
-        </div>
-        <div class="fixed bottom-2 right-5">
-          <div
-            v-if="save"
-            class="bg-[#2A753D] w-[25rem] rounded-xl border-solid border-white border-2 text-center"
-            type="submit"
-          >
-            <p class="text-[#fff] text-lg font-bold p-1">Nova senha cadastrada com sucesso!</p>
           </div>
         </div>
         <div class="fixed bottom-2 right-5">
