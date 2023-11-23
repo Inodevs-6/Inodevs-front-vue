@@ -34,16 +34,16 @@ const router = createRouter({
       path: '/esqueceu',
       name: 'esqueceu',
       component: LoginRedefinicao,
-      meta:{
-        noauth:true
+      meta: {
+        noauth: true
       }
     },
     {
       path: '/VerificarEmail',
       name: 'verificarEmail',
       component: EmailVerified,
-      meta:{
-        noauth:true
+      meta: {
+        noauth: true
       }
     },
     {
@@ -87,7 +87,7 @@ const router = createRouter({
     {
       path: '/Notificacao',
       name: 'Notificacao',
-      component: Notificacao,
+      component: Notificacao
     }
   ]
 })

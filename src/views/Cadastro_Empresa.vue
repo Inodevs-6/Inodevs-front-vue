@@ -15,6 +15,8 @@ const erro = ref('')
 const isDisabled = ref(true)
 const isDone = ref(false)
 const playMatch = ref(true)
+const modalOpened = ref(true)
+// const errorCode = ref()
 
 const valid = ref(false)
 
@@ -63,20 +65,20 @@ const salvar = () => {
     <!-- <OpenMenu /> -->
     <div class="flex xl:ml-[5rem] w-screen items-center flex-col bg-white">
       <div class="w-full p-2 fixed h-[2.5rem] justify-between text-[#fff]">
-          <router-link to="/Perfil">
-            <button class="bg-[#263001] w-[12rem] rounded-xl" type="submit" value="Voltar">
-              <p class="text-lg font-bold p-1">Voltar</p>
-            </button>
-          </router-link>
-        </div>
+        <router-link to="/Perfil">
+          <button class="bg-[#263001] w-[12rem] rounded-xl" type="submit" value="Voltar">
+            <p class="text-lg font-bold p-1">Voltar</p>
+          </button>
+        </router-link>
+      </div>
       <h1
         class="text-center font-medium xl:text-3xl text-xl xl:mt-4 mt-3 flex w-full h-10 justify-center items-center"
       >
         Cadastro de Empresa
       </h1>
-      <p v-if="senha !== senhaNovamente" class="text-red-600 text-lg  font-bold">
-          As senhas não estão iguais !
-        </p>
+      <p v-if="senha !== senhaNovamente" class="text-red-600 text-lg font-bold">
+        As senhas não estão iguais !
+      </p>
       <div
         class="xl:w-[60vw] w-[90%] flex flex-col gap-8 p-3 mt-[3rem] bg-[#1DEEA3] shadow-md bg-opacity-30 rounded-2xl relative"
       >
@@ -228,15 +230,23 @@ const salvar = () => {
             <p class="text-[#fff] text-lg font-bold p-1">Preencha todos os campos!</p>
           </div>
         </div>
-        <div class="fixed bottom-2 right-5">
-          <div
-            v-if="save"
-            class="bg-[#2A753D] w-[25rem] rounded-xl border-solid border-white border-2 text-center"
-            type="submit"
-          >
-            <p class="text-[#fff] text-lg font-bold p-1">Empresa cadastrada com sucesso!</p>
+
+        <div
+          v-if="modalOpened"
+          id="myModal"
+          class="modal fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-20"
+        >
+          <div class="modal-content flex items-center gap-5 justify-center flex-col bg-white p-5 rounded shadow-md w-[30rem] relative">
+            <h2 class="text-xl font-bold">Empresa Cadastrada com Sucesso</h2>
+            <span v-if="erro" class="text-red-700 font-semibold">{{ erro }}</span>
+            <img src="/assets/sucess.svg" alt="sucess" width="50"  />
+            <div class="w-full flex justify-center items-center flex-col">
+              <h2 class="text-base font-bold">Você será redirecionado para pagina de Login</h2>
+              <h2 class="text-base font-bold">Em Instantes</h2>
+            </div>
           </div>
         </div>
+        
         <div class="fixed bottom-2 right-5">
           <div
             v-if="erro"

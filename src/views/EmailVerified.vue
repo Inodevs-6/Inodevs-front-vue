@@ -14,13 +14,12 @@ const valid = ref(false)
 
 const save = ref(false)
 
-const verificar = async() => {
-    erro.value = ''
-    loading.value = true
-    try {
-      
-        router.push('/esqueceu')
-    } catch (error) {
+const verificar = async () => {
+  erro.value = ''
+  loading.value = true
+  try {
+    router.push('/esqueceu')
+  } catch (error) {
     erro.value = (error as Error).message
     console.log(erro)
   }

@@ -140,7 +140,9 @@ onMounted(fetchCandidatos)
           class="h-[3rem] text-white font-bold w-full flex-row flex justify-around items-center rounded-lg bg-[#2A753D]"
         >
           <div class="conteudo-candidatos flex items-center justify-around h-[3rem]">
-            <a class="nome w-[7%] pl-4" :href="candidato.candidato.link"><img class="w-[2rem]" src="/assets/perfil.png" alt="user icon" /></a>
+            <a class="nome w-[7%] pl-4" :href="candidato.candidato.link"
+              ><img class="w-[2rem]" src="/assets/perfil.png" alt="user icon"
+            /></a>
             <div class="barra rounded-full shadow-md border-black">
               <div
                 class="barra-preenchida shadow-md rounded-full"

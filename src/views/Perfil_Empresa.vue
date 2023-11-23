@@ -87,7 +87,7 @@ onMounted(fetchEmpresa)
         class="xl:w-[90%] w-[90%] h-min flex flex-col gap-5 p-3 mt-[1rem] bg-[#1DEEA3] shadow-md bg-opacity-30 rounded-2xl relative"
       >
         <div class="w-full flex flex-col gap-5 xl:gap-0 pt-2 xl:flex-row justify-between">
-          <div class="xl:w-[45%] w-full flex flex-col relative ">
+          <div class="xl:w-[45%] w-full flex flex-col relative">
             <span
               class="bg-[#FFD600] w-[7rem] absolute bottom-[2.1rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
             >
@@ -101,7 +101,7 @@ onMounted(fetchEmpresa)
               :disabled="isDisabled"
             />
           </div>
-          <div class="xl:w-[45%] w-full flex flex-col relative ">
+          <div class="xl:w-[45%] w-full flex flex-col relative">
             <span
               class="bg-[#FFD600] w-[7rem] absolute bottom-[2.1rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
             >
@@ -117,21 +117,21 @@ onMounted(fetchEmpresa)
           </div>
         </div>
         <div class="flex flex-col w-full xl:gap-0 gap-4 xl:flex-row justify-between">
-            <div class="xl:w-[45%] flex w-full flex-col relative ">
-              <span
-                class="bg-[#FFD600] w-[7rem] absolute bottom-[2.1rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
-              >
-                Email
-              </span>
-              <input
-                v-model="email"
-                id="email"
-                placeholder="empresa@email.com"
-                class="bg-[#084808] w-full h-11 p-2 pt-2 shadow-md outline-none rounded-xl text-[#FFF] relative z-0"
-                :disabled="isDisabled"
-              />
+          <div class="xl:w-[45%] flex w-full flex-col relative">
+            <span
+              class="bg-[#FFD600] w-[7rem] absolute bottom-[2.1rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
+            >
+              Email
+            </span>
+            <input
+              v-model="email"
+              id="email"
+              placeholder="empresa@email.com"
+              class="bg-[#084808] w-full h-11 p-2 pt-2 shadow-md outline-none rounded-xl text-[#FFF] relative z-0"
+              :disabled="isDisabled"
+            />
           </div>
-          <div class="xl:w-[45%] w-full flex flex-col relative ">
+          <div class="xl:w-[45%] w-full flex flex-col relative">
             <span
               class="bg-[#FFD600] w-[7rem] absolute bottom-[2.1rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
             >
@@ -145,7 +145,6 @@ onMounted(fetchEmpresa)
               :disabled="isDisabled"
             />
           </div>
-          
         </div>
         <div class="w-full flex flex-col gap-5 xl:gap-0 xl:flex-row justify-between">
           <!-- <div class="xl:w-[45%] w-full flex flex-col relative ">
@@ -162,7 +161,7 @@ onMounted(fetchEmpresa)
               :disabled="isDisabled"
             />
           </div> -->
-          <div class="xl:w-[45%] w-full flex flex-col relative ">
+          <div class="xl:w-[45%] w-full flex flex-col relative">
             <span
               class="bg-[#FFD600] w-[7rem] absolute bottom-[2.1rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
             >
@@ -180,10 +179,9 @@ onMounted(fetchEmpresa)
               <option value="grande">Grande Empresa</option>
             </select>
           </div>
-          
         </div>
         <div class="w-full flex flex-col items-center xl:flex-row">
-          <div class="w-full flex justify-center flex-col relative ">
+          <div class="w-full flex justify-center flex-col relative">
             <span
               class="bg-[#FFD600] w-[9rem] relative top-[1rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
             >
@@ -199,7 +197,7 @@ onMounted(fetchEmpresa)
             </textarea>
           </div>
         </div>
-       
+
         <div class="fixed bottom-2 right-5">
           <div
             v-if="save"
