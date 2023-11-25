@@ -6,51 +6,59 @@ import { useAuth } from '@/stores/auth'
 import router from '@/router'
 import { onMounted, ref } from 'vue'
 import api from '@/services/api'
-const notify = ref([]);
-const notifications = ref();
-let latestNotificationId = ref(null);
-let oldNotificationId = ref(null);
-let timer = ref()
+import { useNotificationStore } from '@/stores/notifications'
+const notificationStore = useNotificationStore();
+const auth = useAuth();
+const notifications = ref([]);
+let oldNotifications = ref([]);
+
+const fetchNotifications = async () => {
+  try {
+    if (notificationStore.notify) {
+      return;
+    }
+
+    const response = await api.get(`/notification/${auth.getUser.id}`);
+    const newNotifications = response.data;
+
+    if (oldNotifications.length > 0 && JSON.stringify(newNotifications) !== JSON.stringify(oldNotifications)) {
+      console.log("1");
+      notificationStore.setNotify(true);
+      console.log(oldNotifications)
+    } else {
+      console.log("0");
+    }
+
+    notifications.value = newNotifications;
+    oldNotifications = newNotifications.slice(); 
+    console.log("passei");
+  } catch (error) {
+    console.error('Erro ao buscar notificações:', error);
+  }
+};
+
+
+const clearNotify = () => {
+  oldNotifications.value = [];
+  notificationStore.setNotify(false);
+  router.push("/Notificacao")
+  console.log(oldNotifications.value)
+  
+}
+
+onMounted(() => {
+  if (!notificationStore.notify) {
+    fetchNotifications();
+    setInterval(fetchNotifications, 20000);
+  }
+});
+
+
 function logout() {
   const auth = useAuth()
   auth.clear()
   router.push('/')
 }
-const auth = useAuth()
-const fetchNotifications = async () => {
-  try {
-    const response = await api.get(`/notification/${auth.getUser.id}`);
-    const newNotifications = response.data;
-
-    if (newNotifications.length > 0) {
-      const latestId = newNotifications[newNotifications.length - 1].id;
-      if (latestId !== latestNotificationId) {
-        console.log(`Mudou o ID, o novo ID é ${latestId}`);
-        latestNotificationId = latestId;
-        if (oldNotificationId === latestNotificationId) {
-          notify.value = 0;
-        } else {
-          notify.value = 1;
-          oldNotificationId = latestNotificationId;
-        }
-      }
-    }
-    notifications.value = newNotifications;
-  } catch (error) {
-    console.error('Erro ao buscar notificações:', error);
-  }
-};
-onMounted(() => {
-  fetchNotifications(); 
-  timer.value = setInterval(fetchNotifications, 10000);
-});
-
-const clearNotify = () => {
-  notify.value = 0
-  oldNotificationId = latestNotificationId; 
-  router.push("/Notificacao")
-}
-
 </script>
 
 <template>
@@ -68,7 +76,8 @@ const clearNotify = () => {
     <div
       class="absolute flex items-center justify-center bg-red-800 left-10 top-[4.7rem] rounded-full"
     >
-      <p class="text-white font-bold px-[0.4rem]">{{ notify }}</p>
+      <p v-if="notificationStore.notify" class="text-white font-bold px-[0.4rem]">1</p>
+      <p v-else class="text-white font-bold px-[0.4rem]">0</p>
     </div>
     <RouterLink to="/home">
       <BtnMenu caminho="/assets/Home.svg" />
