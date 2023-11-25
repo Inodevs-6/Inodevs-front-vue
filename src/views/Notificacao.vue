@@ -4,12 +4,15 @@ import LoaderforList from '@/components/LoaderforList.vue'
 import api from '@/services/api'
 import { defineComponent, onMounted, ref } from 'vue'
 import { useAuth } from '@/stores/auth'
+import { useNotificationStore } from '@/stores/notifications'
 const namesearch = ref('')
 const erro = ref('')
 const isSeach = ref(false)
 const loading = ref(true)
 const auth = useAuth()
 const notifications = ref()
+const notificationStore = useNotificationStore();
+
 const fetchEmpresa = async () => {
   const empresaId = auth.getUser.id
   loading.value = true
@@ -34,6 +37,7 @@ const deleteNotification = (index: number): void => {
 }
 
 onMounted(fetchEmpresa)
+onMounted(() => notificationStore.setNotify(false))
 </script>
 
 <template>

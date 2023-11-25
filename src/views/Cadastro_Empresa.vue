@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import OpenMenu from '@/components/menu/OpenMenu.vue'
 import Alert from '@/components/alert/Alert.vue'
+import router from '@/router'
 import api from '../services/api'
 import { ref } from 'vue'
 const nome = ref('')
@@ -15,7 +16,7 @@ const erro = ref('')
 const isDisabled = ref(true)
 const isDone = ref(false)
 const playMatch = ref(true)
-const modalOpened = ref(true)
+const modalOpened = ref(false)
 // const errorCode = ref()
 
 const valid = ref(false)
@@ -43,20 +44,30 @@ const salvar = () => {
   }
 
   erro.value = ''
-  try {
-    api.post('/empresa/nova-empresa', {
-      nome: nome.value,
-      cnpj: cnpj.value,
-      email: email.value,
-      senha: senha.value,
-      descricao: descricao.value,
-      segmento: segmento.value,
-      porte: porte.value
-    })
-    save.value = true
-  } catch (error) {
-    erro.value = (error as Error).message
-  }
+  
+  api.post('/empresa', {
+  nome: nome.value,
+  cnpj: cnpj.value,
+  email: email.value,
+  senha: senha.value,
+  descricao: descricao.value,
+  segmento: segmento.value,
+  porte: porte.value
+}).then(response => {
+  console.log(response);
+  sucesso();
+}).catch(error => {
+  erro.value = (error as Error).message;
+  console.error("Erro:", error);
+});
+}
+
+async function sucesso() {
+
+  modalOpened.value = true
+  setTimeout(() => {
+    router.push('/home')
+  }, 2000)
 }
 </script>
 
@@ -76,6 +87,7 @@ const salvar = () => {
       >
         Cadastro de Empresa
       </h1>
+      <div v-if="erro" class="text-red-600 text-lg font-bold">{{ erro }} </div>
       <p v-if="senha !== senhaNovamente" class="text-red-600 text-lg font-bold">
         As senhas não estão iguais !
       </p>

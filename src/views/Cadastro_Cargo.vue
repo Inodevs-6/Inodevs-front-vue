@@ -6,6 +6,8 @@ import api from '../services/api'
 import ia from '../services/ia'
 import { ref } from 'vue'
 import { useAuth } from '@/stores/auth'
+import Loaderinputs from '@/components/Loaderinputs.vue'
+import router from '@/router'
 const name = ref('')
 const level = ref('')
 const conhecimentos = ref('')
@@ -27,22 +29,37 @@ const comentario = ref('')
 const id = ref(0)
 const save = ref(false)
 const auth = useAuth()
- 
+const modalOpened = ref(false)
+const modalOpened1 = ref(false)
 async function salvar() {
+  loading.value = true
   erro.value = ''
-  try {
     const empresaId = auth.getUser.id
     api.patch('/editar/' + empresaId + '/' + id.value, {
       conhecimentos: conhecimentos.value,
       habilidades: habilidades.value,
       atitudes: atitudes.value
+    }).then(response => {
+      sucesso()
+    }).catch(error => {
+      erro.value = (error as Error).message;
+  console.error("Erro:", error);
     })
-    save.value = true
-  } catch (error) {
-    erro.value = (error as Error).message
-  }
+    loading.value = false
 }
- 
+
+async function sucesso() {
+modalOpened.value = true
+setTimeout(() => {
+  router.push('/home')
+}, 2000)
+}
+async function sucesso1() {
+modalOpened1.value = true
+setTimeout(() => {
+  router.push('/home')
+}, 2000)
+}
 async function aprimorar(campo: String) {
   erro.value = ''
   let sendComment = ''
@@ -213,6 +230,7 @@ async function aprimorar(campo: String) {
 }
  
 async function match() {
+  loading.value = true
   try {
     played()
     scrapping.value = true
@@ -237,11 +255,12 @@ async function match() {
           }
       })
     )
-
-    
+    sucesso1()
+    console.log("Notificação de results")
   } catch (err) {
     erro.value = (err as Error).message
   }
+  loading.value = false
 }
  
 async function getResponseChatgpt() {
@@ -273,7 +292,6 @@ async function getResponseChatgpt() {
     } else {
       valid.value = true
     }
-   
     const response_notification = (
       await api.post('/notification', {
         type : "Request",
@@ -487,32 +505,36 @@ const played = () => {
             <button
               class="bg-[#263001] w-[10rem] rounded-xl"
               @click="salvar"
+              :disabled="loading"
               type="submit"
               value="Enviar para Busca"
             >
-              <p class="text-lg font-bold p-1">Salvar</p>
+              <p  v-if="!loading" class="text-lg font-bold p-1">Salvar</p>
+              <div class="flex justify-center items-center p-1" v-else><Loaderinputs/></div>
             </button>
  
             <button
               class="bg-[#263001] w-[16rem] rounded-xl"
               @click="match"
+              :disabled="loading"
               type="submit"
               value="Enviar para Busca"
             >
-              <p class="text-lg font-bold p-1">Salvar e Buscar Candidatos</p>
+              <p v-if="!loading" class="text-lg font-bold p-1">Salvar e Buscar Candidatos</p>
+              <div class="flex justify-center items-center p-1" v-else><Loaderinputs/></div>
             </button>
           </div>
         </div>
-        <div v-if="scrapping" class="fixed bottom-2 right-5">
+        <!-- <div v-if="scrapping" class="fixed bottom-2 right-5">
           <button
             class="bg-[#084808] w-[25rem] rounded-xl border-solid border-white border-2 text-center"
             type="submit"
           >
             <p class="text-[#fff] text-lg font-bold p-1">Realizando Busca de Canadidatos...</p>
           </button>
-        </div>
+        </div> -->
  
-        <div class="fixed bottom-2 right-5">
+        <!-- <div class="fixed bottom-2 right-5">
           <div
             v-if="matching"
             class="bg-[#084808] w-[25rem] rounded-xl border-solid border-white border-2 text-center"
@@ -521,7 +543,7 @@ const played = () => {
             <p class="text-[#fff] text-lg font-bold p-1">Match de Candidatos Finalizado!</p>
           </div>
         </div>
- 
+  -->
         <div class="fixed bottom-2 right-5">
           <div
             v-if="valid"
@@ -532,13 +554,34 @@ const played = () => {
           </div>
         </div>
  
-        <div class="fixed bottom-2 right-5">
-          <div
-            v-if="save"
-            class="bg-[#084808] w-[25rem] rounded-xl border-solid border-white border-2 text-center"
-            type="submit"
-          >
-            <p class="text-[#fff] text-lg font-bold p-1">Vaga salva com sucesso!</p>
+        <div
+          v-if="modalOpened"
+          id="myModal"
+          class="modal fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-20"
+        >
+          <div class="modal-content flex items-center gap-5 justify-center flex-col bg-white p-5 rounded shadow-md w-[30rem] relative">
+            <h2 v-if="!erro" class="text-xl font-bold">Vaga cadastrada com sucesso</h2>
+            <span v-if="erro" class="text-red-700 font-semibold">{{ erro }}</span>
+            <img src="/assets/sucess.svg" alt="sucess" width="50"  />
+            <div class="w-full flex justify-center items-center flex-col">
+              <h2 class="text-base font-bold">Você será redirecionado para pagina de Home</h2>
+              <h2 class="text-base font-bold">Em Instantes</h2>
+            </div>
+          </div>
+        </div>
+        <div
+          v-if="modalOpened1"
+          id="myModal"
+          class="modal fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-20"
+        >
+          <div class="modal-content flex items-center gap-5 justify-center flex-col bg-white p-5 rounded shadow-md w-[30rem] relative">
+            <h2 v-if="!erro" class="text-xl font-bold">Vaga cadastrada com sucesso e Busca Iniciada </h2>
+            <span v-if="erro" class="text-red-700 font-semibold">{{ erro }}</span>
+            <img src="/assets/sucess.svg" alt="sucess" width="50"  />
+            <div class="w-full flex justify-center items-center flex-col">
+              <h2 class="text-base font-bold">Você será redirecionado para pagina de Home</h2>
+              <h2 class="text-base font-bold">Em Instantes</h2>
+            </div>
           </div>
         </div>
  
