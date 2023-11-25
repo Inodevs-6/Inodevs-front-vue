@@ -13,29 +13,30 @@ const notifications = ref([]);
 let oldNotifications = ref([]);
 
 const fetchNotifications = async () => {
+  if (notificationStore.notify == true) {
+   return 
+  }else{
+
+  
   try {
-    if (notificationStore.notify) {
-      return;
-    }
+    
 
     const response = await api.get(`/notification/${auth.getUser.id}`);
     const newNotifications = response.data;
 
-    if (oldNotifications.length > 0 && JSON.stringify(newNotifications) !== JSON.stringify(oldNotifications)) {
+    if (notificationStore.oldnotification.length > 0 && JSON.stringify(newNotifications) !== JSON.stringify(notificationStore.oldnotification)) {
       console.log("1");
       notificationStore.setNotify(true);
-      console.log(oldNotifications)
-    } else {
-      console.log("0");
-    }
-
+    } 
     notifications.value = newNotifications;
-    oldNotifications = newNotifications.slice(); 
+    notificationStore.setOldnotification(newNotifications.slice()) ; 
     console.log("passei");
   } catch (error) {
     console.error('Erro ao buscar notificações:', error);
   }
-};
+}
+}
+
 
 
 const clearNotify = () => {
@@ -49,7 +50,7 @@ const clearNotify = () => {
 onMounted(() => {
   if (!notificationStore.notify) {
     fetchNotifications();
-    setInterval(fetchNotifications, 20000);
+    setInterval(fetchNotifications, 10000);
   }
 });
 
@@ -73,11 +74,9 @@ function logout() {
       class="flex flex-row justify-between items-center">
       <BtnMenu caminho="/assets/Bell.svg" />
     </div>
-    <div
-      class="absolute flex items-center justify-center bg-red-800 left-10 top-[4.7rem] rounded-full"
+    <div v-if="notificationStore.notify"
+      class="absolute flex items-center justify-center w-4 h-4 bg-red-800 left-10 top-[4.7rem] rounded-full"
     >
-      <p v-if="notificationStore.notify" class="text-white font-bold px-[0.4rem]">1</p>
-      <p v-else class="text-white font-bold px-[0.4rem]">0</p>
     </div>
     <RouterLink to="/home">
       <BtnMenu caminho="/assets/Home.svg" />
