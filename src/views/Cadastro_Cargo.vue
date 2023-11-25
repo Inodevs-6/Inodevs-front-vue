@@ -27,7 +27,7 @@ const comentario = ref('')
 const id = ref(0)
 const save = ref(false)
 const auth = useAuth()
-
+ 
 async function salvar() {
   erro.value = ''
   try {
@@ -42,11 +42,11 @@ async function salvar() {
     erro.value = (error as Error).message
   }
 }
-
+ 
 async function aprimorar(campo: String) {
   erro.value = ''
   let sendComment = ''
-
+ 
   if (campo == 'Conhecimentos') {
     loadingC.value = true
   }
@@ -62,10 +62,10 @@ async function aprimorar(campo: String) {
     loadingH.value = true
     loadingA.value = true
   }
-
+ 
   try {
     let cha = ''
-
+ 
     if (campo == 'Geral') {
       cha += '{"descricao": '
     }
@@ -159,9 +159,9 @@ async function aprimorar(campo: String) {
       cha += ']'
     }
     cha += '}'
-
+ 
     console.log(cha)
-
+    
     const response = await ia.post('/upgrade', {
       cargo: name.value,
       nivel: level.value,
@@ -169,9 +169,9 @@ async function aprimorar(campo: String) {
       campo: campo,
       comentario: sendComment
     })
-
+ 
     console.log(response.data)
-
+ 
     if (campo == 'Conhecimentos') {
       conhecimentos.value = ''
       response.data.Conhecimentos.forEach((palavra: string) => {
@@ -211,7 +211,7 @@ async function aprimorar(campo: String) {
   loadingH.value = false
   loadingA.value = false
 }
-
+ 
 async function match() {
   try {
     played()
@@ -226,11 +226,24 @@ async function match() {
     })
     matching.value = true
     played()
+ 
+    const response_notification = (
+      await api.post('/notification', {
+        type : "Results",
+        nome: name.value,
+        nivel: level.value,
+        empresa: {
+            id: auth.getUser.id
+          }
+      })
+    )
+
+    
   } catch (err) {
     erro.value = (err as Error).message
   }
 }
-
+ 
 async function getResponseChatgpt() {
   loadingC.value = true
   loadingH.value = true
@@ -260,6 +273,19 @@ async function getResponseChatgpt() {
     } else {
       valid.value = true
     }
+   
+    const response_notification = (
+      await api.post('/notification', {
+        type : "Request",
+        nome: name.value,
+        nivel: level.value,
+        empresa: {
+            id: auth.getUser.id
+          }
+      })
+    )
+    console.log("Notificação de request")
+ 
   } catch (err) {
     erro.value = (err as Error).message
   }
@@ -267,16 +293,16 @@ async function getResponseChatgpt() {
   loadingH.value = false
   loadingA.value = false
 }
-
+ 
 const habilitarInput = () => {
   isDisabled.value = !isDisabled.value
 }
-
+ 
 const played = () => {
   Play.value = true
 }
 </script>
-
+ 
 <template>
   <div class="bg-white flex w-screen overflow-x-hidden overflow-y-scroll h-screen">
     <OpenMenu />
@@ -394,7 +420,7 @@ const played = () => {
             class="h-[10rem] bg-[#084808] p-4 focus:outline-none flex resize-none shadow-xl justify-start rounded-xl text-white"
           >
           </textarea>
-
+ 
           <div
             class="h-[10rem] bg-[#084808] p-4 focus:outline-none flex resize-none shadow-xl justify-center items-center rounded-xl"
             v-else
@@ -441,7 +467,7 @@ const played = () => {
             </div>
           </div>
         </div>
-
+ 
         <!-- <p v-if="loading">Carregando CHA...</p> -->
         <!-- <div    
             v-if="Play"
@@ -457,7 +483,7 @@ const played = () => {
                   Editar
                 </p>
               </button> -->
-
+ 
             <button
               class="bg-[#263001] w-[10rem] rounded-xl"
               @click="salvar"
@@ -466,7 +492,7 @@ const played = () => {
             >
               <p class="text-lg font-bold p-1">Salvar</p>
             </button>
-
+ 
             <button
               class="bg-[#263001] w-[16rem] rounded-xl"
               @click="match"
@@ -485,7 +511,7 @@ const played = () => {
             <p class="text-[#fff] text-lg font-bold p-1">Realizando Busca de Canadidatos...</p>
           </button>
         </div>
-
+ 
         <div class="fixed bottom-2 right-5">
           <div
             v-if="matching"
@@ -495,7 +521,7 @@ const played = () => {
             <p class="text-[#fff] text-lg font-bold p-1">Match de Candidatos Finalizado!</p>
           </div>
         </div>
-
+ 
         <div class="fixed bottom-2 right-5">
           <div
             v-if="valid"
@@ -505,7 +531,7 @@ const played = () => {
             <p class="text-[#fff] text-lg font-bold p-1">Preencha todos os campos!</p>
           </div>
         </div>
-
+ 
         <div class="fixed bottom-2 right-5">
           <div
             v-if="save"
@@ -515,7 +541,7 @@ const played = () => {
             <p class="text-[#fff] text-lg font-bold p-1">Vaga salva com sucesso!</p>
           </div>
         </div>
-
+ 
         <div class="fixed bottom-2 right-5">
           <div
             v-if="erro"

@@ -1,3 +1,58 @@
+<script lang="ts" setup>
+import BtnMenu from '@/components/menu/BtnMenu.vue'
+import MenuMobile from '@/components/menu/MenuMobile.vue'
+import { RouterLink, RouterView } from 'vue-router'
+import { useAuth } from '@/stores/auth'
+import router from '@/router'
+import { onMounted, ref } from 'vue'
+import api from '@/services/api'
+const notify = ref([]);
+const notifications = ref();
+let latestNotificationId = ref(null);
+let oldNotificationId = ref(null);
+let timer = ref()
+function logout() {
+  const auth = useAuth()
+  auth.clear()
+  router.push('/')
+}
+const auth = useAuth()
+const fetchNotifications = async () => {
+  try {
+    const response = await api.get(`/notification/${auth.getUser.id}`);
+    const newNotifications = response.data;
+
+    if (newNotifications.length > 0) {
+      const latestId = newNotifications[newNotifications.length - 1].id;
+      if (latestId !== latestNotificationId) {
+        console.log(`Mudou o ID, o novo ID é ${latestId}`);
+        latestNotificationId = latestId;
+        if (oldNotificationId === latestNotificationId) {
+          notify.value = 0;
+        } else {
+          notify.value = 1;
+          oldNotificationId = latestNotificationId;
+        }
+      }
+    }
+    notifications.value = newNotifications;
+  } catch (error) {
+    console.error('Erro ao buscar notificações:', error);
+  }
+};
+onMounted(() => {
+  fetchNotifications(); 
+  timer.value = setInterval(fetchNotifications, 10000);
+});
+
+const clearNotify = () => {
+  notify.value = 0
+  oldNotificationId = latestNotificationId; 
+  router.push("/Notificacao")
+}
+
+</script>
+
 <template>
   <RouterView />
   <div
@@ -6,9 +61,10 @@
     <RouterLink to="/">
       <BtnMenu caminho="/assets/logo.svg" />
     </RouterLink>
-    <RouterLink to="/Notificacao" class="flex flex-row justify-between items-center">
+    <div @click="clearNotify"
+      class="flex flex-row justify-between items-center">
       <BtnMenu caminho="/assets/Bell.svg" />
-    </RouterLink>
+    </div>
     <div
       class="absolute flex items-center justify-center bg-red-800 left-10 top-[4.7rem] rounded-full"
     >
@@ -37,17 +93,4 @@
     <MenuMobile></MenuMobile>
   </div>
 </template>
-<script lang="ts" setup>
-import BtnMenu from '@/components/menu/BtnMenu.vue'
-import MenuMobile from '@/components/menu/MenuMobile.vue'
-import { RouterLink, RouterView } from 'vue-router'
-import { useAuth } from '@/stores/auth'
-import router from '@/router'
-const notify = null
 
-function logout() {
-  const auth = useAuth()
-  auth.clear()
-  router.push('/')
-}
-</script>

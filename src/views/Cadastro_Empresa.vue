@@ -44,7 +44,7 @@ const salvar = () => {
 
   erro.value = ''
   try {
-    api.post('/empresa', {
+    api.post('/empresa/nova-empresa', {
       nome: nome.value,
       cnpj: cnpj.value,
       email: email.value,

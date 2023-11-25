@@ -9,59 +9,25 @@ const erro = ref('')
 const isSeach = ref(false)
 const loading = ref(true)
 const auth = useAuth()
-const notification = ref()
+const notifications = ref()
 const fetchEmpresa = async () => {
   const empresaId = auth.getUser.id
   loading.value = true
   try {
     const response = await api.get('/notification/' + empresaId)
-    notification.value = response.data
+    notifications.value = response.data.sort((a : any, b : any) => b.id - a.id)
   } catch (error) {
     erro.value = (error as Error).message
   }
   loading.value = false
 }
 
-const notifications = ref([
-  {
-    dateTime: '2023-11-15 12:30',
-    description: 'Esta é uma notificação de exemplo 1.'
-  },
-  {
-    dateTime: '2023-11-16 09:45',
-    description: 'Esta é uma notificação de exemplo 2.'
-  },
-  {
-    dateTime: '2023-11-17 12:30',
-    description: 'Esta é uma notificação de exemplo 3.'
-  },
-  {
-    dateTime: '2023-11-18 09:45',
-    description: 'Esta é uma notificação de exemplo 4.'
-  },
-  {
-    dateTime: '2023-11-18 09:45',
-    description: 'Esta é uma notificação de exemplo 5.'
-  },
-  {
-    dateTime: '2023-11-18 09:45',
-    description: 'Esta é uma notificação de exemplo 6.'
-  },
-  {
-    dateTime: '2023-11-18 09:45',
-    description: 'Esta é uma notificação de exemplo 7.'
-  },
-
-  {
-    dateTime: '2023-11-18 09:45',
-    description: 'Esta é uma notificação de exemplo 8.'
-  },
-
-  {
-    dateTime: '2023-11-18 09:45',
-    description: 'Esta é uma notificação de exemplo 9.'
-  }
-])
+const formatarDataHora = (datetime : Date) => {
+  const dataHora = new Date(datetime);
+  const dataFormatada = dataHora.toLocaleDateString();
+  const horaFormatada = dataHora.toLocaleTimeString();
+  return `${dataFormatada} ${horaFormatada}`;
+}
 
 const deleteNotification = (index: number): void => {
   notifications.value.splice(index, 1)
@@ -90,17 +56,20 @@ onMounted(fetchEmpresa)
         >
           <div class="flex items-start">
             <img src="/assets/calendar.svg" alt="Ícone de Calendário" class="w-6 h-6 mr-2" />
-            <div class="text-sm">{{ notification.dateTime }}</div>
+            <div class="text-sm">{{formatarDataHora(notification.datetime)}}</div>
           </div>
-          <div class="mt-0">
-            {{ notification.description }}
+          <div v-if="notification.type == 'Request'" class="mt-0">
+            O CHA para Vaga {{ notification.nome }}   {{ notification.nivel }} foi gerado com sucesso 
           </div>
-          <img
+          <div v-else class="mt-0">
+           Seus Resultados para a vaga {{ notification.nome }}   {{ notification.nivel }} estão prontos 
+          </div>
+          <!-- <img
             src="/assets/Trash.svg"
             alt="Ícone de Lixeira"
             class="w-6 h-6 cursor-pointer absolute bottom-2 right-2"
             @click="deleteNotification(index)"
-          />
+          /> -->
         </div>
       </div>
     </div>
