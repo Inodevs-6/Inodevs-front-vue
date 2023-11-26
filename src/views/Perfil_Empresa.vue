@@ -14,6 +14,7 @@ const descricao = ref('')
 const segmento = ref('')
 const porte = ref('')
 const erro = ref('')
+const isChecked = ref(true)
 const isDisabled = ref(true)
 const isDone = ref(false)
 const playMatch = ref(true)
@@ -22,23 +23,26 @@ const loadingC = ref(false)
 const valid = ref(false)
 const save = ref(false)
 const auth = useAuth()
-
+ 
 async function editar() {
   try {
     const empresaId = auth.getUser.id
+    console.log(isChecked.value)
     api.patch('/empresa/editar-empresa/' + empresaId, {
       nome: nome.value,
       email: email.value,
       descricao: descricao.value,
       segmento: segmento.value,
-      porte: porte.value
+      porte: porte.value,
+      tfaAtivado: isChecked.value
     })
-    sucesso()
+    save.value = true
+    isDisabled.value = true
   } catch (error) {
     erro.value = (error as Error).message
   }
 }
-
+ 
 const fetchEmpresa = async () => {
   const empresaId = auth.getUser.id
   loading.value = true
@@ -50,27 +54,21 @@ const fetchEmpresa = async () => {
       (email.value = response.data.email),
       (descricao.value = response.data.descricao),
       (segmento.value = response.data.segmento),
-      (porte.value = response.data.porte)
+      (porte.value = response.data.porte),
+      (isChecked.value = response.data.tfaAtivado)
   } catch (error) {
     erro.value = (error as Error).message
   }
   loading.value = false
 }
-
-async function sucesso() {
-  save.value = true
-  setTimeout(() => {
-    router.push('/home')
-  }, 2000)
-}
-
+ 
 const habilitarInput = () => {
   isDisabled.value = !isDisabled.value
 }
-
+ 
 onMounted(fetchEmpresa)
 </script>
-
+ 
 <template>
   <div class="bg-white flex w-screen overflow-x-hidden overflow-y-scroll h-screen">
     <OpenMenu />
@@ -81,13 +79,13 @@ onMounted(fetchEmpresa)
       <h1
         class="text-center font-medium xl:text-3xl text-xl xl:mt-7 mt-3 flex w-full h-10 justify-center items-center"
       >
-        Perfil
+        Informações de Perfil
       </h1>
       <div
-        class="xl:w-[80vw] w-[90%] flex items-center flex-col gap-3 p-4 mt-[1rem] bg-[#1DEEA3] shadow-md bg-opacity-30 rounded-2xl relative"
+        class="xl:w-[80vw] w-[90%] flex items-center flex-col gap-3 p-10 mt-[1rem] bg-[#1DEEA3] shadow-md bg-opacity-30 rounded-2xl relative"
       >
-        <div class="w-full flex flex-col gap-5 xl:gap-0 xl:flex-row justify-between">
-          <div class="xl:w-1/2 w-full flex flex-col relative top-[0.7rem]">
+      <div class="w-full flex flex-col gap-5 xl:gap-0 xl:flex-row justify-between mt-3">
+          <div class="xl:w-[46%] w-full flex flex-col relative">
             <span
               class="bg-[#FFD600] w-[7rem] absolute bottom-[2.1rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
             >
@@ -95,12 +93,13 @@ onMounted(fetchEmpresa)
             </span>
             <input
               v-model="nome"
-              id="nome"
+              id="name"
+              class="bg-[#084808] w-full h-11 p-2 pt-2 shadow-md outline-none rounded-xl text-[#FFF] relative z-0"
               :disabled="isDisabled"
-              class="bg-[#084808] w-[30rem] h-11 p-2 pt-2 shadow-md outline-none rounded-xl text-[#FFF] relative z-0"
+              :class="{ 'opacity-70' : isDisabled == true}"
             />
           </div>
-          <div class="xl:w-1/2 w-full flex flex-col relative left-[3rem] top-[0.7rem]">
+          <div class="xl:w-[46%] w-full flex flex-col relative">
             <span
               class="bg-[#FFD600] w-[7rem] absolute bottom-[2.1rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
             >
@@ -108,76 +107,94 @@ onMounted(fetchEmpresa)
             </span>
             <input
               v-model="cnpj"
-              id="cnpj"
-              disabled
-              class="bg-[#084808] w-[30rem] h-11 p-2 pt-2 shadow-md outline-none rounded-xl text-[#FFF] relative z-0"
+              id="level"
+              class="bg-[#084808] w-full h-11 p-2 pt-2 shadow-md outline-none rounded-xl text-[#FFF] relative z-0"
+              :disabled="isDisabled"
+              :class="{ 'opacity-70' : isDisabled == true}"
             />
           </div>
         </div>
-        <div class="flex flex-col items-center top-[0.7rem]">
-          <span
-            class="bg-[#FFD600] w-[7rem] relative top-[0.7rem] right-[28.2rem] font-semibold rounded-lg text-center z-10"
-          >
-            Email
-          </span>
-          <textarea
-            v-if="!loadingC"
-            rows="4"
-            v-model="email"
-            :disabled="isDisabled"
-            id="email"
-            class="h-[3rem] w-[65.8rem] bg-[#084808] p-3 shadow-xl rounded-xl text-white"
-          >
-          </textarea>
-          <span
-            class="bg-[#FFD600] w-[9rem] relative top-[0.7rem] right-[27rem] font-semibold shadow-md rounded-lg text-center z-10"
-          >
-            Descrição
-          </span>
-          <textarea
-            v-if="!loadingC"
-            rows="4"
-            v-model="descricao"
-            :disabled="isDisabled"
-            id="descricao"
-            class="h-[10rem] w-[65.8rem] bg-[#084808] p-3 focus:outline-none flex resize-none shadow-xl justify-start rounded-xl text-white"
-          >
-          </textarea>
+ 
+        <div class="w-full flex flex-col gap-5 xl:gap-0 xl:flex-row justify-between mt-3">
+          <div class="xl:w-[46%] w-full flex flex-col relative">
+            <div class="relative">
+              <span
+              class="bg-[#FFD600] w-[7rem] absolute bottom-[2.1rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
+              >
+                Email
+              </span>
+              <input
+                v-model="email"
+                id="email"
+                class="bg-[#084808] w-full h-11 p-2 pt-2 shadow-md outline-none rounded-xl text-[#FFF] relative z-0"
+                :disabled="isDisabled"
+                :class="{ 'opacity-70' : isDisabled == true}"
+              />
+            </div>
+         
+            <div class="relative mt-6">
+              <span
+              class="bg-[#FFD600] w-[7rem] absolute bottom-[2.1rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
+              >
+                Segmento
+              </span>
+              <input
+                v-model="segmento"
+                id="segmento"
+                class="bg-[#084808] w-full h-11 p-2 pt-2 shadow-md outline-none rounded-xl text-[#FFF] relative z-0"
+                :disabled="isDisabled"
+                :class="{ 'opacity-70' : isDisabled == true}"
+              />
+            </div>
+ 
+            <div class="relative mt-6">
+              <span
+              class="bg-[#FFD600] w-[7rem] absolute bottom-[2.1rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
+              >
+                Porte
+              </span>
+              <select
+                v-model="porte"
+                id="porte"
+                class="bg-[#084808] w-full h-11 p-2 pt-2 shadow-md outline-none rounded-xl text-[#FFF] relative z-0"
+                :disabled="isDisabled"
+              >
+                <option value="micro">Micro Empresa</option>
+                <option value="pequeno">Pequena Empresa</option>
+                <option value="medio">Média Empresa</option>
+                <option value="grande">Grande Empresa</option>
+              </select>
+            </div>
+          </div>
+ 
+          <div class="xl:w-[46%] w-full flex flex-col relative mt-2">
+              <span
+                class="bg-[#FFD600] w-[7rem] absolute bottom-[95%] left-4 font-semibold shadow-md rounded-lg text-center z-10"
+              >
+                Descrição
+              </span>
+              <textarea
+                v-model="descricao"
+                id="descricao"
+                class="bg-[#084808] h-[95%] w-full p-2 pt-2 shadow-md outline-none rounded-xl text-[#FFF] relative z-0"
+                :disabled="isDisabled"
+                :class="{ 'opacity-70' : isDisabled == true}"
+              ></textarea>
+          </div>
         </div>
-        <div class="flex flex-col items-center top-[0.7rem]">
-          <span
-            class="bg-[#FFD600] w-[7rem] relative top-[0.7rem] right-[28.2rem] font-semibold rounded-lg text-center z-10"
-          >
-            Segmento
-          </span>
-          <textarea
-            v-if="!loadingC"
-            rows="4"
-            v-model="segmento"
-            :disabled="isDisabled"
-            id="email"
-            class="h-[3rem] w-[65.8rem] bg-[#084808] p-3 shadow-xl rounded-xl text-white"
-          >
-          </textarea>
-          <span
-            class="bg-[#FFD600] w-[9rem] relative top-[0.7rem] right-[27rem] font-semibold shadow-md rounded-lg text-center z-10"
-          >
-            Porte
-          </span>
-          <select
-            v-model="porte"
-            id="porte"
-            class="bg-[#084808] w-full h-11 p-2 pt-2 shadow-md outline-none rounded-xl text-[#FFF] relative z-0"
-            :disabled="isDisabled"
-          >
-            <option selected>
-              {{ porte }}
-            </option>
-            <option value="micro">Micro Empresa</option>
-            <option value="pequeno">Pequena Empresa</option>
-            <option value="médio">Média Empresa</option>
-            <option value="grande">Grande Empresa</option>
-          </select>
+        <div>
+          <label for="toggle" class="flex items-center cursor-pointer mt-4 mb-3">
+            <div class="relative">
+              <input type="checkbox" id="toggle" class="hidden" v-model="isChecked" :disabled="isDisabled">
+
+              <div :class="{ 'bg-[#084808]': isChecked && !isDisabled, 'bg-[#084808] opacity-70': isDisabled && isChecked, 'bg-gray-400': !isChecked && !isDisabled, 'bg-gray-400 opacity-70' : isDisabled &&! isChecked }" class="toggle__line w-10 h-5 rounded-full shadow-inner"></div>
+
+              <div v-if="isChecked" class="toggle__dot absolute w-6 h-6 bg-white rounded-full shadow inset-y-0 left-0 transform translate-x-full"></div>
+              <div v-else class="toggle__dot absolute w-6 h-6 bg-white rounded-full shadow inset-y-0 right-6"></div>
+            </div>
+
+            <div class="ml-3">Autenticação de dois fatores</div>
+          </label>
         </div>
         <div class="fixed bottom-2 right-5">
           <div
@@ -197,9 +214,9 @@ onMounted(fetchEmpresa)
             <p class="text-[#fff] text-lg font-bold p-1">{{ erro }}</p>
           </div>
         </div>
-        <div class="w-[90%] flex justify-center flex-col gap-[7rem] xl:flex-row top-[2rem]">
+        <div class="w-[90%] flex justify-center flex-col xl:gap-[7rem] xl:flex-row gap-[1rem] items-center top-[2rem]">
           <!-- <div class="w-full flex justify-center"> -->
-          <div v-if="playMatch" class="w-[11rem] h-[2.5rem] justify-between text-[#fff]">
+          <div v-if="playMatch" class=" h-[2.5rem] justify-between text-[#fff]">
             <router-link :to="'/Redefinir_Senha/'">
               <button
                 class="bg-[#263001] w-[12rem] rounded-xl"
@@ -210,22 +227,23 @@ onMounted(fetchEmpresa)
               </button>
             </router-link>
           </div>
-
+ 
           <!-- <div class="w-full flex justify-center"> -->
-          <div v-if="!isDisabled" class="w-[15rem] h-[2.5rem] justify-between text-[#fff]">
+          <div v-if="!isDisabled" class="h-[2.5rem] justify-between text-[#fff]">
             <button class="bg-[#263001] w-[10rem] rounded-xl" @click="editar" type="submit">
               <p class="text-lg font-bold p-1">Salvar</p>
             </button>
           </div>
 
-          <button
-            v-else
-            class="bg-[#263001] w-[10rem] rounded-xl"
-            @click="habilitarInput"
-            type="submit"
-          >
+          <div v-else class="h-[2.5rem] justify-between text-[#fff]">
+            <button 
+              class="bg-[#263001] w-[10rem] rounded-xl"
+              @click="habilitarInput"
+              type="submit"
+            >
             <p class="text-lg text-white font-bold p-1">Editar</p>
-          </button>
+            </button>
+          </div>
           <!-- </div> -->
           <!-- </div> -->
         </div>

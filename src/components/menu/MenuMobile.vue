@@ -14,10 +14,10 @@
       <img src="/assets/close.svg" width="27" height="27" />
     </button>
     <div class="bg-[#CCFF00] w-full flex justify-start p-3 pt-16 gap-8 flex-col items-start">
-      <div class="flex flex-row">
+      <RouterLink to="/Notificacao" class="flex flex-row justify-between items-center">
         <BtnMenu caminho="/assets/Bell.svg" />
         <p class="font-bold text-2xl">Notify</p>
-      </div>
+      </RouterLink>
       <div
         class="absolute flex items-center justify-center bg-red-800 left-10 top-[4.7rem] rounded-full"
       >
