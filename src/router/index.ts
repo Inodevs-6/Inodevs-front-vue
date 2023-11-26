@@ -31,7 +31,7 @@ const router = createRouter({
       component: Redefinir_Senha
     },
     {
-      path: '/LoginRedefinicao/:id' ,
+      path: '/LoginRedefinicao/:id',
       name: 'LoginDefinicao',
       component: LoginRedefinicao,
       props: true,
