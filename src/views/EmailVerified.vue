@@ -14,9 +14,6 @@ const valid = ref(false)
 
 const save = ref(false)
 
-<<<<<<< HEAD
-const verificar = () => {
-=======
 const verificar = async () => {
   erro.value = ''
   loading.value = true
@@ -41,7 +38,6 @@ const salvar = () => {
     return
   }
 
->>>>>>> f8992612ccf0dbdba79d7d5ebf7479e40695148b
   erro.value = ''
   if (
     email.value

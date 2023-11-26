@@ -6,7 +6,6 @@ import api from '../services/api'
 import ia from '../services/ia'
 import { ref } from 'vue'
 import { useAuth } from '@/stores/auth'
-import Loaderinputs from '@/components/Loaderinputs.vue'
 import router from '@/router'
 const name = ref('')
 const level = ref('')

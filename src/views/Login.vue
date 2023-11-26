@@ -116,7 +116,6 @@ const closeModal = () => {
         class="xl:w-[50%] w-[100%] h-full bg-[#2A753D] rounded-2xl p-3 flex flex-col items-center gap-7 shadow-md"
       >
         <img alt="Vue logo" class="mt-3" src="/assets/profile.svg" width="120" height="120" />
-        <span v-if="erro" class="p-1 text-red-200 bg-red-800 w-[33%] bottom-[24rem] absolute text-center">{{ erro }}</span>
         <div class="relative w-[80%]">
           <span
             class="bg-[#FFD600] w-[7rem] absolute bottom-[2.1rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
@@ -162,6 +161,14 @@ const closeModal = () => {
         
       </div>
     </div>
+    <div class="fixed top-6 right-22">
+        <div
+          class="bg-[#cc0000] w-[25rem] rounded-xl border-solid border-white border-2 text-center"
+          type="submit"
+        >
+          <p class="text-[#fff] text-lg font-bold p-1">{{ erro }}</p>
+        </div>
+      </div>
   </section>
 
   <!-- Modal de autenticação de dois fatores -->
