@@ -2,6 +2,8 @@
 import Alert from '@/components/alert/Alert.vue'
 import api from '../services/api'
 import { ref, defineProps } from 'vue'
+import { useAuth } from '@/stores/auth'
+import router from '@/router';
 
 const senha = ref('')
 const codigo = ref('')
@@ -10,6 +12,10 @@ const erro = ref('')
 const isDisabled = ref(true)
 const isDone = ref(false)
 const playMatch = ref(true)
+const errorCode = ref()
+const loadingCode = ref(false)
+const modalOpened = ref(false)
+const auth = useAuth()
 
 const valid = ref(false)
 
@@ -38,15 +44,47 @@ const salvar = () => {
   }
 
   erro.value = ''
-  try {
-    api.post('empresa/nova-senha/' + empresaEmail, {
+    api.patch('empresa/redefinir-senha/' + props.id, {
       senha: senha.value,
-      senhaNovamente: senhaNovamente.value
+      // senhaNovamente: senhaNovamente.value
+    }).then(response => {
+  console.log(response);
+  sucesso();
+}).catch(error => {
+  erro.value = (error as Error).message;
+  console.error("Erro:", error);
+});
+}
+async function sucesso() {
+
+modalOpened.value = true
+setTimeout(() => {
+  router.push('/home')
+}, 2000)
+}
+
+const verificar = async () => {
+  errorCode.value = ''
+  loadingCode.value = true
+
+  try {
+    const response = await api.post('/empresa/tfaverificar', {
+      codigo: codigo.value
     })
-    save.value = true
+
+    if (response.data.token) {
+      auth.setToken(response.data.token)
+      auth.setUser(response.data.empresa)
+    } else {
+      console.log('Token não recebido.')
+      errorCode.value = "Código inválido!"
+    }
   } catch (error) {
-    erro.value = (error as Error).message
+    console.log((error as Error).message)
+    errorCode.value = "Código inválido!"
   }
+
+  loadingCode.value = false
 }
 </script>
 

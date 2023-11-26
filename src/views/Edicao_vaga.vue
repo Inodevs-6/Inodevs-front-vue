@@ -25,6 +25,8 @@ const matching = ref(false)
 const scrapping = ref(false)
 const valid = ref(false)
 const comentario = ref('')
+const modalOpened = ref(false)
+const modalOpened1 = ref(false)
 const idd = ref(0)
 const vaga = ref([])
 const auth = useAuth()
@@ -69,10 +71,16 @@ const fetchCha = async () => {
   loading.value = false
 }
 async function sucesso() {
-  save.value = true
-  setTimeout(() => {
-    router.push('/home')
-  }, 2000)
+modalOpened.value = true
+setTimeout(() => {
+  router.push('/home')
+}, 2000)
+}
+async function sucesso1() {
+modalOpened1.value = true
+setTimeout(() => {
+  router.push('/home')
+}, 2000)
 }
 
 async function editar() {
@@ -80,7 +88,7 @@ async function editar() {
   erro.value = ''
   try {
     const empresaId = auth.getUser.id
-    api.patch('/editar/' + empresaId + '/' + props.id, {
+    const response = await api.patch('/editar/' + empresaId + '/' + props.id, {
       nome: name.value,
       nivel: level.value,
       conhecimentos: conhecimentos.value,
@@ -222,6 +230,7 @@ async function aprimorar(campo: String) {
 }
 
 async function match() {
+  loading.value = true
   try {
     played()
     scrapping.value = true
@@ -235,9 +244,23 @@ async function match() {
     })
     matching.value = true
     played()
+ 
+    const response_notification = (
+      await api.post('/notification', {
+        type : "Results",
+        nome: name.value,
+        nivel: level.value,
+        empresa: {
+            id: auth.getUser.id
+          }
+      })
+    )
+    sucesso1()
+    console.log("Notificação de results")
   } catch (err) {
     erro.value = (err as Error).message
   }
+  loading.value = false
 }
 
 async function getResponseChatgpt() {
@@ -473,14 +496,17 @@ onMounted(fetchCha)
                 </p>
               </button> -->
 
+            
             <button
-              v-if="!isDisabled"
+            v-if="!isDisabled"
               class="bg-[#263001] w-[10rem] rounded-xl"
               @click="editar"
+              :disabled="loading"
               type="submit"
               value="Enviar para Busca"
             >
-              <p class="text-lg font-bold p-1">Salvar</p>
+              <p  v-if="!loading" class="text-lg font-bold p-1">Salvar</p>
+              <div class="flex justify-center items-center p-1" v-else><Loaderinputs/></div>
             </button>
             <button
               v-if="isDisabled"
@@ -502,22 +528,34 @@ onMounted(fetchCha)
             </button>
           </div>
         </div>
-        <div v-if="scrapping" class="fixed bottom-2 right-5">
-          <button
-            class="bg-[#2A753D] w-[25rem] rounded-xl border-solid border-white border-2 text-center"
-            type="submit"
-          >
-            <p class="text-[#fff] text-lg font-bold p-1">Realizando Busca de Canadidatos...</p>
-          </button>
+        <div
+          v-if="modalOpened"
+          id="myModal"
+          class="modal fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-20"
+        >
+          <div class="modal-content flex items-center gap-5 justify-center flex-col bg-white p-5 rounded shadow-md w-[30rem] relative">
+            <h2 v-if="!erro" class="text-xl font-bold">Vaga Editado com sucesso</h2>
+            <span v-if="erro" class="text-red-700 font-semibold">{{ erro }}</span>
+            <img src="/assets/sucess.svg" alt="sucess" width="50"  />
+            <div class="w-full flex justify-center items-center flex-col">
+              <h2 class="text-base font-bold">Você será redirecionado para pagina de Home</h2>
+              <h2 class="text-base font-bold">Em Instantes</h2>
+            </div>
+          </div>
         </div>
-
-        <div class="fixed bottom-2 right-5">
-          <div
-            v-if="matching"
-            class="bg-[#2A753D] w-[25rem] rounded-xl border-solid border-white border-2 text-center"
-            type="submit"
-          >
-            <p class="text-[#fff] text-lg font-bold p-1">Match de Candidatos Finalizado!</p>
+        <div
+          v-if="modalOpened1"
+          id="myModal"
+          class="modal fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-20"
+        >
+          <div class="modal-content flex items-center gap-5 justify-center flex-col bg-white p-5 rounded shadow-md w-[30rem] relative">
+            <h2  v-if="!erro" class="text-xl font-bold">Vaga Editada  com sucesso e Busca Iniciada </h2>
+            <span v-if="erro" class="text-red-700 font-semibold">{{ erro }}</span>
+            <img src="/assets/sucess.svg" alt="sucess" width="50"  />
+            <div class="w-full flex justify-center items-center flex-col">
+              <h2 class="text-base font-bold">Você será redirecionado para pagina de Home</h2>
+              <h2 class="text-base font-bold">Em Instantes</h2>
+            </div>
           </div>
         </div>
 
