@@ -18,8 +18,6 @@ const senhaNovamente = ref("")
 
 const verificar = async () => {
   errorCode.value = ''
-  // reenviado.value = true
-
   try {
     await api.patch('/empresa/redefinicao-senha/' + email.value)
     sucesso()
@@ -29,45 +27,6 @@ const verificar = async () => {
   }
 }
 
-// const redefinir = async () => {
-//   errorCode.value = ''
-// if (!senha.value || !senhaNovamente.value || senha.value !== senhaNovamente.value) {
-//   if (senha.value !== senhaNovamente.value) {
-//     errorCode.value = 'As senhas não estão iguais'
-//   }
-//   return
-// }
-
-// errorCode.value = ''
-//   api.patch('empresa/redefinir-senha/', {
-//     senha: senha.value,
-//     // senhaNovamente: senhaNovamente.value
-//   }).then(response => {
-// console.log(response);
-// sucesso();
-// }).catch(error => {
-//   errorCode.value = (error as Error).message;
-// console.error("Erro:", error);
-// });
-// }
-
-// const verificaCode = async () => {
-//   errorCode.value = ''
-//   loadingCode.value = true
-
-//   try {
-//     const response = await api.post('/empresa/tfaverificar', {
-//       id: 3 , 
-//       tfaCodigo: codigo.value
-//     })
-//     codeverifed.value = true
-//   } catch (error) {
-//     console.log((error as Error).message)
-//     errorCode.value = "Código inválido!"
-//   }
-
-//   loadingCode.value = false
-// }
 
 async function sucesso() {
 

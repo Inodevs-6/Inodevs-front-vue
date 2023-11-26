@@ -26,7 +26,7 @@ const router = createRouter({
       component: ListaVaga
     },
     {
-      path: '/Redefinir_Senha/:id',
+      path: '/Redefinir_Senha',
       name: 'Redefinir_Senha',
       component: Redefinir_Senha
     },

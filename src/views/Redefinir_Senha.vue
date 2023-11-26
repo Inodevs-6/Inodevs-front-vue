@@ -62,9 +62,9 @@ async function sucesso() {
       </div>
 
       <div class="w-full flex justify-left mt-5">
-        <div v-if="playMatch" class="w-[11rem] h-[2.5rem] justify-between text-[#fff]">
+        <div v-if="playMatch" class="w-[12rem] h-[2.5rem] justify-between text-[#fff] xl:absolute m-2">
           <router-link to="/Perfil">
-            <button class="bg-[#263001] w-[12rem] rounded-xl" type="submit" value="Voltar">
+            <button class="bg-[#263001] w-[10rem] rounded-xl" type="submit" value="Voltar">
               <p class="text-lg font-bold p-1">Voltar</p>
             </button>
           </router-link>
@@ -80,6 +80,24 @@ async function sucesso() {
       >
         <div class="flex flex-col justify-center items-center">
           <div class="xl:w-[45%] w-full flex flex-col relative left-2 top-[1rem]">
+            <p v-if="senha !== senhaNovamente" class="text-red-600 text-lg font-bold mb-8 text-center">
+              As senhas não estão iguais!
+            </p>
+            <p v-else-if="senha.length < 8 && senha.length > 0" class="text-red-600 text-lg font-bold mb-8 text-center"> 
+              A senha deve ter pelo menos 8 caracteres.
+            </p>
+            <p v-else-if="!/[A-Z]/.test(senha) && senha.length > 0" class="text-red-600 text-lg font-bold mb-8 text-center">
+              A senha deve conter pelo menos uma letra maiúscula.
+            </p>
+            <p v-else-if="!/[a-z]/.test(senha) && senha.length > 0" class="text-red-600 text-lg font-bold mb-8 text-center">
+              A senha deve conter pelo menos uma letra minúscula.
+            </p>
+            <p v-else-if="!/\d/.test(senha) && senha.length > 0" class="text-red-600 text-lg font-bold mb-8 text-center">
+              A senha deve conter pelo menos um número.
+            </p>
+            <p v-else-if="!/[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/.test(senha) && senha.length > 0" class="text-red-600 text-lg font-bold mb-8 text-center">
+              A senha deve conter pelo menos um caractere especial.
+            </p>
             <span
               class="bg-[#FFD600] w-[7rem] absolute bottom-[2.1rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
             >
@@ -111,10 +129,6 @@ async function sucesso() {
             />
           </div>
         </div>
-
-        <p v-if="senha !== senhaNovamente" class="text-red-600 text-lg font-bold">
-          As senhas não estão iguais !
-        </p>
         <div class="w-full flex justify-center mt-10">
           <div v-if="playMatch" class="w-[60%] flex justify-center text-[#fff]">
             <button
