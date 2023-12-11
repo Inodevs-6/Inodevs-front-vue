@@ -30,28 +30,40 @@ const props = defineProps({
 const salvar = () => {
   erro.value = ''
 
-  if (!senha.value || !senhaNovamente.value || senha.value !== senhaNovamente.value) {
-    if (senha.value !== senhaNovamente.value) {
-      erro.value = 'As senhas não estão iguais'
-    }
-    valid.value = true
-    return
-  }
+  // if (!senha.value || !senhaNovamente.value || senha.value !== senhaNovamente.value) {
+  //   if (senha.value !== senhaNovamente.value) {
+  //     erro.value = 'As senhas não estão iguais'
+  //   }
+  //   valid.value = true
+  //   return
+  // }
 
-  erro.value = ''
-  api
-    .patch('empresa/redefinir-senha/' + props.id, {
-      senha: senha.value
-      // senhaNovamente: senhaNovamente.value
-    })
-    .then((response) => {
-      console.log(response)
-      sucesso()
-    })
-    .catch((error) => {
-      erro.value = (error as Error).message
-      console.error('Erro:', error)
-    })
+  var comprimentoMinimo = 8;
+  var comprimentoSenha = senha.value.length;
+  var possuiComprimentoSuficiente = comprimentoSenha >= comprimentoMinimo;
+  var possuiLetraMaiuscula = /[A-Z]/.test(senha.value);
+  var possuiLetraMinuscula = /[a-z]/.test(senha.value);
+  var possuiNumero = /\d/.test(senha.value);
+  var possuiCaractereEspecial = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/.test(senha.value);
+  var senhaIguais = senha.value == senhaNovamente.value
+
+  if (possuiComprimentoSuficiente && possuiLetraMaiuscula && possuiLetraMinuscula && possuiNumero && possuiCaractereEspecial && senhaIguais) {
+    api
+      .patch('empresa/redefinir-senha/' + props.id, {
+        senha: senha.value
+        // senhaNovamente: senhaNovamente.value
+      })
+      .then((response) => {
+        console.log(response)
+        sucesso()
+      })
+      .catch((error) => {
+        erro.value = (error as Error).message
+        console.error('Erro:', error)
+      })
+  } else {
+    erro.value = "Senha inválida! Atenda todos requisitos."
+  }
 }
 
 
@@ -126,11 +138,26 @@ async function sucesso() {
      <div v-if="modalOpened" id="myModal" class="modal fixed inset-0 flex items-center justify-center bg-black bg-opacity-50  z-20">
     <div class="modal-content bg-white p-10 rounded shadow-md  w-[80%] relative">
       <span id="closeModalBtn" class="close absolute top-1 right-4 text-2xl cursor-pointer" @click="closeModal">&times;</span>
-      <h2 class="text-2xl font-bold mb-5">Verificação em duas etapas</h2>
+      <h2 class="text-2xl font-bold mb-5">Redefinição de Senha</h2>
       <p class="mb-3">O código durará apenas 2 minutos.</p>
       <span v-if="errorCode" class="text-red-700 font-semibold">{{ errorCode }}</span>
-      <p v-if="senha !== senhaNovamente" class="text-red-600 text-lg font-bold">
-        As senhas não estão iguais !
+      <p v-if="senha.length < 8 && senha.length > 0" class="text-red-600 text-lg font-bold mb-8 text-center"> 
+        A senha deve ter pelo menos 8 caracteres.
+      </p>
+      <p v-else-if="!/[A-Z]/.test(senha) && senha.length > 0" class="text-red-600 text-lg font-bold mb-8 text-center">
+        A senha deve conter pelo menos uma letra maiúscula.
+      </p>
+      <p v-else-if="!/[a-z]/.test(senha) && senha.length > 0" class="text-red-600 text-lg font-bold mb-8 text-center">
+        A senha deve conter pelo menos uma letra minúscula.
+      </p>
+      <p v-else-if="!/\d/.test(senha) && senha.length > 0" class="text-red-600 text-lg font-bold mb-8 text-center">
+        A senha deve conter pelo menos um número.
+      </p>
+      <p v-else-if="!/[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/.test(senha) && senha.length > 0" class="text-red-600 text-lg font-bold mb-8 text-center">
+        A senha deve conter pelo menos um caractere especial.
+      </p>
+      <p v-else-if="senha !== senhaNovamente" class="text-red-600 text-lg font-bold mb-8 text-center">
+        As senhas não estão iguais!
       </p>
       <span v-else>&nbsp;</span>
       <div v-if="!reenviado" class="relative w-[100%] mb-12 mt-8">
@@ -143,11 +170,11 @@ async function sucesso() {
       </div>
       <div v-if="codeverifed" class="relative w-[100%] mb-12 mt-8">
         <span class="bg-[#FFD600] w-[12rem] absolute bottom-[2.1rem] left-4 font-semibold shadow-md rounded-lg text-center z-10">Senha</span>
-        <input v-model="senhaNovamente" id="senha" type="password" placeholder="Entre com sua nova senha" class="bg-[#ffffff] w-full h-11 p-4 pt-4 shadow-md outline-none border-2 rounded-xl text-[#000] relative z-0"/>
+        <input v-model="senha" id="senha" type="password" placeholder="Entre com sua nova senha" class="bg-[#ffffff] w-full h-11 p-4 pt-4 shadow-md outline-none border-2 rounded-xl text-[#000] relative z-0"/>
       </div>
       <div v-if="codeverifed " class="relative w-[100%] mb-12 mt-8">
         <span class="bg-[#FFD600] w-[12rem] absolute bottom-[2.1rem] left-4 font-semibold shadow-md rounded-lg text-center z-10">Senha Novamente</span>
-        <input v-model="senha" id="senha" type="password" placeholder="Entre com o código de verificação" class="bg-[#ffffff] w-full h-11 p-4 pt-4 shadow-md outline-none border-2 rounded-xl text-[#000] relative z-0"/>
+        <input v-model="senhaNovamente" id="senhaNovamente" type="password" placeholder="Entre com o código de verificação" class="bg-[#ffffff] w-full h-11 p-4 pt-4 shadow-md outline-none border-2 rounded-xl text-[#000] relative z-0"/>
       </div>
       <div class="flex items-center h-10">
         <div v-if="!codeverifed && !reenviado" class="w-[30%]" > 
@@ -169,6 +196,15 @@ async function sucesso() {
             <div v-else class="flex justify-center items-center m-1"><Loader /></div>
           </button>
         </div>
+      </div>
+    </div>
+    <div class="fixed bottom-2 right-5">
+      <div
+        v-if="erro"
+        class="bg-[#cc0000] w-[25rem] rounded-xl border-solid border-white border-2 text-center"
+        type="submit"
+      >
+        <p class="text-[#fff] text-lg font-bold p-1">{{ erro }}</p>
       </div>
     </div>
   </div>

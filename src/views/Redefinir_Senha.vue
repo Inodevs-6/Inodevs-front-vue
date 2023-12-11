@@ -18,31 +18,42 @@ const save = ref(false)
 const auth = useAuth()
 
 const confirmarSenha = () => {
-  isDisabled.value = false
+  erro.value = ''
+  var comprimentoMinimo = 8;
+  var comprimentoSenha = senha.value.length;
+  var possuiComprimentoSuficiente = comprimentoSenha >= comprimentoMinimo;
+  var possuiLetraMaiuscula = /[A-Z]/.test(senha.value);
+  var possuiLetraMinuscula = /[a-z]/.test(senha.value);
+  var possuiNumero = /\d/.test(senha.value);
+  var possuiCaractereEspecial = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/.test(senha.value);
+  var senhasIguais = senha.value == senhaNovamente.value
+
+  if (possuiComprimentoSuficiente && possuiLetraMaiuscula && possuiLetraMinuscula && possuiNumero && possuiCaractereEspecial && senhasIguais) {
+    isDisabled.value = false
+  } else {
+    erro.value = "Senha inválida! Atenda todos requisitos."
+  }
 }
 
 const salvar = () => {
   erro.value = ''
-
-  if (!senha.value || !senhaNovamente.value || senha.value !== senhaNovamente.value) {
-    if (senha.value !== senhaNovamente.value) {
-      erro.value = 'As senhas não estão iguais'
+  // if (!senha.value || !senhaNovamente.value || senha.value !== senhaNovamente.value) {
+  //   if (senha.value !== senhaNovamente.value) {
+  //     erro.value = 'As senhas não estão iguais'
+  //   }
+  //   valid.value = true
+  //   return
+  // }
+    try {
+      const empresaId = auth.getUser.id
+      api.patch(`/empresa/editar-senha/${empresaId}`, {
+        id: empresaId,
+        senha: senha.value
+      })
+      sucesso()
+    } catch (error) {
+      erro.value = (error as Error).message
     }
-    valid.value = true
-    return
-  }
-
-  erro.value = ''
-  try {
-    const empresaId = auth.getUser.id
-    api.patch(`/empresa/editar-senha/${empresaId}`, {
-      id: empresaId,
-      senha: senha.value
-    })
-    sucesso()
-  } catch (error) {
-    erro.value = (error as Error).message
-  }
 }
 
 async function sucesso() {
@@ -80,10 +91,7 @@ async function sucesso() {
       >
         <div class="flex flex-col justify-center items-center">
           <div class="xl:w-[45%] w-full flex flex-col relative left-2 top-[1rem]">
-            <p v-if="senha !== senhaNovamente" class="text-red-600 text-lg font-bold mb-8 text-center">
-              As senhas não estão iguais!
-            </p>
-            <p v-else-if="senha.length < 8 && senha.length > 0" class="text-red-600 text-lg font-bold mb-8 text-center"> 
+            <p v-if="senha.length < 8 && senha.length > 0" class="text-red-600 text-lg font-bold mb-8 text-center"> 
               A senha deve ter pelo menos 8 caracteres.
             </p>
             <p v-else-if="!/[A-Z]/.test(senha) && senha.length > 0" class="text-red-600 text-lg font-bold mb-8 text-center">
@@ -97,6 +105,9 @@ async function sucesso() {
             </p>
             <p v-else-if="!/[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/.test(senha) && senha.length > 0" class="text-red-600 text-lg font-bold mb-8 text-center">
               A senha deve conter pelo menos um caractere especial.
+            </p>
+            <p v-else-if="senha !== senhaNovamente" class="text-red-600 text-lg font-bold mb-8 text-center">
+              As senhas não estão iguais!
             </p>
             <span
               class="bg-[#FFD600] w-[7rem] absolute bottom-[2.1rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"

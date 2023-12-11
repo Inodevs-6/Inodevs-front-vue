@@ -36,7 +36,7 @@ const salvar = () => {
     !segmento.value ||
     !porte.value
   ) {
-    validErro.value = "Preencha todos os campos!"
+    erro.value = "Preencha todos os campos!"
   } else {
     var comprimentoMinimo = 8;
     var comprimentoSenha = senha.value.length;
@@ -45,9 +45,11 @@ const salvar = () => {
     var possuiLetraMinuscula = /[a-z]/.test(senha.value);
     var possuiNumero = /\d/.test(senha.value);
     var possuiCaractereEspecial = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/.test(senha.value);
+    var senhasIguais = senha.value == senhaNovamente.value
 
-    if (possuiComprimentoSuficiente && possuiLetraMaiuscula && possuiLetraMinuscula && possuiNumero && possuiCaractereEspecial) {
+    if (possuiComprimentoSuficiente && possuiLetraMaiuscula && possuiLetraMinuscula && possuiNumero && possuiCaractereEspecial && senhasIguais) {
       validErro.value = ''
+      erro.value = ''
     
       api.post('/empresa', {
         nome: nome.value,
@@ -65,7 +67,9 @@ const salvar = () => {
         console.error("Erro:", error);
       });
         
-  } 
+  } else {
+    erro.value = "Senha inválida! Atenda todos requisitos."
+  }
   }
 
 }
@@ -95,10 +99,7 @@ async function sucesso() {
         Cadastro de Empresa
       </h1>
         <div v-if="validErro" class="text-red-600 text-lg font-bold mt-2">{{ validErro }} </div>
-        <p v-if="senha !== senhaNovamente" class="text-red-600 text-lg font-bold mt-2">
-          As senhas não estão iguais!
-        </p>
-        <p v-else-if="senha.length < 8 && senha.length > 0" class="text-red-600 text-lg font-bold mt-2">
+        <p v-if="senha.length < 8 && senha.length > 0" class="text-red-600 text-lg font-bold mt-2">
           A senha deve ter pelo menos 8 caracteres.
         </p>
         <p v-else-if="!/[A-Z]/.test(senha) && senha.length > 0" class="text-red-600 text-lg font-bold mt-2">
@@ -112,6 +113,9 @@ async function sucesso() {
         </p>
         <p v-else-if="!/[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/.test(senha) && senha.length > 0" class="text-red-600 text-lg font-bold mt-2">
           A senha deve conter pelo menos um caractere especial.
+        </p>
+        <p v-else-if="senha !== senhaNovamente" class="text-red-600 text-lg font-bold mt-2">
+          As senhas não estão iguais!
         </p>
         <div
           class="xl:w-[80vw] w-[90%] flex items-center flex-col gap-3 p-8 mt-[1.5rem] bg-[#1DEEA3] shadow-md bg-opacity-30 rounded-2xl relative"
@@ -237,7 +241,7 @@ async function sucesso() {
                 </option>
                 <option value="micro">Micro Empresa</option>
                 <option value="pequeno">Pequena Empresa</option>
-                <option value="médio">Média Empresa</option>
+                <option value="medio">Média Empresa</option>
                 <option value="grande">Grande Empresa</option>
               </select>
           </div>

@@ -31,6 +31,7 @@ const idd = ref(0)
 const vaga = ref([])
 const auth = useAuth()
 const save = ref(false)
+const saved = ref(false)
 const props = defineProps({
   id: {
     type: String,
@@ -72,15 +73,18 @@ const fetchCha = async () => {
 }
 async function sucesso() {
 modalOpened.value = true
-setTimeout(() => {
+saved.value = true
+  setTimeout(() => {
   router.push('/home')
 }, 2000)
 }
 async function sucesso1() {
 modalOpened1.value = true
+if (!saved.value) {
 setTimeout(() => {
   router.push('/home')
 }, 2000)
+}
 }
 
 async function editar() {
@@ -322,7 +326,7 @@ onMounted(fetchCha)
         class="text-center font-medium xl:text-3xl text-xl xl:mt-7 mt-3 flex w-full h-10 justify-center items-center"
         v-if="vaga"
       >
-        Ranqueamento de {{ name }} com nível {{ level }}
+        Edição de Vaga
       </h1>
       <div
         class="xl:w-[88vw] w-[90%] flex flex-col gap-8 p-4 mt-[3rem] bg-[#1DEEA3] shadow-md bg-opacity-30 rounded-2xl relative"
@@ -569,7 +573,7 @@ onMounted(fetchCha)
           </div>
         </div>
 
-        <div class="fixed bottom-2 right-5">
+        <!-- <div class="fixed bottom-2 right-5">
           <div
             v-if="save"
             class="bg-[#2A753D] w-[25rem] rounded-xl border-solid border-white border-2 text-center"
@@ -577,7 +581,7 @@ onMounted(fetchCha)
           >
             <p class="text-[#fff] text-lg font-bold p-1">Vaga salva com sucesso!</p>
           </div>
-        </div>
+        </div> -->
 
         <div class="fixed bottom-2 right-5">
           <div

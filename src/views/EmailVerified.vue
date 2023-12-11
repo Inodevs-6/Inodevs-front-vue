@@ -9,22 +9,22 @@ const errorCode = ref("")
 const modalOpened = ref(false)
 const codigo = ref("")
 const isDone = ref(false)
-const loadingCode = ref(false)
 const playMatch = ref(true)
 const reenviado = ref(false)
-const codeverifed = ref(false)
 const senha = ref('')
-const senhaNovamente = ref("")
+const loading = ref(false)
 
 const verificar = async () => {
   errorCode.value = ''
+  loading.value = true
   try {
-    await api.patch('/empresa/redefinicao-senha/' + email.value)
     sucesso()
+    await api.patch('/empresa/redefinicao-senha/' + email.value)
   } catch (error) {
     console.log((error as Error).message)
     errorCode.value = "Algo deu errado ao enviar o e-mail!"
   }
+  loading.value = false
 }
 
 
@@ -71,10 +71,10 @@ const closeModal = () => {
         {{ erro }}
       </p>
       <div
-        class="xl:w-[80vw] h-[30vw] w-[90%] flex flex-col gap-4 p-4 mt-[3rem] bg-[#1DEEA3] shadow-md bg-opacity-30 rounded-2xl relative"
+        class="xl:w-[80vw] h-[18vw] w-[90%] flex flex-col gap-4 p-4 mt-[3rem] bg-[#1DEEA3] shadow-md bg-opacity-30 rounded-2xl relative"
       >
         <div class="flex flex-col justify-center pt-4 gap-6 items-center">
-          <div class="xl:w-[80%]  flex flex-col relative">
+          <div class="xl:w-[80%]  flex flex-col relative mt-5">
             <span v-if="modalOpened"
               class="bg-[#FFD600] w-[7rem] absolute bottom-[2.1rem] left-4 font-semibold shadow-md rounded-lg text-center "
             >
@@ -89,7 +89,7 @@ const closeModal = () => {
               v-model="email"
               id="email"
               placeholder="Email"
-              class="bg-[#084808] w-full h-11 p-2 pt-2 shadow-md outline-none rounded-xl text-[#FFF] relative z-0"
+              class="bg-[#084808] w-full h-11 p-2 pt-2 shadow-md outline-none rounded-xl text-[#FFF] relative"
               type="text"
             />
           </div>
@@ -103,7 +103,8 @@ const closeModal = () => {
               type="submit"
               value="Confirmar"
             >
-              <p class="text-lg font-bold p-1">Enviar Email</p>
+              <p v-if="!loading" class="text-lg font-bold p-1">Enviar Email</p>
+              <div class="flex justify-center items-center p-1" v-else><Loader /></div>
             </button>
           </div>
         </div>

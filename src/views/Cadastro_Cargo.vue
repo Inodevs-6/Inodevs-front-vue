@@ -49,20 +49,24 @@ async function salvar() {
 
 async function sucesso() {
 modalOpened.value = true
+save.value = true
+  setTimeout(() => {
+  router.push('/home')
+}, 2000)
+
+}
+async function sucesso1() {
+modalOpened1.value = true
+if (!save.value) {
 setTimeout(() => {
   router.push('/home')
 }, 2000)
 }
-async function sucesso1() {
-modalOpened1.value = true
-setTimeout(() => {
-  router.push('/home')
-}, 2000)
 }
 async function aprimorar(campo: String) {
   erro.value = ''
   let sendComment = ''
- 
+
   if (campo == 'Conhecimentos') {
     loadingC.value = true
   }
@@ -78,104 +82,60 @@ async function aprimorar(campo: String) {
     loadingH.value = true
     loadingA.value = true
   }
- 
+
   try {
     let cha = ''
- 
+
     if (campo == 'Geral') {
       cha += '{"descricao": '
     }
     if (campo == 'Conhecimentos' || campo == 'Geral') {
       cha += '{"Conhecimentos": ['
-      conhecimentos.value
-        .trim()
-        .split('\n')
-        .forEach((palavra, index) => {
-          if (index != 0) {
-            cha += ', "' + palavra + '"'
-          } else {
-            cha += '"' + palavra + '"'
-          }
-        })
-      cha += ']}'
-      conhecimentos.value
-        .trim()
-        .split('\n')
-        .forEach((palavra, index) => {
-          if (index != 0) {
-            cha += ', "' + palavra + '"'
-          } else {
-            cha += '"' + palavra + '"'
-          }
-        })
+      conhecimentos.value.trim().split('\n').forEach((palavra, index) => {
+        if (index != 0) {
+          cha += ', "' + palavra + '"'
+        } else {
+          cha += '"' + palavra + '"'
+        }
+      })
       cha += ']'
     }
     if (campo == 'Geral') {
       cha += ', '
-    }
-    if (campo == 'Habilidades') {
+    } 
+    if (campo == 'Habilidades'){
       cha += '{'
     }
     if (campo == 'Habilidades' || campo == 'Geral') {
-      cha += '{"Habilidades": ['
-      habilidades.value
-        .trim()
-        .split('\n')
-        .forEach((palavra, index) => {
-          if (index != 0) {
-            cha += ', "' + palavra + '"'
-          } else {
-            cha += '"' + palavra + '"'
-          }
-        })
-      cha += ']}'
       cha += '"Habilidades": ['
-      habilidades.value
-        .trim()
-        .split('\n')
-        .forEach((palavra, index) => {
-          if (index != 0) {
-            cha += ', "' + palavra + '"'
-          } else {
-            cha += '"' + palavra + '"'
-          }
-        })
+      habilidades.value.trim().split('\n').forEach((palavra, index) => {
+        if (index != 0) {
+          cha += ', "' + palavra + '"'
+        } else {
+          cha += '"' + palavra + '"'
+        }
+      })
       cha += ']'
     }
     if (campo == 'Geral') {
       cha += ', '
     }
-    if (campo == 'Atitudes') {
+    if (campo == 'Atitudes'){
       cha += '{'
     }
     if (campo == 'Atitudes' || campo == 'Geral') {
-      cha += '{"Atitudes": ['
-      atitudes.value
-        .trim()
-        .split('\n')
-        .forEach((palavra, index) => {
-          if (index != 0) {
-            cha += ', "' + palavra + '"'
-          } else {
-            cha += '"' + palavra + '"'
-          }
-        })
-      cha += ']}'
       cha += '"Atitudes": ['
-      atitudes.value
-        .trim()
-        .split('\n')
-        .forEach((palavra, index) => {
-          if (index != 0) {
-            cha += ', "' + palavra + '"'
-          } else {
-            cha += '"' + palavra + '"'
-          }
-        })
+      atitudes.value.trim().split('\n').forEach((palavra, index) => {
+        if (index != 0) {
+          cha += ', "' + palavra + '"'
+        } else {
+          cha += '"' + palavra + '"'
+        }
+      })
       cha += ']'
     }
     cha += '}'
- 
+  
     console.log(cha)
     
     const response = await ia.post('/upgrade', {
@@ -185,37 +145,37 @@ async function aprimorar(campo: String) {
       campo: campo,
       comentario: sendComment
     })
- 
+
     console.log(response.data)
- 
+
     if (campo == 'Conhecimentos') {
-      conhecimentos.value = ''
+      conhecimentos.value = '' 
       response.data.Conhecimentos.forEach((palavra: string) => {
         conhecimentos.value += palavra + '\n'
       })
     }
     if (campo == 'Habilidades') {
-      habilidades.value = ''
+      habilidades.value = '' 
       response.data.Habilidades.forEach((palavra: string) => {
         habilidades.value += palavra + '\n'
       })
     }
     if (campo == 'Atitudes') {
-      atitudes.value = ''
+      atitudes.value = '' 
       response.data.Atitudes.forEach((palavra: string) => {
         atitudes.value += palavra + '\n'
       })
     }
     if (campo == 'Geral') {
-      conhecimentos.value = ''
+      conhecimentos.value = '' 
       response.data.descricao.Conhecimentos.forEach((palavra: string) => {
         conhecimentos.value += palavra + '\n'
       })
-      habilidades.value = ''
+      habilidades.value = '' 
       response.data.descricao.Habilidades.forEach((palavra: string) => {
         habilidades.value += palavra + '\n'
       })
-      atitudes.value = ''
+      atitudes.value = '' 
       response.data.descricao.Atitudes.forEach((palavra: string) => {
         atitudes.value += palavra + '\n'
       })
@@ -227,7 +187,6 @@ async function aprimorar(campo: String) {
   loadingH.value = false
   loadingA.value = false
 }
- 
 async function match() {
   loading.value = true
   try {
@@ -238,8 +197,8 @@ async function match() {
     await ia.post('/scrap')
     scrapping.value = false
     await ia.post('/match', {
-      cargo: name.value.replace(' ', ''),
-      nivel: level.value.replace(' ', '')
+      cargo: name.value,
+      nivel: level.value
     })
     matching.value = true
     played()
@@ -272,8 +231,8 @@ async function getResponseChatgpt() {
       played()
       const response = (
         await ia.post('/chat', {
-          cargo: name.value.replace(' ', ''),
-          nivel: level.value.replace(' ', '')
+          cargo: name.value,
+          nivel: level.value
         })
       ).data
       id.value = response.id
@@ -451,8 +410,9 @@ const played = () => {
           >
             Aprimorar
           </button>
+          
           <span
-            class="bg-[#FFD600] w-[9rem] relative top-[1rem] left-4 font-semibold shadow-md rounded-lg text-center z-10"
+            class="bg-[#FFD600] w-[9rem] relative top-[1rem] left-4 font-semibold shadow-md rounded-lg text-center z-10" v-if="!isDisabled"
           >
             Comentário
           </span>
@@ -463,11 +423,12 @@ const played = () => {
             placeholder="Adicione um comentário caso necessário para fazer o aprimoramento com configurações mais avançadas."
             :disabled="isDisabled"
             class="h-[8rem] bg-[#084808] p-4 focus:outline-none flex resize-none shadow-xl justify-start rounded-xl text-white"
+            v-if="!isDisabled"
           >
           </textarea>
           <button
             @click="aprimorar('Geral')"
-            class="bg-[#FFD600] w-[9rem] relative top-[-2rem] left-[58rem] font-semibold shadow-md rounded-lg text-center z-10"
+            class="bg-[#FFD600] w-[9rem] relative top-[-2rem] left-[58rem] font-semibold shadow-md rounded-lg text-center z-10" v-if="!isDisabled"
           >
             Aprimorar
           </button>

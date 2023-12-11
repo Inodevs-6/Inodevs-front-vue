@@ -62,7 +62,7 @@ const fetchCandidatos = async () => {
 function getCor(percentageMatch: number) {
   if (percentageMatch >= 0 && percentageMatch <= 25) {
     return 'red'
-  } else if (percentageMatch >= 26 && percentageMatch <= 50) {
+  } else if (percentageMatch >= 25 && percentageMatch <= 51) {
     return 'orange'
   } else if (percentageMatch >= 51 && percentageMatch <= 75) {
     return 'yellow'
